@@ -1,1 +1,184 @@
-<p>format-group works!</p>
+<ng-container *ngIf="formatGroup.verses">
+  <ng-container *ngFor="let verse of formatGroup.verses">
+    <header
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'HEADER' || verse.n === 'header'"
+    ></header>
+    <section
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'SECTION' || verse.n === 'section'"
+    ></section>
+    <ul
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'UL' || verse.n === 'ul'"
+    ></ul>
+    <li
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'LI' || verse.n === 'li'"
+    ></li>
+    <dl
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'DL' || verse.n === 'dl'"
+    ></dl>
+    <h1
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'H1' || verse.n === 'h1'"
+    ></h1>
+    <h2
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'H2' || verse.n === 'h2'"
+    ></h2>
+    <h3
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'H3' || verse.n === 'h3'"
+    ></h3>
+    <h4
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'H4' || verse.n === 'h4'"
+    ></h4>
+    <p
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'p' || verse.n === 'p'"
+    ></p>
+    <em
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'em' || verse.n === 'em'"
+    ></em>
+    <dd
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'DD' || verse.n === 'dd'"
+    ></dd>
+    <figure
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'FIGURE' || verse.n === 'figure'"
+    ></figure>
+    <div
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'DIV' || verse.n === 'div'"
+    ></div>
+    <ol
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'OL' || verse.n === 'ol'"
+    ></ol>
+    <span
+      verse
+      [verse]="verse"
+      [id]="verse.id"
+      *ngIf="verse.n === 'SPAN' || verse.n === 'span'"
+    ></span>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="formatGroup.grps">
+  <ng-container *ngFor="let grp of formatGroup.grps">
+    <header
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'HEADER' || grp.name === 'header'"
+    ></header>
+    <section
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'SECTION' || grp.name === 'section'"
+    ></section>
+    <ul
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'UL' || grp.name === 'ul'"
+    ></ul>
+    <li
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'LI' || grp.name === 'li'"
+    ></li>
+    <dl
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'DL' || grp.name === 'dl'"
+    ></dl>
+    <h1
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'H1' || grp.name === 'h1'"
+    ></h1>
+    <h2
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'H2' || grp.name === 'h2'"
+    ></h2>
+    <h3
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'H3' || grp.name === 'h3'"
+    ></h3>
+    <h4
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'H4' || grp.name === 'h4'"
+    ></h4>
+    <p
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'p' || grp.name === 'p'"
+    ></p>
+    <em
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'em' || grp.name === 'em'"
+    ></em>
+    <dd
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'DD' || grp.name === 'dd'"
+    ></dd>
+    <figure
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'FIGURE' || grp.name === 'figure'"
+    ></figure>
+    <div
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'DIV' || grp.name === 'div'"
+    ></div>
+    <ol
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'OL' || grp.name === 'ol'"
+    ></ol>
+    <span
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
+    ></span>
+  </ng-container>
+</ng-container>

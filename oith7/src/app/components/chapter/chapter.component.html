@@ -1,1 +1,9 @@
-<p>chapter works!</p>
+<ng-container *ngFor="let grp of this.chapter.body.grps">
+  <ng-container *ngIf="grp.name === 'HEADER'">
+    <header format-group [formatGroup]="grp"></header>
+  </ng-container>
+  <ng-container *ngIf="grp.name === 'DIV' || grp.name === 'div'">
+    <div format-group [formatGroup]="grp"></div>
+  </ng-container>
+  {{ grp.name }}
+</ng-container>

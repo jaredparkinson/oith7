@@ -7,6 +7,14 @@ import { FormatGroupComponent } from './components/format-group/format-group.com
 import { FormatTextComponent } from './components/format-text/format-text.component';
 import { ChapterComponent } from './components/chapter/chapter.component';
 import { ChapterLoaderComponent } from './components/chapter-loader/chapter-loader.component';
+import {
+  APP_INITIALIZER,
+  CUSTOM_ELEMENTS_SCHEMA,
+  NO_ERRORS_SCHEMA,
+} from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { FormatGroupsComponent } from './components/format-groups/format-groups.component';
+import { VerseComponent } from './components/verse/verse.component';
 
 @NgModule({
   declarations: [
@@ -14,13 +22,17 @@ import { ChapterLoaderComponent } from './components/chapter-loader/chapter-load
     FormatGroupComponent,
     FormatTextComponent,
     ChapterComponent,
-    ChapterLoaderComponent
+    ChapterLoaderComponent,
+    FormatGroupsComponent,
+    VerseComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}

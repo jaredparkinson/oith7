@@ -1,1 +1,4 @@
-<p>chapter-loader works!</p>
+<ng-container *ngIf="this.chapterService.chapter">
+  <div chapter [chapter]="this.chapterService.chapter"></div>
+</ng-container>
+<ng-container *ngIf="!this.chapterService.chapter">Loading...</ng-container>

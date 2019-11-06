@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Chapter } from '../../../../../oith-lib/src/models/Chapter';
 
 @Component({
-  selector: 'app-chapter',
+  selector: '[chapter]',
   templateUrl: './chapter.component.html',
-  styleUrls: ['./chapter.component.scss']
+  styleUrls: ['./chapter.component.scss'],
 })
 export class ChapterComponent implements OnInit {
+  @Input() public chapter: Chapter;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

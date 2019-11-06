@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormatGroup } from '../../../../../oith-lib/src/models/Chapter';
 
 @Component({
-  selector: 'app-format-group',
+  selector: '[format-group]',
   templateUrl: './format-group.component.html',
-  styleUrls: ['./format-group.component.scss']
+  styleUrls: ['./format-group.component.scss'],
 })
 export class FormatGroupComponent implements OnInit {
+  @Input() public formatGroup: FormatGroup;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
