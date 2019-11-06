@@ -80,5 +80,15 @@
       [formatGroup]="grp"
       *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
     ></span>
+    <span
+      format-group
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'A' || grp.name === 'a'"
+    ></span>
+    <ng-container *ngIf="!grp.name && grp.grps">
+      <ng-container *ngFor="let grp2 of grp.grps">
+        <f-text format-text [formatText]="grp2"></f-text>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </ng-container>
