@@ -1,0 +1,3 @@
+[submodule "oith-styles"]
+	path = oith-styles
+	url = git@github.com:jaredparkinson/oith-styles.git
