@@ -106,6 +106,18 @@
         [formatGroup]="grp"
         *ngIf="grp.name === 'HEADER' || grp.name === 'header'"
       ></header>
+      <div
+        class="img-container "
+        *ngIf="grp.name === 'IMG' || grp.name === 'img'"
+      >
+        <img
+          class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+          format-group
+          [src]="grp.attrs['src']"
+          [formatGroup]="grp"
+        />
+      </div>
+
       <section
         format-group
         [formatGroup]="grp"
