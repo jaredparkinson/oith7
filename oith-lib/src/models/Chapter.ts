@@ -18,6 +18,10 @@ export class Verse {
   }
 }
 
+export class VersePlaceholder {
+  v: string;
+  verse?: Verse;
+}
 export class FormatMerged {
   text: string;
 
@@ -37,11 +41,11 @@ export class FormatText implements Offsets {
   // public off
 }
 export class FormatGroup {
-  public grps?: (FormatGroup | FormatText)[];
+  public grps?: (FormatGroup | FormatText | VersePlaceholder)[];
   public name?: string;
   // public txt?: FormatText;
-  public verseIDs?: string[];
-  public verses?: Verse[];
+  // public verseIDs?: string[];
+  // public verses?: Verse[];
   public attrs?: {};
   public docType: DocType = DocType.FORMATGROUP;
 }

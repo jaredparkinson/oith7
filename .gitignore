@@ -49,4 +49,4 @@ dist
 build
 scripture_files
 images
-node_modules
+.cache

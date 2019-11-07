@@ -1,10 +1,17 @@
 import { decode } from 'he';
 import { forkJoin, Observable, of } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
-import { Chapter, FormatGroup, FormatText, Verse } from '../../models/Chapter';
+import {
+  Chapter,
+  FormatGroup,
+  FormatText,
+  Verse,
+  VersePlaceholder,
+} from '../../models/Chapter';
 import { flatMap$ } from '../../rx/flatMap$';
 import { DocType } from '../../verse-notes/verse-note';
 import { parseDocID } from '../parseDocID';
+import { asap } from 'rxjs/internal/scheduler/asap';
 
 export const fixLink = map((i: Cheerio) => {
   const output = i.attr('href');
@@ -178,8 +185,7 @@ function parseVerseFormat(
             attrs: $(e).attr(),
             name: e.name,
             grps: ft,
-            verseIDs: undefined,
-            verses: undefined,
+            // verseIDs: undefined,
             docType: DocType.FORMATGROUP,
           };
         },
@@ -247,73 +253,98 @@ export function childrenToArray(
   ).pipe(flatMap(o => o));
 }
 
-function parseChildren$(
+function newParseChildre(
   $: CheerioStatic,
   element: Cheerio,
-  cid: string,
-): Observable<FormatGroup[]> {
+): Observable<FormatGroup> {
   return of(element.children().toArray()).pipe(
     flatMap$,
-    filter(o => typeof $(o).prop('data-aid') === 'undefined'),
     map(o => {
-      return forkJoin(
-        parseChildren$($, $(o), cid),
-        childrenToArray($, o).pipe(
-          filter(e => typeof $(e).prop('data-aid') === 'string'),
-          map(o => $(o).prop('id') as string),
-          map(id => parseVerseID(id)),
-          toArray(),
-        ),
-        of($(o)),
-      );
+      if (typeof $(o).prop('data-aid') === 'string') {
+        return of({ v: $(o).prop('id') as string } as VersePlaceholder);
+      }
+      return newParseChildre($, $(o));
     }),
     flatMap(o => o),
+    toArray(),
     map(
-      ([formatGroups, verseIDS, e]): FormatGroup => {
-        const nodeName = $(e).prop('nodeName') as string;
-        const cls = $(e).prop('class');
-        const f = $(e).attr();
+      (o): FormatGroup => {
+        const nodeName = $(element).prop('nodeName') as string;
+        const cls = $(element).prop('class');
+        const f = $(element).attr();
         const l = Object.keys(f).length;
 
         return {
           name: nodeName,
-          grps: formatGroups.length > 0 ? formatGroups : undefined,
-          verses: undefined,
-          verseIDs: verseIDS.length > 0 ? verseIDS : undefined,
-          attrs: l > 0 ? $(e).attr() : undefined,
+          grps: o, //formatGroups.length > 0 ? formatGroups : undefined,
+          // verses: undefined,
+          // verseIDs: verseIDS.length > 0 ? verseIDS : undefined,
+          attrs: l > 0 ? $(element).attr() : undefined,
           docType: DocType.FORMATGROUP,
         };
       },
     ),
-    toArray(),
   );
 }
 
-function parseBody($: CheerioStatic, cid: string) {
-  return forkJoin(
-    parseChildren$($, $('body'), cid),
-    of($('body')
-      .children()
-      .toArray()
-      .filter(e => typeof $(e).prop('data-aid') === 'string')
-      .map(o => $(o).prop('id')) as string[]).pipe(
-      flatMap$,
-      map(id => parseVerseID(id)),
-      toArray(),
-    ),
-  ).pipe(
-    map(
-      ([formatGroups, vUd]): FormatGroup => {
-        return {
-          name: undefined,
-          grps: formatGroups.length > 0 ? formatGroups : undefined,
-          verses: undefined,
-          verseIDs: vUd.length > 0 ? vUd : undefined,
-          docType: DocType.FORMATGROUP,
-        };
-      },
-    ),
-  );
+// function parseChildren$(
+//   $: CheerioStatic,
+//   element: Cheerio,
+//   cid: string,
+// ): Observable<(FormatGroup)[]> {
+//   return of(element.children().toArray()).pipe(
+//     flatMap$,
+//     // filter(o => typeof $(o).prop('data-aid') === 'undefined'),
+//     map(o => {
+//       if (typeof $(o).prop('data-aid') === 'string') {
+//         return forkJoin(
+//           of({ id: $(o).prop('data-aid') as string } as VersePlaceholder),
+//           of($(o)),
+//         );
+//       }
+//       return forkJoin(
+//         parseChildren$($, $(o), cid),
+
+//         of($(o)),
+//       );
+//     }),
+//     flatMap(o => o),
+//     map(
+//       ([formatGroups, e]): FormatGroup => {
+//         const nodeName = $(e).prop('nodeName') as string;
+//         const cls = $(e).prop('class');
+//         const f = $(e).attr();
+//         const l = Object.keys(f).length;
+
+//         return {
+//           name: nodeName,
+//           grps: formatGroups.length > 0 ? formatGroups : undefined,
+//           // verses: undefined,
+//           // verseIDs: verseIDS.length > 0 ? verseIDS : undefined,
+//           attrs: l > 0 ? $(e).attr() : undefined,
+//           docType: DocType.FORMATGROUP,
+//         };
+//       },
+//     ),
+//     toArray(),
+//   );
+// }
+
+function parseBody($: CheerioStatic) {
+  return newParseChildre($, $('body'));
+  // .pipe(
+  // map(
+  // (formatGroups): FormatGroup => {
+  // return {
+  // name: undefined,
+  // grps: formatGroups.length > 0 ? formatGroups : undefined,
+  // verses: undefined,
+  // verseIDs: vUd.length > 0 ? vUd : undefined,
+  // docType: DocType.FORMATGROUP,
+  // };
+  // },
+  // ),
+  // );
 }
 
 function parseTitle($: CheerioStatic) {
@@ -336,7 +367,7 @@ export function chapterProcessor($: CheerioStatic) {
       return forkJoin(
         of(id),
         fixLinks($),
-        parseBody($, id),
+        parseBody($),
         parseTitle($),
         parseShortTitle($),
       );

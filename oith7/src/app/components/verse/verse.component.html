@@ -6,8 +6,10 @@
       *ngIf="grp.name === 'HEADER' || grp.name === 'header'"
     ></header>
     <section
+      class="kjkkk"
       format-group
       [formatGroup]="grp"
+      [topLevel]="true"
       *ngIf="grp.name === 'SECTION' || grp.name === 'section'"
     ></section>
     <ul

@@ -1,8 +1,108 @@
 <ng-container *ngFor="let grp of this.chapter.body.grps">
   <ng-container *ngIf="grp.name === 'HEADER'">
-    <header format-group [formatGroup]="grp"></header>
+    <header format-group [topLevel]="false" [formatGroup]="grp"></header>
+    <ng-container *ngIf="this.chapter.body.verses">
+      <ng-container *ngFor="let verse of this.chapter.body.verses">
+        <header
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'HEADER' || verse.n === 'header'"
+        ></header>
+        <section
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'SECTION' || verse.n === 'section'"
+        ></section>
+        <ul
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'UL' || verse.n === 'ul'"
+        ></ul>
+        <li
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'LI' || verse.n === 'li'"
+        ></li>
+        <dl
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'DL' || verse.n === 'dl'"
+        ></dl>
+        <h1
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'H1' || verse.n === 'h1'"
+        ></h1>
+        <h2
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'H2' || verse.n === 'h2'"
+        ></h2>
+        <h3
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'H3' || verse.n === 'h3'"
+        ></h3>
+        <h4
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'H4' || verse.n === 'h4'"
+        ></h4>
+        <p
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'p' || verse.n === 'p'"
+        ></p>
+        <em
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'em' || verse.n === 'em'"
+        ></em>
+        <dd
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'DD' || verse.n === 'dd'"
+        ></dd>
+        <figure
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'FIGURE' || verse.n === 'figure'"
+        ></figure>
+        <div
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'DIV' || verse.n === 'div'"
+        ></div>
+        <ol
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'OL' || verse.n === 'ol'"
+        ></ol>
+        <span
+          verse
+          [verse]="verse"
+          [id]="verse.id"
+          *ngIf="verse.n === 'SPAN' || verse.n === 'span'"
+        ></span>
+      </ng-container>
+    </ng-container>
   </ng-container>
   <ng-container *ngIf="grp.name === 'DIV' || grp.name === 'div'">
-    <div format-group [formatGroup]="grp"></div>
+    <div [topLevel]="true" format-group [formatGroup]="grp"></div>
   </ng-container>
 </ng-container>

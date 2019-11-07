@@ -14,6 +14,7 @@ import {
   FormatMerged,
   FormatText,
   Verse,
+  VersePlaceholder,
 } from '../models/Chapter';
 import { flatMap$ } from '../rx/flatMap$';
 import { VerseNote, VerseNoteGroup } from '../verse-notes/verse-note';
@@ -21,34 +22,54 @@ import { VerseNote, VerseNoteGroup } from '../verse-notes/verse-note';
 function findFormatGroupsWithVerseIDs(
   formatGroup: FormatGroup,
   // isBody: boolean,
-): Observable<FormatGroup> {
-  if (Array.isArray(formatGroup.verseIDs)) {
-    if (Array.isArray(formatGroup.grps)) {
-      return forkJoin(
-        of(formatGroup.grps).pipe(
-          flatMap$,
-          map(o => findFormatGroupsWithVerseIDs(o)),
-          flatMap$,
-          toArray(),
-        ),
-        of([formatGroup]),
-      ).pipe(
-        flatMap$,
-        flatMap$,
-      );
-    }
-    return of(formatGroup);
-  } else {
-    return of(formatGroup.grps as FormatGroup[]).pipe(
-      filter(o => o !== undefined),
-      flatMap$,
-      map(o => findFormatGroupsWithVerseIDs(o)),
-      flatMap$,
-    );
-  }
-
-  return EMPTY;
+): Observable<VersePlaceholder> {
+  return of(formatGroup.grps as (
+    | FormatGroup
+    | FormatText
+    | VersePlaceholder)[]).pipe(
+    filter(o => o !== undefined),
+    flatMap$,
+    map(o => {
+      if ((o as VersePlaceholder).v !== undefined) {
+        return of(o as VersePlaceholder);
+      }
+      return findFormatGroupsWithVerseIDs(o as FormatGroup);
+    }),
+    flatMap$,
+  );
 }
+
+// function findFormatGroupsWithVerseIDs(
+//   formatGroup: FormatGroup,
+//   // isBody: boolean,
+// ): Observable<FormatGroup> {
+//   if (Array.isArray(formatGroup.verseIDs)) {
+//     if (Array.isArray(formatGroup.grps)) {
+//       return forkJoin(
+//         of(formatGroup.grps).pipe(
+//           flatMap$,
+//           map(o => findFormatGroupsWithVerseIDs(o)),
+//           flatMap$,
+//           toArray(),
+//         ),
+//         of([formatGroup]),
+//       ).pipe(
+//         flatMap$,
+//         flatMap$,
+//       );
+//     }
+//     return of(formatGroup);
+//   } else {
+//     return of(formatGroup.grps as FormatGroup[]).pipe(
+//       filter(o => o !== undefined),
+//       flatMap$,
+//       map(o => findFormatGroupsWithVerseIDs(o)),
+//       flatMap$,
+//     );
+//   }
+
+//   return EMPTY;
+// }
 
 function findVerse(verses: Verse[], verseID: string) {
   return of(verses).pipe(
@@ -79,14 +100,13 @@ export function generateVerseNoteShell(chapter: Chapter) {
 export function addVersesToBody(chapter: Chapter) {
   return findFormatGroupsWithVerseIDs(chapter.body).pipe(
     map(o => {
-      return of(o.verseIDs as string[]).pipe(
-        flatMap$,
-        map(o => findVerse(chapter.verses, o)),
+      return of(o).pipe(
+        map(o => findVerse(chapter.verses, o.v)),
         flatMap$,
         filter(o => o !== undefined),
-        toArray(),
+        // toArray(),
         map(verses => {
-          o.verses = verses as Verse[];
+          o.verse = verses; //as Verse[];
         }),
       );
       // (o.verseIDs as string[]).map(vID => {

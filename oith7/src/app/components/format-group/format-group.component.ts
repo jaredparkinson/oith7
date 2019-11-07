@@ -11,7 +11,7 @@ import { flatMap$ } from '../../../../../oith-lib/src/rx/flatMap$';
 })
 export class FormatGroupComponent implements OnInit {
   @Input() public formatGroup: FormatGroup;
-
+@Input() public topLevel?:boolean
   public imgSrc?: string = '';
 
   constructor() {}
