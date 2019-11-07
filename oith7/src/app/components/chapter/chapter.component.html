@@ -1,4 +1,4 @@
-<ng-container *ngFor="let grp of this.chapter.body.grps">
+<!-- <ng-container *ngFor="let grp of this.chapter.body.grps">
   <ng-container *ngIf="grp.name === 'HEADER'">
     <header format-group [topLevel]="false" [formatGroup]="grp"></header>
     <ng-container *ngIf="this.chapter.body.verses">
@@ -105,4 +105,5 @@
   <ng-container *ngIf="grp.name === 'DIV' || grp.name === 'div'">
     <div [topLevel]="true" format-group [formatGroup]="grp"></div>
   </ng-container>
-</ng-container>
+</ng-container> -->
+<div format-group [formatGroup]="this.chapter.body"></div>

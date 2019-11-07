@@ -100,6 +100,8 @@ export function generateVerseNoteShell(chapter: Chapter) {
 export function addVersesToBody(chapter: Chapter) {
   return findFormatGroupsWithVerseIDs(chapter.body).pipe(
     map(o => {
+      console.log(o);
+
       return of(o).pipe(
         map(o => findVerse(chapter.verses, o.v)),
         flatMap$,

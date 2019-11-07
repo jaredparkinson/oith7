@@ -261,7 +261,9 @@ function newParseChildre(
     flatMap$,
     map(o => {
       if (typeof $(o).prop('data-aid') === 'string') {
-        return of({ v: $(o).prop('id') as string } as VersePlaceholder);
+        return of({
+          v: parseVerseID($(o).prop('id') as string),
+        } as VersePlaceholder);
       }
       return newParseChildre($, $(o));
     }),
