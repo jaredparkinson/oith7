@@ -3,88 +3,106 @@
     <header
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'HEADER' || grp.name === 'header'"
     ></header>
     <section
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       [topLevel]="true"
       *ngIf="grp.name === 'SECTION' || grp.name === 'section'"
     ></section>
     <ul
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'UL' || grp.name === 'ul'"
     ></ul>
+    <a
+      format-group
+      [href]="grp.attrs ? grp.attrs['href'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'A' || grp.name === 'a'"
+    ></a>
     <li
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'LI' || grp.name === 'li'"
     ></li>
     <dl
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'DL' || grp.name === 'dl'"
     ></dl>
     <h1
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'H1' || grp.name === 'h1'"
     ></h1>
     <h2
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'H2' || grp.name === 'h2'"
     ></h2>
     <h3
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'H3' || grp.name === 'h3'"
     ></h3>
     <h4
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'H4' || grp.name === 'h4'"
     ></h4>
     <p
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'p' || grp.name === 'p'"
     ></p>
     <em
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'em' || grp.name === 'em'"
     ></em>
     <dd
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'DD' || grp.name === 'dd'"
     ></dd>
     <figure
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'FIGURE' || grp.name === 'figure'"
     ></figure>
     <div
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'DIV' || grp.name === 'div'"
     ></div>
     <ol
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'OL' || grp.name === 'ol'"
     ></ol>
     <span
       format-group
       [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
-    ></span>
-    <span
-      format-group
-      [formatGroup]="grp"
-      *ngIf="grp.name === 'A' || grp.name === 'a'"
     ></span>
     <ng-container *ngIf="!grp.name && grp.grps">
       <ng-container *ngFor="let grp2 of grp.grps">

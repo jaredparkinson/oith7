@@ -1,5 +1,5 @@
 import { decode } from 'he';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, EMPTY } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import {
   Chapter,
@@ -234,7 +234,12 @@ function parseVerses($: CheerioStatic) {
 }
 
 function fixLinks($: CheerioStatic) {
-  return of($('[href]').toArray()).pipe(
+  const links = $('[href]').toArray();
+  if (links.length <= 0) {
+    return EMPTY;
+  }
+  return of(links).pipe(
+    filter(o => o.length > 0),
     flatMap$,
     map(o => $(o)),
     fixLink,

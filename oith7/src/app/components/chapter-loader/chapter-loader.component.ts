@@ -16,6 +16,8 @@ import {
   styleUrls: ['./chapter-loader.component.scss'],
 })
 export class ChapterLoaderComponent implements OnInit {
+  public isManual = false;
+
   constructor(
     public httpClient: HttpClient,
     public chapterService: ChapterService,
@@ -27,6 +29,7 @@ export class ChapterLoaderComponent implements OnInit {
       .pipe(
         map(params => parseParams(params)),
         map(chapterParams => {
+          this.isManual = window.location.href.includes('manual');
           return forkJoin(
             of(chapterParams),
             this.httpClient

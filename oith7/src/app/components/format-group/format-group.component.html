@@ -4,6 +4,7 @@
       <header
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'HEADER' || grp.verse.n === 'header'"
       ></header>
@@ -11,90 +12,105 @@
         verse
         class="kjkkk"
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'SECTION' || grp.verse.n === 'section'"
       ></section>
       <ul
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'UL' || grp.verse.n === 'ul'"
       ></ul>
       <li
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'LI' || grp.verse.n === 'li'"
       ></li>
       <dl
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'DL' || grp.verse.n === 'dl'"
       ></dl>
       <h1
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'H1' || grp.verse.n === 'h1'"
       ></h1>
       <h2
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'H2' || grp.verse.n === 'h2'"
       ></h2>
       <h3
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'H3' || grp.verse.n === 'h3'"
       ></h3>
       <h4
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'H4' || grp.verse.n === 'h4'"
       ></h4>
       <p
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'p' || grp.verse.n === 'p'"
       ></p>
       <em
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'em' || grp.verse.n === 'em'"
       ></em>
       <dd
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'DD' || grp.verse.n === 'dd'"
       ></dd>
       <figure
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'FIGURE' || grp.verse.n === 'figure'"
       ></figure>
       <div
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'DIV' || grp.verse.n === 'div'"
       ></div>
       <ol
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'OL' || grp.verse.n === 'ol'"
       ></ol>
       <span
         verse
         [verse]="grp.verse"
+        class="verse"
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'SPAN' || grp.verse.n === 'span'"
       ></span>
@@ -132,10 +148,17 @@
       ></ul>
       <li
         format-group
-        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [attr.data-marker]="grp.attrs['data-marker']"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
         [formatGroup]="grp"
         *ngIf="grp.name === 'LI' || grp.name === 'li'"
       ></li>
+      <a
+        format-group
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'A' || grp.name === 'a'"
+      ></a>
       <dl
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
@@ -208,17 +231,13 @@
         [formatGroup]="grp"
         *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
       ></span>
-      <span
-        format-group
-        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
-        [formatGroup]="grp"
-        *ngIf="grp.name === 'A' || grp.name === 'a'"
-      ></span>
     </ng-container>
     <ng-container *ngIf="!grp.name && grp.grps">
       <ng-container *ngFor="let grp2 of grp.grps">
-        <f-text format-text [formatText]="grp2"
-        class="{{ grp2.attrs ? grp2.attrs['class'] : '' }}"
+        <f-text
+          format-text
+          [formatText]="grp2"
+          class="{{ grp2.attrs ? grp2.attrs['class'] : '' }}"
         ></f-text>
       </ng-container>
     </ng-container>

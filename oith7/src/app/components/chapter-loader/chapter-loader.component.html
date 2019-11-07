@@ -1,5 +1,8 @@
 <ng-container *ngIf="this.chapterService.chapter">
-  <div class="chapter-loader">
+  <div
+    class="chapter-loader"
+    [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
+  >
     <left-nav></left-nav>
     <div
       [id]="chapterService.chapter.id"
