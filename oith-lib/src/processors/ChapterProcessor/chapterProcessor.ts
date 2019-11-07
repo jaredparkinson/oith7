@@ -1,5 +1,5 @@
 import { decode } from 'he';
-import { forkJoin, Observable, of, EMPTY } from 'rxjs';
+import { forkJoin, Observable, of, EMPTY, observable } from 'rxjs';
 import { filter, flatMap, map, toArray } from 'rxjs/operators';
 import {
   Chapter,
@@ -104,6 +104,98 @@ export const fixLink = map((i: Cheerio) => {
     return;
   }
 });
+
+export const fixLinkOther = (i: Cheerio) => {
+  const output = i.attr('href');
+  if (
+    output.endsWith(
+      'manual/come-follow-me-for-individuals-and-families-new-testament-2019',
+    )
+  ) {
+    i.attr(
+      'href',
+      `/manual/come-follow-me-for-individuals-and-families-new-testament-2019/title`,
+    );
+  }
+  const r7 = /^.*(manual\/come-follow-me.*)\.html/g.exec(output);
+
+  if (r7) {
+    i.attr('href', `/${r7[1]}`);
+    return;
+  }
+
+  const r2 = /^.*scriptures\/(gs)\/([a-z\d\-]+)\.html#(sec[a-z\d_]+)$/g.exec(
+    output,
+  );
+  if (r2) {
+    i.attr('href', `/${r2[1]}/${r2[2]}`);
+    return;
+  }
+
+  const r3 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+\.html\?span=[^#]+)#p\d+$/g.exec(
+    output,
+  );
+  if (r3) {
+    i.attr('href', `/${r3[2]}/${r3[3]}`);
+    return;
+  }
+
+  const r4 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(note|)(\d+)[a-z]#(note|)\d+[a-z]$/g.exec(
+    output,
+  );
+  if (r4) {
+    i.attr('href', `/${r4[2]}/${r4[3]}.${r4[5]}`);
+    return;
+  }
+
+  const r5 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(\d+)&amp;context=([^#]+)#p\d+$/g.exec(
+    output,
+  );
+  if (r5) {
+    i.attr('href', `/${r5[2]}/${r5[3]}.${r5[4]}.${r5[5]}`);
+    return;
+  }
+  const r51 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+    output,
+  );
+  if (r51) {
+    i.attr('href', `/${r51[2]}/${r51[3]}.${r51[4]}`);
+    return;
+  }
+
+  const r6 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html$/g.exec(
+    output,
+  );
+  if (r6) {
+    i.attr('href', `/${r6[2]}/${r6[3]}`);
+    return;
+  }
+
+  const r61 = /^.*scriptures\/jst\/(jst-[a-z\d\-]+\/\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+    output,
+  );
+  if (r61) {
+    i.attr('href', `/${r61[1]}`);
+    return;
+  }
+
+  const r62 = /^.*scriptures(\/(bible|history)-maps\/map-\d+)\.html$/g.exec(
+    output,
+  );
+  if (r62) {
+    i.attr('href', `/${r62[1]}`);
+    return;
+  }
+
+  const r8 = /^.*\/((manual|general-conference|ensign|liahona|new-era|friend).+)/g.exec(
+    output,
+  );
+
+  if (r8) {
+    i.attr('href', `https://churchofjesuschrist.org/study/${r8[1]}/`);
+    return;
+  }
+};
 
 function parseText(e: Cheerio) {
   return of(decode(e.text()));
@@ -218,6 +310,7 @@ function parseVerse($: CheerioStatic, verseE: CheerioElement) {
           text,
           tgs as FormatGroup[],
           verseE.name.toLowerCase(),
+          verseE.attribs,
         );
       },
     ),
@@ -235,9 +328,16 @@ function parseVerses($: CheerioStatic) {
 
 function fixLinks($: CheerioStatic) {
   const links = $('[href]').toArray();
-  if (links.length <= 0) {
-    return EMPTY;
-  }
+  // console.log(links.length);
+
+  // if (links.length > 0) {
+  //   return of(links.map(o => fixLinkOther($(o))));
+  // }
+  // console.log(links.length);
+  // return of('links');
+  // // if (links.length <= 0) {
+  // //   return EMPTY;
+  // // }
   return of(links).pipe(
     filter(o => o.length > 0),
     flatMap$,
@@ -275,22 +375,34 @@ function newParseChildre(
     flatMap(o => o),
     toArray(),
     map(
-      (o): FormatGroup => {
+      (o): Observable<FormatGroup> => {
+        // console.log('nodeName');
+        try {
+          $(element).prop('nodeName');
+        } catch (error) {
+          return EMPTY;
+          // console.log(element.text());
+
+          // console.log('error');
+        }
+        // console.log($(element);
+
         const nodeName = $(element).prop('nodeName') as string;
         const cls = $(element).prop('class');
         const f = $(element).attr();
         const l = Object.keys(f).length;
 
-        return {
+        return of({
           name: nodeName,
           grps: o, //formatGroups.length > 0 ? formatGroups : undefined,
           // verses: undefined,
           // verseIDs: verseIDS.length > 0 ? verseIDS : undefined,
           attrs: l > 0 ? $(element).attr() : undefined,
           docType: DocType.FORMATGROUP,
-        };
+        });
       },
     ),
+    flatMap$,
   );
 }
 

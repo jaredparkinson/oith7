@@ -12,7 +12,8 @@
     "serve:ssr": "node dist/server",
     "start-server": "npm run build:ssr && npm run serve:ssr",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run oith7:server:production --bundleDependencies all"
+    "build:client-and-server-bundles": "ng build --prod && ng run oith7:server:production --bundleDependencies all",
+    "prod": "ng build --prod  --aot --build-optimizer"
   },
   "private": true,
   "dependencies": {

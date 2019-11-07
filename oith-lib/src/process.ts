@@ -20,7 +20,7 @@ export function getFileType(document: CheerioStatic): Observable<string> {
 }
 
 export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
-  console.log('Processing Fils');
+  console.log('Processing Files');
 
   return loadFiles()
     .pipe(

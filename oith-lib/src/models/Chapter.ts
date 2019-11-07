@@ -5,16 +5,19 @@ export class Verse {
   public n: string;
 
   public grps: FormatGroup[];
+  public attrs: {};
   public constructor(
     id: string,
     text: string,
     formatGroups: FormatGroup[],
     n: string,
+    attrs: {},
   ) {
     this.id = id;
     this.text = text;
     this.grps = formatGroups;
     this.n = n;
+    this.attrs = attrs;
   }
 }
 
