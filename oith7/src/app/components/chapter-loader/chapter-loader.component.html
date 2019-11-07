@@ -1,4 +1,9 @@
 <ng-container *ngIf="this.chapterService.chapter">
-  <div chapter [chapter]="this.chapterService.chapter"></div>
+  <div
+    [id]="chapterService.chapter.id"
+    chapter
+    class="chapter"
+    [chapter]="this.chapterService.chapter"
+  ></div>
 </ng-container>
 <ng-container *ngIf="!this.chapterService.chapter">Loading...</ng-container>

@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import '../../oith-styles/src/lib.scss';
+@import '../node_modules/normalizecss/normalize.css';
+@import '../node_modules/animate.css/animate.css';
+* {
+  font-family: serif;
+}
+// body{}

@@ -6,12 +6,16 @@ import { ChapterLoaderComponent } from './components/chapter-loader/chapter-load
 const routes: Routes = [
   {
     path: ':book/:chapter',
-    component: ChapterLoaderComponent
-  }
+    component: ChapterLoaderComponent,
+  },
+  {
+    path: 'manual/:book/:chapter',
+    component: ChapterLoaderComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
