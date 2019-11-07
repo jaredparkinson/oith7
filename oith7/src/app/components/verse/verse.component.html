@@ -104,6 +104,48 @@
       class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
     ></span>
+    <table
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'TABLE' || grp.name === 'table'"
+    ></table>
+    <thead
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'THEAD' || grp.name === 'thead'"
+    ></thead>
+    <tbody
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'TBODY' || grp.name === 'tbody'"
+    ></tbody>
+    <th
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'TH' || grp.name === 'th'"
+    ></th>
+    <tr
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'TR' || grp.name === 'tr'"
+    ></tr>
+    <td
+      format-group
+      [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+      [formatGroup]="grp"
+      *ngIf="grp.name === 'TD' || grp.name === 'td'"
+    ></td>
     <ng-container *ngIf="!grp.name && grp.grps">
       <ng-container *ngFor="let grp2 of grp.grps">
         <f-text format-text [formatText]="grp2"></f-text>

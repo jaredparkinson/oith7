@@ -148,11 +148,53 @@
       ></ul>
       <li
         format-group
-        [attr.data-marker]="grp.attrs['data-marker']"
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
         class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
         [formatGroup]="grp"
         *ngIf="grp.name === 'LI' || grp.name === 'li'"
       ></li>
+      <table
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'TABLE' || grp.name === 'table'"
+      ></table>
+      <thead
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'THEAD' || grp.name === 'thead'"
+      ></thead>
+      <tbody
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'TBODY' || grp.name === 'tbody'"
+      ></tbody>
+      <th
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'TH' || grp.name === 'th'"
+      ></th>
+      <tr
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'TR' || grp.name === 'tr'"
+      ></tr>
+      <td
+        format-group
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'TD' || grp.name === 'td'"
+      ></td>
       <a
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
