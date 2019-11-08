@@ -35,7 +35,7 @@ export class ChapterLoaderComponent implements OnInit {
             of(chapterParams),
             this.httpClient
               .get<Chapter>(
-                `assets/scripture_files/eng-${chapterParams.book}-${chapterParams.chapter}-chapter.json`,
+                `assets/scripture_files/${chapterParams.lang}-${chapterParams.book}-${chapterParams.chapter}-chapter.json`,
                 { responseType: 'json' },
               )
               .pipe(

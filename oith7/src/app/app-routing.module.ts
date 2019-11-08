@@ -12,6 +12,14 @@ const routes: Routes = [
     path: 'manual/:book/:chapter',
     component: ChapterLoaderComponent,
   },
+  {
+    path: ':lang/:book/:chapter',
+    component: ChapterLoaderComponent,
+  },
+  {
+    path: ':lang/manual/:book/:chapter',
+    component: ChapterLoaderComponent,
+  },
 ];
 
 @NgModule({

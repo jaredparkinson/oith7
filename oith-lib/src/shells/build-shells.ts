@@ -227,6 +227,7 @@ export interface ChapterParams {
   chapter: string;
   highlight: string;
   context: string;
+  lang: string;
 }
 
 export function parseParams(params: Params): ChapterParams {
@@ -238,5 +239,6 @@ export function parseParams(params: Params): ChapterParams {
     chapter: chapterSplit[0],
     highlight: chapterSplit[1],
     context: chapterSplit[2],
+    lang: params['lang'] ? params['lang'] : 'eng',
   };
 }

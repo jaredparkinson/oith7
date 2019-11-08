@@ -3,6 +3,7 @@ import { FormatGroup } from '../../../../../oith-lib/src/models/Chapter';
 import { of, forkJoin } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { flatMap$ } from '../../../../../oith-lib/src/rx/flatMap$';
+import { LinkService } from 'src/app/services/link.service';
 
 @Component({
   selector: '[format-group]',
@@ -11,10 +12,10 @@ import { flatMap$ } from '../../../../../oith-lib/src/rx/flatMap$';
 })
 export class FormatGroupComponent implements OnInit {
   @Input() public formatGroup: FormatGroup;
-@Input() public topLevel?:boolean
+  @Input() public topLevel?: boolean;
   public imgSrc?: string = '';
 
-  constructor() {}
+  constructor(public linkService: LinkService) {}
 
   ngOnInit() {
     of(this.formatGroup)

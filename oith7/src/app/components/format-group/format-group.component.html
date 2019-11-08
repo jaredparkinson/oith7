@@ -198,7 +198,7 @@
       <a
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
-        [href]="grp.attrs ? grp.attrs['href'] : undefined"
+        (click)="this.linkService.runLink(grp)"
         [ngClass]="{
           'valid-href':
             grp.attrs &&
