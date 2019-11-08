@@ -142,8 +142,36 @@ function resetVerses(verses: Verse[]) {
   );
 }
 
-function highlightVerses(verses: Verse[]) {
-  return of(verses);
+function highlightContext(
+  verses: Verse[],
+  chapterParams: ChapterParams,
+  hC: 'highlight' | 'context',
+) {
+  chapterParams[hC].split(',').map(h => {
+    if (h.includes('-')) {
+      const hSplit = h.split('-');
+
+      const firstIndex = verses.findIndex(v => v.id === hSplit[0]);
+      const lastIndex = verses.findIndex(v => v.id === hSplit[1]);
+
+      verses.slice(firstIndex, lastIndex + 1).map(v => (v[hC] = true));
+    } else {
+      const verse = verses.find(v => v.id === h);
+      if (verse) {
+        verse[hC] = true;
+      }
+    }
+  });
+}
+
+export function highlightVerses(verses: Verse[], chapterParams: ChapterParams) {
+  if (chapterParams.highlight) {
+    highlightContext(verses, chapterParams, 'highlight');
+  }
+  if (chapterParams.context) {
+    highlightContext(verses, chapterParams, 'context');
+  }
+  return EMPTY;
 }
 
 function generateVerseNoteGroups(verseNotea?: VerseNote[]) {
@@ -195,8 +223,8 @@ export declare type Params = {
 export interface ChapterParams {
   book: string;
   chapter: string;
-  highlight: string;
-  context: string;
+  highlight?: string;
+  context?: string;
   lang: string;
 }
 

@@ -3,6 +3,8 @@ export class Verse {
   public id: string;
   public text: string;
   public n: string;
+  public highlight?: boolean;
+  public context?: boolean;
 
   public grps: FormatGroup[];
   public attrs: {};

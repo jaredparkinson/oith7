@@ -50,7 +50,11 @@ export class LinkService {
 
 export function scrollIntoView(selector: string) {
   return of(document.querySelector(selector) as HTMLElement).pipe(
-    filter(o => o !== undefined),
-    map(o => o.scrollIntoView()),
+    filter(o => o !== null),
+    map(o => {
+      console.log(o);
+
+      o.scrollIntoView();
+    }),
   );
 }
