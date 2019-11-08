@@ -44,6 +44,13 @@
         [id]="grp.verse.id"
         *ngIf="grp.verse.n === 'H1' || grp.verse.n === 'h1'"
       ></h1>
+      <footer
+        verse
+        [verse]="grp.verse"
+        class="{{ grp.verse.attrs ? grp.verse.attrs['class'] : '' }} "
+        [id]="grp.verse.id"
+        *ngIf="grp.verse.n === 'FOOTER' || grp.verse.n === 'footer'"
+      ></footer>
       <h2
         verse
         [verse]="grp.verse"
@@ -133,13 +140,18 @@
           [formatGroup]="grp"
         />
       </div>
-
       <section
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
         [formatGroup]="grp"
         *ngIf="grp.name === 'SECTION' || grp.name === 'section'"
       ></section>
+      <footer
+        format-group
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [formatGroup]="grp"
+        *ngIf="grp.name === 'FOOTER' || grp.name === 'footer'"
+      ></footer>
       <ul
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"

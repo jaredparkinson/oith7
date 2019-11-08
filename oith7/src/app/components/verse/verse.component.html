@@ -126,6 +126,12 @@
       class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'SPAN' || grp.name === 'span'"
     ></span>
+    <footer
+      format-group
+      [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+      *ngIf="grp.name === 'FOOTER' || grp.name === 'footer'"
+    ></footer>
     <table
       format-group
       [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
