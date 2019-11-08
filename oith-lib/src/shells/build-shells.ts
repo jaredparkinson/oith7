@@ -39,43 +39,12 @@ function findFormatGroupsWithVerseIDs(
   );
 }
 
-// function findFormatGroupsWithVerseIDs(
-//   formatGroup: FormatGroup,
-//   // isBody: boolean,
-// ): Observable<FormatGroup> {
-//   if (Array.isArray(formatGroup.verseIDs)) {
-//     if (Array.isArray(formatGroup.grps)) {
-//       return forkJoin(
-//         of(formatGroup.grps).pipe(
-//           flatMap$,
-//           map(o => findFormatGroupsWithVerseIDs(o)),
-//           flatMap$,
-//           toArray(),
-//         ),
-//         of([formatGroup]),
-//       ).pipe(
-//         flatMap$,
-//         flatMap$,
-//       );
-//     }
-//     return of(formatGroup);
-//   } else {
-//     return of(formatGroup.grps as FormatGroup[]).pipe(
-//       filter(o => o !== undefined),
-//       flatMap$,
-//       map(o => findFormatGroupsWithVerseIDs(o)),
-//       flatMap$,
-//     );
-//   }
-
-//   return EMPTY;
-// }
-
 function findVerse(verses: Verse[], verseID: string) {
-  return of(verses).pipe(
-    flatMap$,
-    find(o => o.id === verseID),
-  );
+  return of(verses.find(v => v.id === verseID));
+  // return of(verses).pipe(
+  //   flatMap$,
+  //   find(o => o.id === verseID),
+  // );
 }
 
 export function generateVerseNoteShell(chapter: Chapter) {
@@ -100,20 +69,21 @@ export function generateVerseNoteShell(chapter: Chapter) {
 export function addVersesToBody(chapter: Chapter) {
   return findFormatGroupsWithVerseIDs(chapter.body).pipe(
     map(o => {
-      return of(o).pipe(
-        map(o => findVerse(chapter.verses, o.v)),
-        flatMap$,
-        filter(o => o !== undefined),
-        // toArray(),
-        map(verses => {
-          o.verse = verses; //as Verse[];
-        }),
-      );
+      o.verse = chapter.verses.find(v => v.id === o.v);
+      // return of(o).pipe(
+      //   map(o => findVerse(chapter.verses, o.v)),
+      //   flatMap$,
+      //   filter(o => o !== undefined),
+      //   // toArray(),
+      //   map(verses => {
+      //     o.verse = verses; //as Verse[];
+      //   }),
+      // );
       // (o.verseIDs as string[]).map(vID => {
       //   const verse = chapter.verses.find(v => v.id === vID);
       // });
     }),
-    flatMap$,
+    // flatMap$,
     toArray(),
   );
 }
