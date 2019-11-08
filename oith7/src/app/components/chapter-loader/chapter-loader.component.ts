@@ -40,13 +40,17 @@ export class ChapterLoaderComponent implements OnInit {
               )
               .pipe(
                 map(chapter => {
-                  return addVersesToBody(chapter).pipe(
-                    map(() => {
-                      return buildNewShell(chapter).pipe(map(() => chapter));
-                    }),
-                  );
+                  return forkJoin(
+                    addVersesToBody(chapter),
+                    buildNewShell(chapter),
+                    of(chapter),
+                  ).pipe(map(o => o[2]));
+                  // return addVersesToBody(chapter).pipe(
+                  //   map(() => {
+                  //     return buildNewShell(chapter).pipe(map(() => chapter));
+                  //   }),
+                  // );
                 }),
-                flatMap(o => o),
                 flatMap(o => o),
               ),
           );
