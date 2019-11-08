@@ -218,3 +218,25 @@ export function buildNewShell(chapter: Chapter) {
     generateVerseNoteGroups(chapter.verseNotes),
   );
 }
+export declare type Params = {
+  [key: string]: any;
+};
+
+export interface ChapterParams {
+  book: string;
+  chapter: string;
+  highlight: string;
+  context: string;
+}
+
+export function parseParams(params: Params): ChapterParams {
+  const book = params['book'] as string;
+  const chapterSplit = (params['chapter'] as string).split('.');
+
+  return {
+    book: book,
+    chapter: chapterSplit[0],
+    highlight: chapterSplit[1],
+    context: chapterSplit[2],
+  };
+}

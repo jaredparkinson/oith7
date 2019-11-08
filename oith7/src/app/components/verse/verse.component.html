@@ -21,7 +21,11 @@
     ></ul>
     <a
       format-group
-      [href]="grp.attrs ? grp.attrs['href'] : ''"
+      (click)="this.linkService.runLink(grp)"
+      [ngClass]="{
+        'valid-href':
+          grp.attrs && grp.attrs['href'] && !grp.attrs['href'].includes('#note')
+      }"
       class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       [formatGroup]="grp"
       *ngIf="grp.name === 'A' || grp.name === 'a'"
@@ -32,6 +36,24 @@
       class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
       *ngIf="grp.name === 'LI' || grp.name === 'li'"
     ></li>
+    <ruby
+      format-group
+      [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+      *ngIf="grp.name === 'RUBY' || grp.name === 'ruby'"
+    ></ruby>
+    <rb
+      format-group
+      [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+      *ngIf="grp.name === 'RB' || grp.name === 'rb'"
+    ></rb>
+    <rt
+      format-group
+      [formatGroup]="grp"
+      class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+      *ngIf="grp.name === 'RT' || grp.name === 'rt'"
+    ></rt>
     <dl
       format-group
       [formatGroup]="grp"
@@ -148,7 +170,11 @@
     ></td>
     <ng-container *ngIf="!grp.name && grp.grps">
       <ng-container *ngFor="let grp2 of grp.grps">
-        <f-text format-text [formatText]="grp2"></f-text>
+        <f-text
+          [attr.offsets]="grp2.offsets"
+          format-text
+          [formatText]="grp2"
+        ></f-text>
       </ng-container>
     </ng-container>
   </ng-container>

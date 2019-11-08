@@ -198,9 +198,34 @@
       <a
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [href]="grp.attrs ? grp.attrs['href'] : undefined"
+        [ngClass]="{
+          'valid-href':
+            grp.attrs &&
+            grp.attrs['href'] &&
+            !grp.attrs['href'].includes('#note')
+        }"
         [formatGroup]="grp"
         *ngIf="grp.name === 'A' || grp.name === 'a'"
       ></a>
+      <ruby
+        format-group
+        [formatGroup]="grp"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        *ngIf="grp.name === 'RUBY' || grp.name === 'ruby'"
+      ></ruby>
+      <rb
+        format-group
+        [formatGroup]="grp"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        *ngIf="grp.name === 'RB' || grp.name === 'rb'"
+      ></rb>
+      <rt
+        format-group
+        [formatGroup]="grp"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        *ngIf="grp.name === 'RT' || grp.name === 'rt'"
+      ></rt>
       <dl
         format-group
         class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
@@ -278,6 +303,7 @@
       <ng-container *ngFor="let grp2 of grp.grps">
         <f-text
           format-text
+          [attr.offsets]="grp2.offsets"
           [formatText]="grp2"
           class="{{ grp2.attrs ? grp2.attrs['class'] : '' }}"
         ></f-text>

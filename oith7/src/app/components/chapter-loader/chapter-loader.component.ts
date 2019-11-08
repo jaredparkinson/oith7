@@ -8,6 +8,7 @@ import { Chapter } from '../../../../../oith-lib/src/models/Chapter';
 import {
   buildNewShell,
   addVersesToBody,
+  parseParams,
 } from '../../../../../oith-lib/src/shells/build-shells';
 
 @Component({
@@ -55,23 +56,4 @@ export class ChapterLoaderComponent implements OnInit {
       )
       .subscribe(o => console.log(o));
   }
-}
-
-export interface ChapterParams {
-  book: string;
-  chapter: string;
-  highlight: string;
-  context: string;
-}
-
-export function parseParams(params: Params): ChapterParams {
-  const book = params['book'] as string;
-  const chapterSplit = (params['chapter'] as string).split('.');
-
-  return {
-    book: book,
-    chapter: chapterSplit[0],
-    highlight: chapterSplit[1],
-    context: chapterSplit[2],
-  };
 }
