@@ -1,4 +1,4 @@
-<ng-container *ngIf="formatGroup.grps">
+<ng-container *ngIf="formatGroup.grps !== undefined">
   <ng-container *ngFor="let grp of formatGroup.grps">
     <ng-container *ngIf="grp.v !== undefined">
       <header
