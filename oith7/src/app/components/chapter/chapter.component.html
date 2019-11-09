@@ -106,4 +106,8 @@
     <div [topLevel]="true" format-group [formatGroup]="grp"></div>
   </ng-container>
 </ng-container> -->
-<div format-group [formatGroup]="this.chapter.body"></div>
+<ng-container *ngIf="this.chapter">
+  <div [id]="this.chapter.id" class="chapter">
+    <div format-group [formatGroup]="this.chapter.body"></div>
+  </div>
+</ng-container>

@@ -4,12 +4,9 @@
     [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
   >
     <left-nav></left-nav>
-    <div
-      [id]="chapterService.chapter.id"
-      chapter
-      class="chapter"
-      [chapter]="this.chapterService.chapter"
-    ></div>
+    <ng-container *ngIf="this.chapter">
+      <chapter-loader chapter [chapter]="this.chapter | async"></chapter-loader
+    ></ng-container>
     <right-nav></right-nav>
   </div>
 </ng-container>

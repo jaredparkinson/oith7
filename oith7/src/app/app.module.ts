@@ -15,6 +15,9 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { FormatGroupsComponent } from './components/format-groups/format-groups.component';
 import { VerseComponent } from './components/verse/verse.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { chapterReducer } from './reducers/chapter.reducer';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { VerseComponent } from './components/verse/verse.component';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    StoreModule.forRoot({
+      chapter: chapterReducer,
+    }),
     AppRoutingModule,
     HttpClientModule,
   ],

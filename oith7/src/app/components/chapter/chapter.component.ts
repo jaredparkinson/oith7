@@ -8,7 +8,9 @@ import { Chapter } from '../../../../../oith-lib/src/models/Chapter';
 })
 export class ChapterComponent implements OnInit {
   @Input() public chapter: Chapter;
-  constructor() {}
+  constructor() {
+    console.log(this.chapter);
+  }
 
   ngOnInit() {}
 }
