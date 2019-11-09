@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormatGroup } from '../../../../oith-lib/src/models/Chapter';
-import { of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { of, EMPTY } from 'rxjs';
+import { filter, map, flatMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { flatMap$ } from '../../../../oith-lib/src/rx/flatMap$';
 import { ChapterService } from './chapter.service';
@@ -39,10 +39,18 @@ export class LinkService {
             typeof o.attrs['href'] === 'string' &&
             !(o.attrs['href'] as string).includes('#note'),
         ),
-        map(o =>
-          this.router.navigateByUrl((o.attrs as { href: string })['href']),
-        ),
-        flatMap$,
+        map(o => {
+          const href = (o.attrs as { href: string })['href'];
+
+          if (href.includes('http')) {
+            window.location.href = href;
+            return EMPTY;
+          }
+          return of(
+            this.router.navigateByUrl((o.attrs as { href: string })['href']),
+          ).pipe(flatMap(o => o));
+        }),
+        flatMap(o => o),
       )
       .subscribe(o => console.log(o));
   }

@@ -6,14 +6,11 @@
   [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
 >
   <left-nav></left-nav>
-  <chapter-loader
-    chapter
-    [chapter]="this.chapterService.chapter"
-  ></chapter-loader>
   <!-- <chapter-loader
     chapter
-    [chapter]="this.chapterService.testChapter | async"
+    [chapter]="this.chapterService.chapter"
   ></chapter-loader> -->
+  <chapter-loader chapter [chapter]="this.chapter | async"></chapter-loader>
   <!-- <ng-container *ngIf="this.chapter"> </ng-container> -->
   <right-nav></right-nav>
 </div>

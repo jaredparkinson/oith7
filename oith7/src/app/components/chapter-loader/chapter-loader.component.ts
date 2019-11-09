@@ -25,7 +25,7 @@ import { AddChapter } from 'src/app/actions/chapter.actions';
 export class ChapterLoaderComponent implements OnInit {
   public isManual = false;
 
-  // public chapter: Observable<Chapter>;
+  public chapter: Observable<Chapter>;
 
   constructor(
     public httpClient: HttpClient,
@@ -33,7 +33,7 @@ export class ChapterLoaderComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private store: Store<AppState>,
   ) {
-    // this.chapter = store.pipe(select('chapter'));
+    this.chapter = store.pipe(select('chapter'));
   }
 
   ngOnInit() {
@@ -71,9 +71,9 @@ export class ChapterLoaderComponent implements OnInit {
         }),
         flatMap(o => o),
         map(o => {
-          this.chapterService.chapter = o[1];
-          this.chapterService.testChapter.next(o[1]);
-          // this.store.dispatch(new AddChapter(o[1]));
+          // this.chapterService.chapter = o[1];
+          // this.chapterService.testChapter.next(o[1]);
+          this.store.dispatch(new AddChapter(o[1]));
         }),
         delay(100),
         map(() => {

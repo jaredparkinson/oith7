@@ -107,7 +107,12 @@
   </ng-container>
 </ng-container> -->
 <ng-container *ngIf="this.chapter">
-  <div [id]="this.chapter.id" class="chapter">
+  <div
+    [id]="this.chapter.id"
+    class="chapter body {{
+      this.chapter.body.attrs ? this.chapter.body.attrs['class'] : ''
+    }}"
+  >
     <div format-group [formatGroup]="this.chapter.body"></div>
   </div>
 </ng-container>

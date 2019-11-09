@@ -23,7 +23,7 @@ export class FormatGroupComponent implements OnInit {
   ngOnInit() {
     of(this.formatGroup as FormatGroup)
       .pipe(
-        filter(o => o !== undefined && Array.isArray(o.attrs)),
+        filter(o => o !== undefined && typeof o.attrs !== 'undefined'),
         map(o => {
           return forkJoin(this.setProps(o));
         }),
@@ -34,14 +34,12 @@ export class FormatGroupComponent implements OnInit {
 
   public setProps(grp: FormatGroup) {
     return of(grp).pipe(
-      filter(o => o.name !== undefined),
+      filter(f => f.name !== undefined),
       map(f => {
         switch ((f.name as string).toLowerCase()) {
           case 'img': {
             if (f.attrs) {
               f.attrs['src'] = `/assets/images/${f.attrs['src']}.jpg`;
-              console.log(f.attrs);
-              console.log(this.imgSrc);
             }
             break;
           }
