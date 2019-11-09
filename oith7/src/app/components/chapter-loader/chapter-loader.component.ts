@@ -72,19 +72,15 @@ export class ChapterLoaderComponent implements OnInit {
         flatMap(o => o),
         map(o => {
           this.chapterService.chapter = o[1];
-          this.store.dispatch(new AddChapter(o[1]));
+          // this.store.dispatch(new AddChapter(o[1]));
         }),
-        delay(1000),
+        delay(100),
         map(() => {
           return scrollIntoView('.context,.highlight');
         }),
 
         flatMap$,
       )
-      .subscribe(o => {
-        this.store.pipe(select('chapter')).subscribe(o => {
-          console.log(o);
-        });
-      });
+      .subscribe(o => {});
   }
 }

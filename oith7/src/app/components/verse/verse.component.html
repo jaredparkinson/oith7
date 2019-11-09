@@ -1,6 +1,55 @@
 <ng-container *ngIf="verse.grps">
   <ng-container *ngFor="let grp of verse.grps">
-    <header
+    <ng-container [ngSwitch]="grp.name ? grp.name.toLowerCase() : ''">
+      <a
+        format-group
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        (click)="this.linkService.runLink(grp)"
+        [ngClass]="{
+          'valid-href':
+            grp.attrs &&
+            grp.attrs['href'] &&
+            !grp.attrs['href'].includes('#note')
+        }"
+        [formatGroup]="grp"
+        *ngSwitchCase="'a'"
+      ></a>
+      <ul
+        format-group
+        *ngSwitchCase="'ul'"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [formatGroup]="grp"
+      ></ul>
+      <li
+        format-group
+        *ngSwitchCase="'li'"
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+      ></li>
+      <ruby
+        format-group
+        *ngSwitchCase="'ruby'"
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+      ></ruby>
+      <rt
+        format-group
+        *ngSwitchCase="'rt'"
+        [attr.data-marker]="grp.attrs ? grp.attrs['data-marker'] : ''"
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
+        [formatGroup]="grp"
+      ></rt>
+      <format-group
+        *ngSwitchDefault
+        class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
+        [attr.name]="grp.name"
+        [formatGroup]="grp"
+        format-group
+      ></format-group>
+    </ng-container>
+    <!-- <header
       format-group
       [formatGroup]="grp"
       class="{{ grp.attrs ? grp.attrs['class'] : '' }}"
@@ -173,7 +222,7 @@
       class="{{ grp.attrs ? grp.attrs['class'] : '' }} "
       [formatGroup]="grp"
       *ngIf="grp.name === 'TD' || grp.name === 'td'"
-    ></td>
+    ></td> -->
     <ng-container *ngIf="!grp.name && grp.grps">
       <ng-container *ngFor="let grp2 of grp.grps">
         <f-text
