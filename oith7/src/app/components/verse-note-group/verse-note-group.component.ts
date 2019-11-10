@@ -18,6 +18,5 @@ export class VerseNoteGroupComponent implements OnInit {
     this.notes = this.verseNoteGroup.notes.sort(
       (a, b) => a.noteType - b.noteType,
     );
-    console.log(this.notes);
   }
 }

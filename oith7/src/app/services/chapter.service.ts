@@ -13,7 +13,7 @@ export class ChapterService {
   }
 
   private test() {
-    this.testChapter.subscribe(o => console.log(o));
+    this.testChapter.subscribe(o => o);
     // this.chapter.subscribe(o => console.log(o));
   }
 }

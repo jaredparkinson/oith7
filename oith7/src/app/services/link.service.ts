@@ -13,7 +13,6 @@ export class LinkService {
   constructor(private router: Router, private chapterService: ChapterService) {}
 
   public runLink(formatGroup: FormatGroup) {
-    console.log(formatGroup);
     if (
       formatGroup.attrs &&
       formatGroup.attrs['href'] !== undefined &&
@@ -52,7 +51,7 @@ export class LinkService {
         }),
         flatMap(o => o),
       )
-      .subscribe(o => console.log(o));
+      .subscribe(o => o);
   }
 }
 
@@ -60,8 +59,6 @@ export function scrollIntoView(selector: string) {
   return of(document.querySelector(selector) as HTMLElement).pipe(
     filter(o => o !== null),
     map(o => {
-      console.log(o);
-
       o.scrollIntoView();
     }),
   );
