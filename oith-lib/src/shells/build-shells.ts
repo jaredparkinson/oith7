@@ -48,9 +48,8 @@ function findVerse(verses: Verse[], verseID: string) {
 }
 
 export function generateVerseNoteShell(chapter: Chapter) {
-  return of(chapter.verses).pipe(
-    flatMap$,
-    map(v => {
+  const verseNotes = chapter.verses
+    .map(v => {
       return (chapter.verseNotes
         ? chapter.verseNotes.find(
             vN =>
@@ -58,10 +57,24 @@ export function generateVerseNoteShell(chapter: Chapter) {
               `${chapter.id.replace('-chapter', '')}-${v.id}-verse-notes`,
           )
         : undefined) as VerseNote;
-    }),
-    filter(o => o !== undefined),
-    toArray(),
-  );
+    })
+    .filter(o => o !== undefined);
+  return of((chapter.verseNotes = verseNotes));
+
+  // return of(chapter.verses).pipe(
+  //   flatMap$,
+  //   map(v => {
+  //     return (chapter.verseNotes
+  //       ? chapter.verseNotes.find(
+  //           vN =>
+  //             vN.id ===
+  //             `${chapter.id.replace('-chapter', '')}-${v.id}-verse-notes`,
+  //         )
+  //       : undefined) as VerseNote;
+  //   }),
+  //   filter(o => o !== undefined),
+  //   toArray(),
+  // );
 }
 
 // export function prepareVerseNotes(verseNotes: VerseNote[]) {}

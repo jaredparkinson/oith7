@@ -18,6 +18,8 @@ export class VerseNotesComponent implements OnInit {
     this.verseNotes = this.store.select('chapter').pipe(
       filter(o => o !== undefined),
       map(o => {
+        console.log(o);
+
         return o.verseNotes;
       }),
     );

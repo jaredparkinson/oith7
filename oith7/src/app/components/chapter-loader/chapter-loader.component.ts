@@ -11,6 +11,7 @@ import {
   parseParams,
   highlightVerses,
   ChapterParams,
+  generateVerseNoteShell,
 } from '../../../../../oith-lib/src/shells/build-shells';
 import { scrollIntoView } from 'src/app/services/link.service';
 import { flatMap$ } from '../../../../../oith-lib/src/rx/flatMap$';
@@ -105,6 +106,7 @@ export class ChapterLoaderComponent implements OnInit {
               buildNewShell(chapter),
               highlightVerses(chapter.verses, chapterParams).pipe(toArray()),
               of(chapter),
+              generateVerseNoteShell(chapter),
             ).pipe(map(o => o[3]));
             // return addVersesToBody(chapter).pipe(
             //   map(() => {
