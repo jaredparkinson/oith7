@@ -1,17 +1,20 @@
 <!-- <ng-container *ngIf="this.chapterService.chapter">
 </ng-container>
 <ng-container *ngIf="!this.chapterService.chapter">Loading...</ng-container> -->
-<div
-  class="chapter-loader"
-  [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
->
-  <left-nav></left-nav>
-  <!-- <chapter-loader
+<div class="chapter-loader">
+  <chapter-content
+    [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
+  >
+    <left-nav></left-nav>
+    <!-- <chapter-loader
     chapter
     [chapter]="this.chapterService.chapter"
-  ></chapter-loader> -->
-  <chapter-loader chapter [chapter]="this.chapter | async"></chapter-loader>
-  <!-- <ng-container *ngIf="this.chapter"> </ng-container> -->
-  <right-nav></right-nav>
+    ></chapter-loader> -->
+    <chapter-loader chapter [chapter]="this.chapter | async"></chapter-loader>
+    <!-- <ng-container *ngIf="this.chapter"> </ng-container> -->
+    <right-nav></right-nav>
+  </chapter-content>
+  <white-space
+    style="height: calc(100vh - 48px); display: block;"
+  ></white-space>
 </div>
-<white-space style="height: calc(100vh - 48px); display: block;"></white-space>

@@ -113,6 +113,10 @@
       this.chapter.body.attrs ? this.chapter.body.attrs['class'] : ''
     }}"
   >
-    <div format-group [formatGroup]="this.chapter.body"></div>
+    <div
+      format-group
+      [formatGroup]="this.chapter.body"
+      [attr.name]="this.chapter.body.name"
+    ></div>
   </div>
 </ng-container>
