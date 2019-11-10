@@ -23,6 +23,10 @@ import {
 } from './reducers/chapter.reducer';
 import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
 import { VerseNoteComponent } from './components/verse-note/verse-note.component';
+import { VerseNoteGroupComponent } from './components/verse-note-group/verse-note-group.component';
+import { VerseNotePhraseComponent } from './components/verse-note-phrase/verse-note-phrase.component';
+import { VerseNoteRefComponent } from './components/verse-note-ref/verse-note-ref.component';
+import { NoteComponent } from './components/note/note.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,10 @@ import { VerseNoteComponent } from './components/verse-note/verse-note.component
     VerseComponent,
     VerseNotesComponent,
     VerseNoteComponent,
+    VerseNoteGroupComponent,
+    VerseNotePhraseComponent,
+    VerseNoteRefComponent,
+    NoteComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

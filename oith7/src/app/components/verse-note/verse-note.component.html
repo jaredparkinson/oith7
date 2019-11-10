@@ -1,1 +1,6 @@
-<p>verse-note works!</p>
+<ng-container *ngIf="this.verseNote.noteGroups">
+  <verse-note-group
+    [verseNoteGroup]="verseNoteGroup"
+    *ngFor="let verseNoteGroup of this.verseNote.noteGroups"
+  ></verse-note-group>
+</ng-container>
