@@ -18,7 +18,7 @@ import { flatMap$ } from '../../../../../oith-lib/src/rx/flatMap$';
 import { AppState } from 'src/app/app.state';
 import { Store, select } from '@ngrx/store';
 import { AddChapter, AddChapterHistory } from 'src/app/actions/chapter.actions';
-
+import { syncScrolling$ } from '../../../../../oith-lib/src/sync-scrolling/sync-scrolling';
 @Component({
   selector: '[chapter-loader]',
   templateUrl: './chapter-loader.component.html',
@@ -121,5 +121,9 @@ export class ChapterLoaderComponent implements OnInit {
 
   private addCurrentPageToHistory(chapterParams: ChapterParams) {
     return of();
+  }
+
+  public scroll() {
+    syncScrolling$.next();
   }
 }

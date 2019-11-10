@@ -1,7 +1,7 @@
 <!-- <ng-container *ngIf="this.chapterService.chapter">
 </ng-container>
 <ng-container *ngIf="!this.chapterService.chapter">Loading...</ng-container> -->
-<div class="chapter-loader">
+<div class="chapter-loader" (scroll)="this.scroll()">
   <chapter-content
     [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"
   >

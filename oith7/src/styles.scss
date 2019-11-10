@@ -6,3 +6,12 @@
   // font-family: serif;
 }
 // body{}
+
+router-outlet ~ div {
+  width: calc(100vw - 250px);
+  left: 250px;
+  position: absolute;
+  .chapter-loader {
+    width: calc(100% - 300px);
+  }
+}

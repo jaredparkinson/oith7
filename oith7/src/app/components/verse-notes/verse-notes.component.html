@@ -1,5 +1,9 @@
 <verse-note
   [verseNote]="verseNote"
+  [id]="verseNote.id"
   *ngFor="let verseNote of this.verseNotes | async"
 >
 </verse-note>
+<verse-note-whitespace
+  style="height: 100vh; display: block;"
+></verse-note-whitespace>
