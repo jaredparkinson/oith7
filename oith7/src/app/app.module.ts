@@ -21,6 +21,8 @@ import {
   chapterReducer,
   chapterHistoryReducter,
 } from './reducers/chapter.reducer';
+import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
+import { VerseNoteComponent } from './components/verse-note/verse-note.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import {
     ChapterLoaderComponent,
     FormatGroupsComponent,
     VerseComponent,
+    VerseNotesComponent,
+    VerseNoteComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

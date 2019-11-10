@@ -53,7 +53,6 @@ export class ChapterLoaderComponent implements OnInit {
         }),
         flatMap(o => o),
         map(chapterParams => {
-          this.isManual = window.location.href.includes('manual');
           return this.getChapter(chapterParams);
         }),
         flatMap(o => o),
@@ -67,6 +66,8 @@ export class ChapterLoaderComponent implements OnInit {
         }),
         delay(100),
         map(() => {
+          this.isManual = window.location.href.includes('manual');
+
           return scrollIntoView('.context,.highlight');
         }),
 
