@@ -1,2 +1,6 @@
 <note-phrase [notePhrase]="this.verseNoteGroup.notes[0].phrase"></note-phrase>
-<ng-container *ngIf="this.verseNoteGroup.notes"> </ng-container>
+<ng-container *ngIf="this.notes">
+  <ng-container *ngFor="let note of this.notes">
+    <note [note]="note"></note>
+  </ng-container>
+</ng-container>

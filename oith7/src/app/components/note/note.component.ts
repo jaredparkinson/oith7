@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {
+  Note,
+  NoteRef,
+} from '../../../../../oith-lib/src/verse-notes/verse-note';
 
 @Component({
-  selector: 'app-note',
+  selector: 'note',
   templateUrl: './note.component.html',
-  styleUrls: ['./note.component.scss']
+  styleUrls: ['./note.component.scss'],
 })
 export class NoteComponent implements OnInit {
-
-  constructor() { }
+  @Input() public note: Note;
+  public noteRefs?: NoteRef[];
+  constructor() {}
 
   ngOnInit() {
+    this.noteRefs = this.note.ref.sort((a, b) => a.category - b.category);
   }
-
 }

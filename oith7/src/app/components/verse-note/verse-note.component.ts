@@ -17,6 +17,5 @@ export class VerseNoteComponent implements OnInit {
 
   ngOnInit() {
     // this.verseVerseNoteGroups = this.verseNote.noteGroups.sort((a,b)=> a.formatTag.o)
-    console.log(this.verseNote.noteGroups);
   }
 }
