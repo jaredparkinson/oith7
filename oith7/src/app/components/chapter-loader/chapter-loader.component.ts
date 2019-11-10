@@ -46,19 +46,10 @@ export class ChapterLoaderComponent implements OnInit {
 
           return forkJoin(of(chapterParams)).pipe(
             map(o => {
-              console.log('oiajsdfoijasdfoijasdofijasdoifj');
-
-              console.log(chapterParams);
-
-              console.log(o);
               this.addToHistory();
               return o[0];
             }),
           );
-          return forkJoin(
-            of(chapterParams),
-            this.addCurrentPageToHistory(chapterParams),
-          ).pipe(map(o => o[0]));
         }),
         flatMap(o => o),
         map(chapterParams => {
