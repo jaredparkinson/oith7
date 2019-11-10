@@ -13,9 +13,39 @@ import {
 export class VerseNoteComponent implements OnInit {
   @Input() public verseNote: VerseNote;
   public verseVerseNoteGroups?: VerseNoteGroup[];
+  public shortTitle?: string;
+  public title?: string;
   constructor() {}
 
   ngOnInit() {
-    // this.verseVerseNoteGroups = this.verseNote.noteGroups.sort((a,b)=> a.formatTag.o)
+    if (this.verseNote) {
+      const idSplit = this.verseNote.id.split('-');
+      if (doesntInclude(['title1', 'closing1'], this.verseNote.id)) {
+        if (this.verseNote.id.includes('jst-')) {
+          this.title = `${idSplit[1]}-${idSplit[2]} ${idSplit[3]}:${
+            idSplit[idSplit.length - 3]
+          } Notes`;
+        } else {
+          this.title = `${capitalizeFirstLetter(idSplit[1])} ${idSplit[2]}:${
+            idSplit[idSplit.length - 3]
+          } Notes`;
+        }
+        this.shortTitle = `Verse ${idSplit[idSplit.length - 3]} Notes`;
+      } else if (this.verseNote.id.includes('title1')) {
+        this.title = 'Chapter Notes';
+        this.shortTitle = 'Chapter Notes';
+      } else if (this.verseNote.id.includes('closing')) {
+        this.title = 'Footer Notes';
+        this.shortTitle = 'Footer Notes';
+      }
+      // console.log(idSplit);
+    }
   }
+}
+export function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function doesntInclude(strings: string[], val: string) {
+  return strings.filter(s => val.includes(s)).length === 0;
 }

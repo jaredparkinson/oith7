@@ -1,4 +1,5 @@
 <ng-container *ngIf="this.verseNote.noteGroups">
+  <p>{{ shortTitle }}</p>
   <verse-note-group
     [verseNoteGroup]="verseNoteGroup"
     *ngFor="let verseNoteGroup of this.verseNote.noteGroups"
