@@ -12,12 +12,14 @@ import { VerseNote } from '../../../../../oith-lib/src/verse-notes/verse-note';
 })
 export class VerseNotesComponent implements OnInit {
   public verseNotes: Observable<VerseNote[]>;
-  constructor(private store: Store<AppState>) {
-    this.verseNotes = store.select('chapter').pipe(
+  constructor(private store: Store<AppState>) {}
+
+  ngOnInit() {
+    this.verseNotes = this.store.select('chapter').pipe(
       filter(o => o !== undefined),
-      map(o => o.verseNotes),
+      map(o => {
+        return o.verseNotes;
+      }),
     );
   }
-
-  ngOnInit() {}
 }

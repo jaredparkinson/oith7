@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { VerseNote } from '../../../../../oith-lib/src/verse-notes/verse-note';
+import {
+  VerseNote,
+  Note,
+} from '../../../../../oith-lib/src/verse-notes/verse-note';
 
 @Component({
   selector: 'verse-note',
