@@ -10,4 +10,8 @@ export class VerseNotePhraseComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  public click() {
+    this.notePhrase = 'ioasjdfoiajsdfioajsdf';
+  }
 }
