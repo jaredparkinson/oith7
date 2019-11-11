@@ -226,9 +226,11 @@ function generateVerseNoteGroups(verseNotea?: VerseNote[]) {
 
 export function buildNewShell(chapter: Chapter) {
   return forkJoin(
-    buildFMerged(chapter),
     // resetVerses(chapter.verses),
-    generateVerseNoteGroups(chapter.verseNotes),
+    generateVerseNoteGroups(chapter.verseNotes).pipe(
+      map(() => buildFMerged(chapter)),
+      flatMap(o => o),
+    ),
   );
 }
 export declare type Params = {

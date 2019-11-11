@@ -8,7 +8,7 @@ import {
 import { of, EMPTY, forkJoin, Observable } from 'rxjs';
 import { flatMap$ } from '../rx/flatMap$';
 import { map, toArray, flatMap } from 'rxjs/operators';
-import { VerseNote, FormatTag } from '../verse-notes/verse-note';
+import { VerseNote, FormatTag, FormatTagType } from '../verse-notes/verse-note';
 import { expandOffsets } from '../offsets/expandOffsets';
 
 function expandNoteOffsets(verseNote?: VerseNote) {
@@ -18,11 +18,24 @@ function expandNoteOffsets(verseNote?: VerseNote) {
         map(o => o[1]),
       );
     });
-    return of(vasdf).pipe(
-      flatMap(o => o),
-      flatMap(o => o),
-      toArray(),
-    );
+    if (verseNote.noteGroups) {
+      return of(
+        verseNote.noteGroups.map(ng =>
+          forkJoin(expandOffsets(ng.formatTag), of(ng.formatTag)).pipe(
+            map(o => o[1]),
+          ),
+        ),
+      ).pipe(
+        flatMap$,
+        flatMap$,
+        toArray(),
+      );
+    }
+    // return of(vasdf).pipe(
+    //   flatMap(o => o),
+    //   flatMap(o => o),
+    //   toArray(),
+    // );
   }
 
   return EMPTY;
@@ -61,9 +74,6 @@ function addTextToFormatText(
   formatText: FormatText,
   formatTags?: FormatTag[],
 ) {
-  // console.log(formatTags);
-  // console.log(formatText.uncompressedOffsets);
-
   if (formatText.offsets && !formatTags) {
     const split = formatText.offsets.split('-');
 
@@ -105,8 +115,6 @@ function addTextToFormatText(
         );
       })),
     );
-
-    console.log(fMerged);
   }
 
   return EMPTY;
@@ -132,7 +140,6 @@ export function buildFMerged(chapter: Chapter) {
         const verseNote = chapter.verseNotes.find(vN =>
           vN.id.includes(`-${verse.id}-verse-note`),
         );
-        // console.log(verseNote);
         return expandNoteOffsets(verseNote).pipe(
           map(formatTags => resetVerse(verse, formatTags)),
           flatMap$,

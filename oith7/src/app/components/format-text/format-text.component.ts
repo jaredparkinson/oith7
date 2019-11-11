@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormatText } from '../../../../../oith-lib/src/models/Chapter';
+import {
+  FormatText,
+  FormatMerged,
+} from '../../../../../oith-lib/src/models/Chapter';
 import { FormatTagType } from '../../../../../oith-lib/src/verse-notes/verse-note';
 
 @Component({
@@ -20,10 +23,15 @@ export class FormatTextComponent implements OnInit {
         const u = fm.formatTags.filter(
           f => f.fType === FormatTagType.NOTEOFFSETS,
         );
-        if (u.length > 0) {
-          console.log(u.length);
+        if (u.length === 1) {
+          fm.underline = true;
+        } else if (u.length > 1) {
+          fm.doubleUnderline = true;
         }
       });
     }
+  }
+  public click(formatMerged: FormatMerged) {
+    console.log(formatMerged);
   }
 }

@@ -76,6 +76,13 @@ export class VerseNoteGroup {
     this.id = id;
     // this.notePhrase = note.phrase ? note.phrase : '';
     this.notes = notes;
+    this.formatTag = {
+      fType: FormatTagType.NOTEOFFSETS,
+      offsets: notes[0].formatTag.offsets,
+      id: '',
+      noteGroupID: '',
+      uncompressedOffsets: undefined,
+    };
   }
 }
 
@@ -469,7 +476,7 @@ export class FormatTagNoteOffsets extends FormatTag {
   public fType = FormatTagType.NOTEOFFSETS;
   public highlight?: boolean;
   public noteGroupID: string;
-  public uncompressedOffsets: number[];
+  public uncompressedOffsets?: number[];
   public constructor(
     offsets: string,
     id: string,

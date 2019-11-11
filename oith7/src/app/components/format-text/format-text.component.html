@@ -1,3 +1,7 @@
 <ng-container *ngFor="let ft of formatText.formatMerged">
-  <f-t>{{ ft.text }}</f-t>
+  <f-t
+    (click)="click(ft)"
+    [ngClass]="{ 'ref-double': ft.doubleUnderline, 'ref-single': ft.underline }"
+    >{{ ft.text }}</f-t
+  >
 </ng-container>

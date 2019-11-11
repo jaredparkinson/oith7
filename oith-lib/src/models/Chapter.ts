@@ -36,6 +36,8 @@ export class VersePlaceholder {
 export class FormatMerged {
   public text: string;
   public formatTags: FormatTag[];
+  public underline?: boolean;
+  public doubleUnderline?: boolean;
   public constructor(text: string, formatTags: FormatTag[]) {
     this.text = text;
     this.formatTags = formatTags;
