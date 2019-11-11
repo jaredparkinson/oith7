@@ -863,6 +863,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@ngrx/router-store@^8.5.0":
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/router-store/-/router-store-8.5.0.tgz#f06ae310324edacb66f92e1d8b60ee4603a7c41b"
+  integrity sha512-jbdQAn7xjt8Huo6llaQ53c6JnPT7mhEvF8EeaL+u/zfbdfBgU+nh5Ty2ZSDMvLhdf8JJ1g+QcHKwsWRRkYHXNA==
+
 "@ngrx/store@^8.5.0":
   version "8.5.0"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-8.5.0.tgz#4ee6c7d15db71aadc0aeafdd22ed4c18fb4a6fb5"
