@@ -19,10 +19,6 @@ function syncScrolling() {
               `[id*='-${verse.id}-verse-note']`,
             );
 
-            console.log(`[id*='-${verse.id}-verse-note']`);
-
-            console.log(verseNote);
-
             if (verseNote) {
               verseNote.scrollIntoView();
             }

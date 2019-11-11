@@ -1,4 +1,10 @@
-import { VerseNote, Offsets, Doc, DocType } from '../verse-notes/verse-note';
+import {
+  VerseNote,
+  Offsets,
+  Doc,
+  DocType,
+  FormatTag,
+} from '../verse-notes/verse-note';
 export class Verse {
   public id: string;
   public text: string;
@@ -28,10 +34,11 @@ export class VersePlaceholder {
   verse?: Verse;
 }
 export class FormatMerged {
-  text: string;
-
-  public constructor(text: string) {
+  public text: string;
+  public formatTags: FormatTag[];
+  public constructor(text: string, formatTags: FormatTag[]) {
     this.text = text;
+    this.formatTags = formatTags;
   }
 }
 

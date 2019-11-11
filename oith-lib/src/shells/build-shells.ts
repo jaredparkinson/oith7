@@ -18,6 +18,7 @@ import {
 } from '../models/Chapter';
 import { flatMap$ } from '../rx/flatMap$';
 import { VerseNote, VerseNoteGroup } from '../verse-notes/verse-note';
+import { buildFMerged } from './buildFMerged';
 
 function findFormatGroupsWithVerseIDs(
   formatGroup: FormatGroup,
@@ -119,48 +120,48 @@ function extractFormatText(
   return EMPTY;
 }
 
-function addTextToFormatText(verse: Verse, formatText: FormatText) {
-  if (formatText.offsets) {
-    const split = formatText.offsets.split('-');
+// function addTextToFormatText(verse: Verse, formatText: FormatText) {
+//   if (formatText.offsets) {
+//     const split = formatText.offsets.split('-');
 
-    return of(
-      (formatText.formatMerged = [
-        new FormatMerged(
-          verse.text.slice(parseInt(split[0], 10), parseInt(split[1], 10) + 1),
-        ),
-      ]),
-    );
-  }
+//     return of(
+//       (formatText.formatMerged = [
+//         new FormatMerged(
+//           verse.text.slice(parseInt(split[0], 10), parseInt(split[1], 10) + 1),
+//         ),
+//       ]),
+//     );
+//   }
 
-  return EMPTY;
-}
+//   return EMPTY;
+// }
 
-function resetVerse(verse: Verse) {
-  return extractFormatText(verse).pipe(
-    map(o => {
-      return addTextToFormatText(verse, o);
-    }),
-    flatMap$,
-    toArray(),
-    map(o => o),
-  );
-}
+// function resetVerse(verse: Verse) {
+//   return extractFormatText(verse).pipe(
+//     map(o => {
+//       return addTextToFormatText(verse, o);
+//     }),
+//     flatMap$,
+//     toArray(),
+//     map(o => o),
+//   );
+// }
 
-function resetVerses(verses: Verse[]) {
-  return of(verses).pipe(
-    flatMap$,
-    map(v => resetVerse(v)),
-    flatMap$,
-    toArray(),
-  );
-}
+// function resetVerses(verses: Verse[]) {
+//   return of(verses).pipe(
+//     flatMap$,
+//     map(v => resetVerse(v)),
+//     flatMap$,
+//     toArray(),
+//   );
+// }
 
 function highlightContext(
   verses: Verse[],
   chapterParams: ChapterParams,
   hC: 'highlight' | 'context',
 ) {
-  chapterParams[hC].split(',').map(h => {
+  (chapterParams[hC] as string).split(',').map(h => {
     if (h.includes('-')) {
       const hSplit = h.split('-');
 
@@ -225,7 +226,8 @@ function generateVerseNoteGroups(verseNotea?: VerseNote[]) {
 
 export function buildNewShell(chapter: Chapter) {
   return forkJoin(
-    resetVerses(chapter.verses),
+    buildFMerged(chapter),
+    // resetVerses(chapter.verses),
     generateVerseNoteGroups(chapter.verseNotes),
   );
 }

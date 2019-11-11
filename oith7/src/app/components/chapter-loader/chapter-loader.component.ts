@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ChapterService } from 'src/app/services/chapter.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { map, flatMap, toArray, delay, find, filter } from 'rxjs/operators';
-import { forkJoin, of, Observable } from 'rxjs';
+import { forkJoin, of, Observable, Subscription } from 'rxjs';
 import { Chapter } from '../../../../../oith-lib/src/models/Chapter';
 import {
   buildNewShell,
@@ -24,10 +24,17 @@ import { syncScrolling$ } from '../../../../../oith-lib/src/sync-scrolling/sync-
   templateUrl: './chapter-loader.component.html',
   styleUrls: ['./chapter-loader.component.scss'],
 })
-export class ChapterLoaderComponent implements OnInit {
+export class ChapterLoaderComponent implements OnInit, OnDestroy {
+  public ngOnDestroy(): void {
+    if (this.isManual$) {
+      this.isManual$.unsubscribe();
+    }
+  }
   public isManual = false;
 
   public chapter: Store<Chapter>;
+
+  public isManual$?: Subscription;
 
   constructor(
     public httpClient: HttpClient,
@@ -40,6 +47,7 @@ export class ChapterLoaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isManual$ = this.manualOrChapter().subscribe();
     this.activatedRoute.params
       .pipe(
         map(params => {
@@ -67,8 +75,6 @@ export class ChapterLoaderComponent implements OnInit {
         }),
         delay(100),
         map(() => {
-          this.isManual = window.location.href.includes('manual');
-
           return scrollIntoView('.context,.highlight');
         }),
 
@@ -125,5 +131,15 @@ export class ChapterLoaderComponent implements OnInit {
 
   public scroll() {
     syncScrolling$.next();
+  }
+
+  private manualOrChapter() {
+    return this.store.select('chapter').pipe(
+      filter(o => o !== undefined),
+      map(() => {
+        this.isManual = window.location.href.includes('manual');
+        console.log(this.isManual);
+      }),
+    );
   }
 }

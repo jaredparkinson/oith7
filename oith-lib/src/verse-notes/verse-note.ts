@@ -43,12 +43,19 @@ export class Note extends Doc {
     noteRefs: NoteRef[],
     noteType: number,
     notePhrase: string,
+    offsets: string,
+    url?: string,
   ) {
     super(vid, DocType.NOTE);
     // this.id = vid;
     this.phrase = notePhrase;
     this.ref = noteRefs;
     this.noteType = noteType;
+    this.formatTag = {
+      fType: FormatTagType.NOTEOFFSETS,
+      offsets: offsets,
+      url: url,
+    };
   }
 }
 
@@ -426,7 +433,6 @@ export abstract class Formating {
   public offsets?: string;
 
   public uncompressedOffsets?: number[];
-  public uncompressedOffsets2?: { first: number; last: number }[];
   public visible?: boolean;
   public constructor(formatType: FormatTagType, offsets: string) {
     this.fType = formatType;
@@ -439,8 +445,10 @@ export class FormatTagHighlight extends Formating {
   // public note
   public highlight?: boolean;
   public url?: string;
-  public constructor(formatType: FormatTagType, offsets: string) {
+  public constructor(formatType: FormatTagType, offsets: string, url?: string) {
     super(formatType, offsets);
+
+    this.url = url;
   }
 }
 export class FormatTag extends Formating {

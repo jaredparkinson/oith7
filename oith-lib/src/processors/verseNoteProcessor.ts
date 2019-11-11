@@ -79,6 +79,15 @@ function parseNotePhrase($: CheerioStatic, noteE: CheerioElement) {
   throw noteE.attribs['id'];
 }
 
+function parseOffsets(noteElement: CheerioElement) {
+  return of(noteElement.attribs['offsets']);
+}
+function parseNoteUrl($: CheerioStatic, noteElement: CheerioElement) {
+  const popupElement = $(noteElement).find('pop-up');
+
+  return of(popupElement.attr('url'));
+}
+
 function parseNoteMap(
   $: CheerioStatic,
   noteElement: CheerioElement,
@@ -96,13 +105,17 @@ function parseNoteMap(
       flatMap$,
       toArray(),
     ),
+    parseOffsets(noteElement),
+    parseNoteUrl($, noteElement),
   ).pipe(
-    map(([notePhrase, noteType, noteRefts]) => {
+    map(([notePhrase, noteType, noteRefs, offsets, url]) => {
       return new Note(
         noteElement.attribs['id'],
-        noteRefts,
+        noteRefs,
         noteType,
         notePhrase,
+        offsets,
+        url,
       );
     }),
   );
