@@ -83,8 +83,8 @@ export class VerseNoteGroup {
       id: '',
       noteGroupID: '',
       uncompressedOffsets: undefined,
+      h: new Subject(),
     };
-    this.formatTag.h = new Subject();
   }
 }
 

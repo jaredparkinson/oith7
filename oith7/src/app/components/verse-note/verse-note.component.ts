@@ -12,7 +12,7 @@ import {
 })
 export class VerseNoteComponent implements OnInit {
   @Input() public verseNote: VerseNote;
-  public verseVerseNoteGroups?: VerseNoteGroup[];
+  public verseNoteGroups?: VerseNoteGroup[];
   public shortTitle?: string;
   public title?: string;
   constructor() {}
@@ -39,6 +39,14 @@ export class VerseNoteComponent implements OnInit {
         this.shortTitle = 'Footer Notes';
       }
       // console.log(idSplit);
+
+      if (this.verseNote.noteGroups) {
+        this.verseNoteGroups = this.verseNote.noteGroups.sort(
+          (a, b) =>
+            a.formatTag.uncompressedOffsets[0] -
+            b.formatTag.uncompressedOffsets[0],
+        );
+      }
     }
   }
 }
