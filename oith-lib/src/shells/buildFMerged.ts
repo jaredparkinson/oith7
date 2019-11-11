@@ -91,7 +91,9 @@ function addTextToFormatText(
 
     formatText.uncompressedOffsets.map(u => {
       const ft = formatTags.filter(
-        o => o.uncompressedOffsets && o.uncompressedOffsets.includes(u),
+        o =>
+          (o.uncompressedOffsets && o.uncompressedOffsets.includes(u)) ||
+          o.offsets === 'all',
       );
 
       if (!last) {

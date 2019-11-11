@@ -26,8 +26,12 @@ export class FormatTextComponent implements OnInit {
       // const underlineCount = this.formatText.formatMerged.filter(o=> o.formatTags.)
       this.formatText.formatMerged.map(fm => {
         const u = fm.formatTags.filter(
-          f => f.fType === FormatTagType.NOTEOFFSETS,
+          f => f.fType === FormatTagType.NOTEOFFSETS && f.offsets !== 'all',
         );
+
+        fm.all = fm.formatTags.find(f => f.offsets === 'all') !== undefined;
+        console.log(fm.all);
+
         if (u.length === 1) {
           fm.underline = true;
         } else if (u.length > 1) {

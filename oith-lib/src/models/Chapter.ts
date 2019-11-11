@@ -39,6 +39,7 @@ export class FormatMerged {
   public underline?: boolean;
   public doubleUnderline?: boolean;
   public highlight?: boolean;
+  public all?: boolean;
   public constructor(text: string, formatTags: FormatTag[]) {
     this.text = text;
     this.formatTags = formatTags;
