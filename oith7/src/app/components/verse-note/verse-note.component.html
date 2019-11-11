@@ -1,6 +1,7 @@
 <ng-container *ngIf="this.verseNote.noteGroups">
   <p class="short-title">{{ shortTitle }}</p>
   <verse-note-group
+    [ngClass]="{ highlight: verseNoteGroup.formatTag.highlight }"
     [verseNoteGroup]="verseNoteGroup"
     *ngFor="let verseNoteGroup of this.verseNote.noteGroups"
   ></verse-note-group>

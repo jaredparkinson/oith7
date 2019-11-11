@@ -3,7 +3,12 @@ import {
   FormatText,
   FormatMerged,
 } from '../../../../../oith-lib/src/models/Chapter';
-import { FormatTagType } from '../../../../../oith-lib/src/verse-notes/verse-note';
+import {
+  FormatTagType,
+  FormatTagNoteOffsets,
+} from '../../../../../oith-lib/src/verse-notes/verse-note';
+import { UnderlineService } from 'src/app/services/underline.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: '[format-text]',
@@ -14,9 +19,9 @@ export class FormatTextComponent implements OnInit {
   @Input() public formatText: FormatText;
   public underline = false;
   public doubleUnderline = false;
-  constructor() {}
+  constructor(public underlineService: UnderlineService) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.formatText.formatMerged) {
       // const underlineCount = this.formatText.formatMerged.filter(o=> o.formatTags.)
       this.formatText.formatMerged.map(fm => {
@@ -29,9 +34,21 @@ export class FormatTextComponent implements OnInit {
           fm.doubleUnderline = true;
         }
       });
+
+      this.formatText.formatMerged.map(fM => {
+        const highlights$ = fM.formatTags
+          .filter(fT => fT.fType === FormatTagType.NOTEOFFSETS)
+          .map((fT: FormatTagNoteOffsets) => {
+            return fT.h;
+          })
+          .filter(ft => ft !== undefined);
+        combineLatest(highlights$).subscribe(
+          o => (fM.highlight = o.includes(true)),
+        );
+      });
     }
   }
   public click(formatMerged: FormatMerged) {
-    console.log(formatMerged);
+    this.underlineService.underlineClick(formatMerged);
   }
 }
