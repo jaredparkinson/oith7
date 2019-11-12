@@ -135,8 +135,6 @@ export function buildFMerged(chapter: Chapter) {
     flatMap$,
     map(async verse => {
       if (chapter.verseNotes) {
-        console.log(verse);
-
         const verseNote = chapter.verseNotes.find(vN =>
           vN.id.includes(`-${verse.id}-verse-note`),
         );

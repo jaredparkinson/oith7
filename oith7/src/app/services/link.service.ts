@@ -56,8 +56,6 @@ export class LinkService {
 }
 
 export function scrollIntoView(selector: string) {
-  console.log(selector);
-
   return of(document.querySelector(selector) as HTMLElement).pipe(
     filter(o => o !== null),
     map(o => {

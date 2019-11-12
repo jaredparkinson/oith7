@@ -78,7 +78,7 @@ export class VerseNoteGroup {
     // ? note.formatTag.offsets
     // : '100000';
     this.id = id;
-    console.log(notes.filter(n => n.formatTag.url));
+    // console.log(notes.filter(n => n.formatTag.url));
 
     // this.notePhrase = note.phrase ? note.phrase : '';
     this.notes = notes;

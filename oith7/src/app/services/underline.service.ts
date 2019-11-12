@@ -79,7 +79,6 @@ export class UnderlineService {
     if (u) {
       u.h.next(true);
       // formatMerged.highlight = true;
-      console.log(u);
       of('verse-note-group.highlight')
         .pipe(
           delay(10),
