@@ -3,7 +3,7 @@
 npm run prod
 
 Set-Location .\dist\browser
-tar -czf ../../nightly.tar.gz *.*
+tar --exclude assets -czf ../../nightly.tar.gz *.*
 Set-Location ../..
 scp -P 7822 nightly.tar.gz oneinthi@oneinthinehand.org:files.oneinthinehand.org/
 
