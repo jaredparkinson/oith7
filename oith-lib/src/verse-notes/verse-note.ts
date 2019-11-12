@@ -1,6 +1,6 @@
 import cuid from 'cuid';
 import { expandOffsets } from '../offsets/expandOffsets';
-import { Observable, Subject } from 'node_modules/rxjs';
+import { Observable, Subject } from 'rxjs';
 // import { NoteCategory } from './settings/note-gorup-settings';
 
 export enum DocType {
@@ -81,7 +81,7 @@ export class VerseNoteGroup {
       fType: FormatTagType.NOTEOFFSETS,
       offsets: notes[0].formatTag.offsets,
       id: '',
-      noteGroupID: '',
+      noteGroupID: cuid(),
       uncompressedOffsets: undefined,
       h: new Subject(),
     };

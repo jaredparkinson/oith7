@@ -3,12 +3,14 @@ import { FormatMerged } from '../../../../oith-lib/src/models/Chapter';
 import { of, EMPTY, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
-import { filter, map, flatMap, toArray, first } from 'rxjs/operators';
+import { filter, map, flatMap, toArray, first, delay } from 'rxjs/operators';
 import {
   VerseNoteGroup,
   FormatTagNoteOffsets,
   FormatTagType,
 } from '../../../../oith-lib/src/verse-notes/verse-note';
+import { scrollIntoView } from './link.service';
+import { flatMap$ } from '../../../../oith-lib/src/rx/flatMap$';
 
 @Injectable({
   providedIn: 'root',
@@ -53,9 +55,13 @@ export class UnderlineService {
             }
           } else {
             this.selectedFormatMerged = formatMerged;
-            this.underlineOffsetTags = formatMerged.formatTags.filter(
-              f => f.fType === FormatTagType.NOTEOFFSETS,
-            ) as FormatTagNoteOffsets[];
+            this.underlineOffsetTags = formatMerged.formatTags
+              .filter(f => f.fType === FormatTagType.NOTEOFFSETS)
+              .sort((a, b) => {
+                const aO = a.offsets !== 'all' ? a.uncompressedOffsets[0] : 0;
+                const bO = b.offsets !== 'all' ? b.uncompressedOffsets[0] : 0;
+                return aO - bO;
+              }) as FormatTagNoteOffsets[];
             return this.setHighlight(formatMerged);
           }
 
@@ -73,7 +79,15 @@ export class UnderlineService {
     if (u) {
       u.h.next(true);
       // formatMerged.highlight = true;
-      console.log(formatMerged);
+      console.log(u);
+      of('verse-note-group.highlight')
+        .pipe(
+          delay(10),
+          map(o => scrollIntoView(o)),
+          flatMap$,
+        )
+        .subscribe();
+      // scrollIntoView(``).subscribe();
     }
     return EMPTY;
   }
