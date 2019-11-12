@@ -30,7 +30,6 @@ export class FormatTextComponent implements OnInit {
         );
 
         fm.all = fm.formatTags.find(f => f.offsets === 'all') !== undefined;
-        console.log(fm.all);
 
         if (u.length === 1) {
           fm.underline = true;

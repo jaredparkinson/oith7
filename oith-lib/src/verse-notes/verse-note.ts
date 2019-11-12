@@ -37,6 +37,7 @@ export class Note extends Doc {
   public href?: string;
   public phrase: string;
   public ref: NoteRef[];
+  public speak?: string;
   public noteType: number;
   // public docType: DocType = DocType.NOTE;
   public constructor(
@@ -46,6 +47,7 @@ export class Note extends Doc {
     notePhrase: string,
     offsets: string,
     url?: string,
+    speak?: string,
   ) {
     super(vid, DocType.NOTE);
     // this.id = vid;
@@ -56,6 +58,7 @@ export class Note extends Doc {
       fType: FormatTagType.NOTEOFFSETS,
       offsets: offsets,
       url: url,
+      speak: speak,
     };
   }
 }
@@ -75,16 +78,24 @@ export class VerseNoteGroup {
     // ? note.formatTag.offsets
     // : '100000';
     this.id = id;
+    console.log(notes.filter(n => n.formatTag.url));
+
     // this.notePhrase = note.phrase ? note.phrase : '';
     this.notes = notes;
-    this.formatTag = {
-      fType: FormatTagType.NOTEOFFSETS,
-      offsets: notes[0].formatTag.offsets,
-      id: '',
-      noteGroupID: cuid(),
-      uncompressedOffsets: undefined,
-      h: new Subject(),
-    };
+    this.formatTag = new FormatTagNoteOffsets(
+      notes[0].formatTag.offsets ? notes[0].formatTag.offsets : '',
+      '',
+      cuid(),
+      notes,
+    );
+    // this.formatTag = {
+    //   fType: FormatTagType.NOTEOFFSETS,
+    //   offsets: notes[0].formatTag.offsets,
+    //   id: '',
+    //   noteGroupID: cuid(),
+    //   uncompressedOffsets: undefined,
+    //   h: new Subject(),
+    // };
   }
 }
 
@@ -453,10 +464,17 @@ export abstract class Formating {
 export class FormatTagHighlight extends Formating {
   // public note
   public highlight?: boolean;
+  public speak?: string;
   public url?: string;
-  public constructor(formatType: FormatTagType, offsets: string, url?: string) {
+  public constructor(
+    formatType: FormatTagType,
+    offsets: string,
+    url?: string,
+    speak?: string,
+  ) {
     super(formatType, offsets);
 
+    this.speak = speak;
     this.url = url;
   }
 }
@@ -480,18 +498,24 @@ export class FormatTagNoteOffsets extends FormatTag {
   public h: Subject<boolean>;
   public noteGroupID: string;
   public uncompressedOffsets?: number[];
+  public notes: Note[];
   public constructor(
     offsets: string,
     id: string,
     noteGroupID: string,
-    formatType?: FormatTagType,
+    notes: Note[],
+    fType?: FormatTagType,
   ) {
     super(FormatTagType.NOTEOFFSETS, offsets);
     this.noteGroupID = noteGroupID;
     this.id = id;
-    if (formatType) {
-      this.fType = formatType;
+    this.notes = notes;
+
+    if (fType) {
+      this.fType = fType;
     }
+    this.h = new Subject();
+
     expandOffsets(this);
   }
 }
@@ -505,7 +529,7 @@ export class FormatTagNotePronunciation extends FormatTagNoteOffsets {
     noteGroupID: string,
     notes: Note[],
   ) {
-    super(offsets, _id, offsets, FormatTagType.NOTEOFFSETSPRONUNCIATION);
+    super(offsets, _id, offsets, notes, FormatTagType.NOTEOFFSETSPRONUNCIATION);
     this.noteGroupID = noteGroupID;
     this.id = _id;
     const note = notes.find(note => note.href !== undefined);
