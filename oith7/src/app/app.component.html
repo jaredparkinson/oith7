@@ -1,8 +1,7 @@
-<div style="display: grid; grid-template-rows: 48px calc(100vh - 48px);">
-  <oith-header
-    style="display: block; position: absolute; height: 49px; width: 100vw;"
-  ></oith-header>
-  <div style="position: absolute;">
-    <router-outlet></router-outlet>
-  </div>
+<oith-header
+  style="display: block; position: absolute; height: 49px; width: 100vw; "
+  [ngStyle]="{ top: oithHeaderTop }"
+></oith-header>
+<div style="position: absolute;">
+  <router-outlet></router-outlet>
 </div>

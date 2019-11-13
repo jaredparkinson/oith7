@@ -21,8 +21,8 @@ export class AppComponent implements OnInit {
   }
   title = 'oith7';
 
-  public oithHeaderTop = 0;
-  public contentTop = 48;
+  public oithHeaderTop = `0px`;
+  public contentTop = `48px`;
 
   public constructor(
     public initService: InitService,
@@ -31,6 +31,8 @@ export class AppComponent implements OnInit {
   public setupSettings() {
     this.settings.subscribe(o => {
       console.log(o);
+      this.contentTop = `${o.contentTop}px`;
+      this.oithHeaderTop = `${o.oithHeaderTop}px`;
     });
   }
 }
