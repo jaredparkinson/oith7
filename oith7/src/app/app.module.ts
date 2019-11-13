@@ -20,6 +20,8 @@ import { reducers, metaReducers } from './reducers';
 import {
   chapterReducer,
   chapterHistoryReducter,
+  noteSettingsReducer,
+  noteCategoriesReducer,
 } from './reducers/chapter.reducer';
 import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
 import { VerseNoteComponent } from './components/verse-note/verse-note.component';
@@ -27,7 +29,13 @@ import { VerseNoteGroupComponent } from './components/verse-note-group/verse-not
 import { VerseNotePhraseComponent } from './components/verse-note-phrase/verse-note-phrase.component';
 import { VerseNoteRefComponent } from './components/verse-note-ref/verse-note-ref.component';
 import { NoteComponent } from './components/note/note.component';
-
+import { InitService } from './services/init.service';
+import { NoteSettings } from '../../../oith-lib/src/processors/NoteSettings';
+export function load(initService: InitService) {
+  return async () => {
+    return initService.load();
+  };
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,11 +57,21 @@ import { NoteComponent } from './components/note/note.component';
     StoreModule.forRoot({
       chapter: chapterReducer,
       chapterHistory: chapterHistoryReducter,
+      noteSettings: noteSettingsReducer,
+      noteCategories: noteCategoriesReducer,
+      noteTypes: noteSettingsReducer,
     }),
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: load,
+      deps: [InitService],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
 })

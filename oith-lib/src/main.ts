@@ -18,10 +18,8 @@ import {
 import { noteCategoryProcessor } from './processors/note-categories-processor';
 import { JSDOM } from 'jsdom';
 import { noteTypeProcessor } from './processors/note-types-processor';
-import {
-  NoteSettings,
-  noteGroupProcessor,
-} from './processors/note-groups-processor';
+import { noteGroupProcessor } from './processors/note-groups-processor';
+import { NoteSettings } from './processors/NoteSettings';
 export class ChapterProcessor {
   public chapterProcessor = map((document: Document) => {
     of(document.querySelectorAll('body > *'));

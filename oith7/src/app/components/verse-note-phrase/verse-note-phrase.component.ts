@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { UnderlineService } from 'src/app/services/underline.service';
 
 @Component({
   selector: 'note-phrase',
@@ -7,11 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class VerseNotePhraseComponent implements OnInit {
   @Input() public notePhrase: string;
-  constructor() {}
+  constructor(public underlineService: UnderlineService) {}
 
   ngOnInit() {}
 
   public click() {
-    this.notePhrase = 'ioasjdfoiajsdfioajsdf';
+    // this.notePhrase = 'ioasjdfoiajsdfioajsdf';
   }
 }

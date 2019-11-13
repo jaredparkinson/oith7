@@ -11,6 +11,21 @@ import {
 } from '../actions/chapter.actions';
 import { Chapter } from '../../../../oith-lib/src/models/Chapter';
 import { ChapterModel } from '../models/chapter.model';
+import { NoteSettings } from '../../../../oith-lib/src/processors/NoteSettings';
+import {
+  AddNoteSettings,
+  NoteSettingsActions,
+  ADD_NOTE_SETTINGS,
+} from '../actions/note-settings.actions';
+import {
+  NoteTypes,
+  NoteCategories,
+} from '../../../../oith-lib/src/verse-notes/settings/note-gorup-settings';
+import { NoteTypesActions, ADD_NOTE_TYPES } from '../actions/notetypes.actions';
+import {
+  NoteCategoryActions,
+  ADD_NOTE_CATEGORIES,
+} from '../actions/note-cat.actions';
 
 // const chapterState: Chapter = { chapter: undefined, id: '' };
 
@@ -41,6 +56,56 @@ export function chapterHistoryReducter(
       return state.filter(c => (c.id = action.payload));
     }
 
+    default: {
+      return state;
+    }
+  }
+}
+
+export function noteSettingsReducer(
+  state: NoteSettings,
+  action: NoteSettingsActions,
+) {
+  switch (action.type) {
+    case ADD_NOTE_SETTINGS: {
+      return action.payload;
+      break;
+    }
+    // case REMOVE_CHAPTER: {
+
+    //   }
+    default: {
+      return state;
+    }
+  }
+}
+
+export function noteTypesReducer(state: NoteTypes, action: NoteTypesActions) {
+  switch (action.type) {
+    case ADD_NOTE_TYPES: {
+      return action.payload;
+      break;
+    }
+    // case REMOVE_CHAPTER: {
+
+    //   }
+    default: {
+      return state;
+    }
+  }
+}
+export function noteCategoriesReducer(
+  state: NoteCategories,
+  action: NoteCategoryActions,
+) {
+  switch (action.type) {
+    case ADD_NOTE_CATEGORIES: {
+      return action.payload;
+      break;
+    }
+    // case REMOVE_CHAPTER: {
+
+    //   }
     default: {
       return state;
     }
