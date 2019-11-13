@@ -1,0 +1,10 @@
+// @import '/node_modules/normalizecss/normalize.css';
+// @import '/node_modules/animate.css/animate.css';
+@import './layout/chapter-layout.scss';
+@import './manuals/manuals.scss';
+@import './scriptures/scriptures.scss';
+@import './verse-notes/verse-notes.scss';
+@import './format-tags/format-tags.scss';
+body {
+  font-size: 18px;
+}
