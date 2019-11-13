@@ -1,5 +1,6 @@
 import { Observable, of, forkJoin } from 'rxjs';
 import { flatMap, map, filter, toArray, retry } from 'rxjs/operators';
+import cheerio from 'cheerio';
 import { emptyDir } from 'fs-extra';
 import normalizePath = require('normalize-path');
 import { emptyDir$, readFileMap, writeFile$, readFile$ } from './fs$';
@@ -17,6 +18,10 @@ import {
 import { noteCategoryProcessor } from './processors/note-categories-processor';
 import { JSDOM } from 'jsdom';
 import { noteTypeProcessor } from './processors/note-types-processor';
+import {
+  NoteSettings,
+  noteGroupProcessor,
+} from './processors/note-groups-processor';
 export class ChapterProcessor {
   public chapterProcessor = map((document: Document) => {
     of(document.querySelectorAll('body > *'));
@@ -86,11 +91,15 @@ export function unzipFiles(pathName: string): Observable<void[]> {
   // return fast
 }
 
-export function loadnoteSettings(): Observable<[NoteTypes, NoteCategories]> {
+export function loadnoteSettings(): Observable<
+  [NoteTypes, NoteCategories, NoteSettings]
+> {
   return readFile$(argv.ns as string)
     .pipe(
       map(o => new AdmZip(o).getEntries()),
       map(o => {
+        console.log(o.map(i => i.name));
+
         return forkJoin(
           of(o.find(i => i.name === 'note_types.html') as IZipEntry).pipe(
             filterUndefined$,
@@ -102,6 +111,11 @@ export function loadnoteSettings(): Observable<[NoteTypes, NoteCategories]> {
             map(i =>
               noteCategoryProcessor(new JSDOM(i.getData()).window.document),
             ),
+            flatMap$,
+          ),
+          of(o.find(i => i.name === 'note_groups.html') as IZipEntry).pipe(
+            filterUndefined$,
+            map(i => noteGroupProcessor(cheerio.load(i.getData()))),
             flatMap$,
           ),
         );
@@ -118,9 +132,14 @@ forkJoin(hasArg('ns', 'string'), hasArg('i', 'string'))
     flatMap$,
     map(() => {
       return loadnoteSettings().pipe(
-        map(([nt, nc]) => {
+        map(([nt, nc, ns]) => {
           // return of(nt);
-          return process(nt, nc);
+          return forkJoin(
+            writeFile$(`${flatPath}/note_categories.json`, JSON.stringify(nc)),
+            writeFile$(`${flatPath}/note_types.json`, JSON.stringify(nt)),
+            writeFile$(`${flatPath}/note_settings.json`, JSON.stringify(ns)),
+            process(nt, nc),
+          );
         }),
         flatMap$,
       );
