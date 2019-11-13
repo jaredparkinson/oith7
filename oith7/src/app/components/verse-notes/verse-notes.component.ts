@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { map, filter } from 'rxjs/operators';
@@ -10,11 +10,14 @@ import { VerseNote } from '../../../../../oith-lib/src/verse-notes/verse-note';
   templateUrl: './verse-notes.component.html',
   styleUrls: ['./verse-notes.component.scss'],
 })
-export class VerseNotesComponent implements OnInit {
+export class VerseNotesComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {}
   public verseNotes: Observable<VerseNote[]>;
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
+    console.log(this.verseNotes);
+
     this.verseNotes = this.store.select('chapter').pipe(
       filter(o => o !== undefined),
       map(o => {

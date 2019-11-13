@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import {
   FormatText,
   FormatMerged,
@@ -8,17 +8,23 @@ import {
   FormatTagNoteOffsets,
 } from '../../../../../oith-lib/src/verse-notes/verse-note';
 import { UnderlineService } from 'src/app/services/underline.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: '[format-text]',
   templateUrl: './format-text.component.html',
   styleUrls: ['./format-text.component.scss'],
 })
-export class FormatTextComponent implements OnInit {
+export class FormatTextComponent implements OnInit, OnDestroy {
+  public ngOnDestroy(): void {
+    if (this.highlights$) {
+      // this.highlights$.unsubscribe();
+    }
+  }
   @Input() public formatText: FormatText;
   public underline = false;
   public doubleUnderline = false;
+  public highlights$?: Subscription;
   constructor(public underlineService: UnderlineService) {}
 
   public ngOnInit() {
@@ -45,7 +51,7 @@ export class FormatTextComponent implements OnInit {
             return fT.h;
           })
           .filter(ft => ft !== undefined);
-        combineLatest(highlights$).subscribe(
+        this.highlights$ = combineLatest(highlights$).subscribe(
           o => (fM.highlight = o.includes(true)),
         );
       });

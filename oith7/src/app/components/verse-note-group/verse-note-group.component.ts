@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 export class VerseNoteGroupComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     if (this.verseNoteGroup && this.verseNoteGroup.formatTag.h) {
-      this.verseNoteGroup.formatTag.h.unsubscribe();
+      // this.verseNoteGroup.formatTag.h.unsubscribe();
     }
   }
   @Input() public verseNoteGroup: VerseNoteGroup;
