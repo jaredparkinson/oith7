@@ -22,6 +22,7 @@ import {
   chapterHistoryReducter,
   noteSettingsReducer,
   noteCategoriesReducer,
+  settingssReducer as settingsReducer,
 } from './reducers/chapter.reducer';
 import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
 import { VerseNoteComponent } from './components/verse-note/verse-note.component';
@@ -31,6 +32,7 @@ import { VerseNoteRefComponent } from './components/verse-note-ref/verse-note-re
 import { NoteComponent } from './components/note/note.component';
 import { InitService } from './services/init.service';
 import { NoteSettings } from '../../../oith-lib/src/processors/NoteSettings';
+import { OithHeaderComponent } from './components/oith-header/oith-header.component';
 export function load(initService: InitService) {
   return async () => {
     return initService.load();
@@ -51,6 +53,7 @@ export function load(initService: InitService) {
     VerseNotePhraseComponent,
     VerseNoteRefComponent,
     NoteComponent,
+    OithHeaderComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -60,6 +63,7 @@ export function load(initService: InitService) {
       noteSettings: noteSettingsReducer,
       noteCategories: noteCategoriesReducer,
       noteTypes: noteSettingsReducer,
+      settings: settingsReducer,
     }),
     AppRoutingModule,
     HttpClientModule,
