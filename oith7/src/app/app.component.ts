@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { InitService, Settings } from './services/init.service';
 import { Store } from '@ngrx/store';
 import { AppState } from './app.state';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ResizeService } from './services/resize.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
   public constructor(
     public initService: InitService,
     public store: Store<AppState>,
+    public resizeService: ResizeService,
   ) {}
   public setupSettings() {
     this.settings.subscribe(o => {
@@ -34,5 +36,9 @@ export class AppComponent implements OnInit {
       this.contentTop = `${o.contentTop}px`;
       this.oithHeaderTop = `${o.oithHeaderTop}px`;
     });
+  }
+  @HostListener('window:resize', ['$event'])
+  public resize(event: Event) {
+    this.resizeService.resize$.next(event);
   }
 }

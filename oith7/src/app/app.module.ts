@@ -22,8 +22,8 @@ import {
   chapterHistoryReducter,
   noteSettingsReducer,
   noteCategoriesReducer,
-  settingssReducer as settingsReducer,
 } from './reducers/chapter.reducer';
+import { settingsReducer } from './reducers/settingsReducer';
 import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
 import { VerseNoteComponent } from './components/verse-note/verse-note.component';
 import { VerseNoteGroupComponent } from './components/verse-note-group/verse-note-group.component';

@@ -26,13 +26,7 @@ import {
   NoteCategoryActions,
   ADD_NOTE_CATEGORIES,
 } from '../actions/note-cat.actions';
-import {
-  NoteTypesActions,
-  ADD_NOTE_TYPES,
-  SettingsActions,
-  ADD_SETTINGS,
-} from '../actions/notetypes.actions';
-import { Settings } from '../services/init.service';
+import { NoteTypesActions, ADD_NOTE_TYPES } from '../actions/notetypes.actions';
 
 // const chapterState: Chapter = { chapter: undefined, id: '' };
 
@@ -107,21 +101,6 @@ export function noteCategoriesReducer(
 ) {
   switch (action.type) {
     case ADD_NOTE_CATEGORIES: {
-      return action.payload;
-      break;
-    }
-    // case REMOVE_CHAPTER: {
-
-    //   }
-    default: {
-      return state;
-    }
-  }
-}
-
-export function settingssReducer(state: Settings, action: SettingsActions) {
-  switch (action.type) {
-    case ADD_SETTINGS: {
       return action.payload;
       break;
     }

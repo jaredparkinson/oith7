@@ -19,12 +19,14 @@ import { AppState } from 'src/app/app.state';
 import { Store, select } from '@ngrx/store';
 import { AddChapter, AddChapterHistory } from 'src/app/actions/chapter.actions';
 import { syncScrolling$ } from '../../../../../oith-lib/src/sync-scrolling/sync-scrolling';
+import { Settings } from 'src/app/services/init.service';
 @Component({
   selector: '[chapter-loader]',
   templateUrl: './chapter-loader.component.html',
   styleUrls: ['./chapter-loader.component.scss'],
 })
 export class ChapterLoaderComponent implements OnInit, OnDestroy {
+  public notePaneWidth = `${300}px`;
   public ngOnDestroy(): void {
     if (this.isManual$) {
       this.isManual$.unsubscribe();
@@ -35,6 +37,7 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
   public chapter: Store<Chapter>;
 
   public isManual$?: Subscription;
+  public settings: Observable<Settings>;
 
   constructor(
     public httpClient: HttpClient,
@@ -43,11 +46,21 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
   ) {
     this.chapter = store.pipe(select('chapter')) as Store<Chapter>;
-    store.pipe();
+    this.settings = this.store
+      .select('settings')
+      .pipe(filter(o => o !== undefined));
+  }
+
+  public loadSettings() {
+    this.settings.subscribe(settings => {
+      this.notePaneWidth = `${settings.notePaneWidth}px`;
+      console.log(settings);
+    });
   }
 
   ngOnInit() {
     this.isManual$ = this.manualOrChapter().subscribe();
+    this.loadSettings();
     this.activatedRoute.params
       .pipe(
         map(params => {
