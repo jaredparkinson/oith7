@@ -33,6 +33,7 @@ import { NoteComponent } from './components/note/note.component';
 import { InitService } from './services/init.service';
 import { NoteSettings } from '../../../oith-lib/src/processors/NoteSettings';
 import { OithHeaderComponent } from './components/oith-header/oith-header.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 export function load(initService: InitService) {
   return async () => {
     return initService.load();
@@ -54,6 +55,7 @@ export function load(initService: InitService) {
     VerseNoteRefComponent,
     NoteComponent,
     OithHeaderComponent,
+    NavigationComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

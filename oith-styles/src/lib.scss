@@ -8,3 +8,16 @@
 body {
   font-size: 18px;
 }
+
+oith-header,
+.oith-header {
+  height: 48px;
+
+  > * {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 48px;
+    width: 48px;
+  }
+}

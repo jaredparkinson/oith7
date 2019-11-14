@@ -5,6 +5,7 @@ import { AppState } from './app.state';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ResizeService } from './services/resize.service';
+import { SafeStyle, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ import { ResizeService } from './services/resize.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  public navHeight: SafeStyle = '';
   public settings: Observable<Settings>;
+  public navOpen = true;
   ngOnInit(): void {
     this.settings = this.store.select('settings');
     // .pipe(filter(o => o !== undefined));
@@ -28,6 +31,7 @@ export class AppComponent implements OnInit {
   public constructor(
     public initService: InitService,
     public store: Store<AppState>,
+    public sanitizer: DomSanitizer,
     public resizeService: ResizeService,
   ) {}
   public setupSettings() {
@@ -35,6 +39,10 @@ export class AppComponent implements OnInit {
       console.log(o);
       this.contentTop = `${o.contentTop}px`;
       this.oithHeaderTop = `${o.oithHeaderTop}px`;
+      this.navHeight = this.sanitizer.bypassSecurityTrustStyle(
+        `calc(100vh - ${this.contentTop} )`,
+      );
+      this.navOpen = o.nav;
     });
   }
   @HostListener('window:resize', ['$event'])

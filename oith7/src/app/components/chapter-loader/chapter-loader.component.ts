@@ -27,6 +27,7 @@ import { Settings } from 'src/app/services/init.service';
 })
 export class ChapterLoaderComponent implements OnInit, OnDestroy {
   public notePaneWidth = `${300}px`;
+  contentTop: string;
   public ngOnDestroy(): void {
     if (this.isManual$) {
       this.isManual$.unsubscribe();
@@ -54,6 +55,7 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
   public loadSettings() {
     this.settings.subscribe(settings => {
       this.notePaneWidth = `${settings.notePaneWidth}px`;
+      this.contentTop = `${settings.contentTop}px`;
       console.log(settings);
     });
   }

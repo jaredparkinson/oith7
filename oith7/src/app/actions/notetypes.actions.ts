@@ -21,7 +21,7 @@ export class AddNoteTypes implements Action {
 
 export type NoteTypesActions = AddNoteTypes; //| AddHistoryChapter;
 
-export const ADD_SETTINGS = '[NoteType] Add';
+export const ADD_SETTINGS = '[Settings] Add';
 // export const ADD_HISTORY_NOTE_TYPES = '[NoteType] Add Histry';
 
 export class AddSettings implements Action {

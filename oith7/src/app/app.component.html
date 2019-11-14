@@ -1,7 +1,18 @@
 <oith-header
-  style="display: block; position: absolute; height: 49px; width: 100vw; "
+  style="display: block; position: absolute; height: 49px; width: 100vw; background-color: #E9E9EA;"
   [ngStyle]="{ top: oithHeaderTop }"
 ></oith-header>
-<div style="position: absolute;">
+<div
+  style="position: absolute;"
+  [ngStyle]="{ top: contentTop }"
+  style="position: fixed;"
+>
+  <nav
+    [style.height]="navHeight"
+    style="position: fixed;"
+    *ngIf="navOpen"
+    app-nav
+  ></nav>
+
   <router-outlet></router-outlet>
 </div>

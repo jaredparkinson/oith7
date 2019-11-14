@@ -48,4 +48,5 @@ export class Settings {
   public contentTop = 48;
   public lang = 'eng';
   public vis = {};
+  displayNav: boolean;
 }

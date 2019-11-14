@@ -65,6 +65,7 @@ export function chapterHistoryReducter(
 
 export function noteSettingsReducer(
   state: NoteSettings,
+
   action: NoteSettingsActions,
 ) {
   switch (action.type) {
