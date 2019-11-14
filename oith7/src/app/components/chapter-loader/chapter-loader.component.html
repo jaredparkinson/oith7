@@ -1,6 +1,13 @@
 <!-- <ng-container *ngIf="this.chapterService.chapter">
 </ng-container>
 <ng-container *ngIf="!this.chapterService.chapter">Loading...</ng-container> -->
+
+<nav
+  [style.height]="navHeight"
+  style="position: fixed;left: 0;"
+  *ngIf="ssettings.displayNav"
+  app-nav
+></nav>
 <div class="chapter-loader" (scroll)="this.scroll()">
   <chapter-content
     [ngClass]="{ 'classic-scriptures': !isManual, manual: isManual }"

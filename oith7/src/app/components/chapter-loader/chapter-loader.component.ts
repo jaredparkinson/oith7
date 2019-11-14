@@ -37,8 +37,9 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
 
   public chapter: Store<Chapter>;
 
+  public ssettings: Settings;
   public isManual$?: Subscription;
-  public settings: Observable<Settings>;
+  public settings$: Observable<Settings>;
 
   constructor(
     public httpClient: HttpClient,
@@ -47,15 +48,17 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
   ) {
     this.chapter = store.pipe(select('chapter')) as Store<Chapter>;
-    this.settings = this.store
+    this.settings$ = this.store
       .select('settings')
       .pipe(filter(o => o !== undefined));
   }
 
   public loadSettings() {
-    this.settings.subscribe(settings => {
+    this.settings$.subscribe(settings => {
+      this.ssettings = settings;
       this.notePaneWidth = `${settings.notePaneWidth}px`;
       this.contentTop = `${settings.contentTop}px`;
+      // this.navHeight =
       console.log(settings);
     });
   }

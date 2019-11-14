@@ -7,12 +7,5 @@
   [ngStyle]="{ top: contentTop }"
   style="position: fixed;"
 >
-  <nav
-    [style.height]="navHeight"
-    style="position: fixed;"
-    *ngIf="navOpen"
-    app-nav
-  ></nav>
-
   <router-outlet></router-outlet>
 </div>
