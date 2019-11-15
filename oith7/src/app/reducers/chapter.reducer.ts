@@ -70,6 +70,12 @@ export function noteSettingsReducer(
 ) {
   switch (action.type) {
     case ADD_NOTE_SETTINGS: {
+      console.log(action.payload);
+
+      localStorage.setItem(
+        `oith7-${action.payload.id}`,
+        JSON.stringify(action.payload),
+      );
       return action.payload;
       break;
     }
@@ -85,6 +91,7 @@ export function noteSettingsReducer(
 export function noteTypesReducer(state: NoteTypes, action: NoteTypesActions) {
   switch (action.type) {
     case ADD_NOTE_TYPES: {
+      console.log(action);
       return action.payload;
       break;
     }

@@ -56,8 +56,6 @@ export class AppComponent implements OnInit {
   // @HostListener('window:keydown', ['$event'])
   @HostListener('window:click', ['$event'])
   public dismissMenus(evt: Event) {
-    // console.log(evt);
-
     this.menuService.dismissMenu.next(evt.srcElement as HTMLElement);
   }
 }

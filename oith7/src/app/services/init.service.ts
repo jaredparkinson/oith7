@@ -4,9 +4,14 @@ import { forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
-import { AddSettings } from '../actions/notetypes.actions';
+import { AddSettings, AddNoteTypes } from '../actions/notetypes.actions';
 import { AddNoteSettings } from '../actions/note-settings.actions';
 import { NoteSettings } from '../../../../oith-lib/src/processors/NoteSettings';
+import {
+  NoteTypes,
+  NoteCategories,
+} from '../../../../oith-lib/src/verse-notes/settings/note-gorup-settings';
+import { AddNoteCategories } from '../actions/note-cat.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -25,26 +30,32 @@ export class InitService {
     // let
   }
   public loadSetings() {
-    forkJoin(
+    return forkJoin(
       this.lns<NoteSettings>('note-settings').pipe(
         map(o => this.store.dispatch(new AddNoteSettings(o))),
       ),
-    ).subscribe();
-    return of(localStorage.getItem('oith7-settings')).pipe(
-      map(o => {
-        this.store.dispatch(
-          new AddSettings(
-            o !== null && o.trim() !== ''
-              ? (JSON.parse(o) as Settings)
-              : new Settings(),
-          ),
-        );
-      }),
+      this.lns<NoteTypes>('note-types').pipe(
+        map(o => this.store.dispatch(new AddNoteTypes(o))),
+      ),
+      this.lns<NoteCategories>('note-categories').pipe(
+        map(o => this.store.dispatch(new AddNoteCategories(o))),
+      ),
+      of(localStorage.getItem('oith7-settings')).pipe(
+        map(o => {
+          this.store.dispatch(
+            new AddSettings(
+              o !== null && o.trim() !== ''
+                ? (JSON.parse(o) as Settings)
+                : new Settings(),
+            ),
+          );
+        }),
+      ),
     );
   }
 
   public lns<T>(id: string) {
-    let s = localStorage.getItem(`oith7-${id}`);
+    let s = localStorage.getItem(`oith7-eng-${id}`);
 
     if (s) {
       return of(JSON.parse(s) as T);

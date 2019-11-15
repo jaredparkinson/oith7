@@ -22,6 +22,7 @@ import {
   chapterHistoryReducter,
   noteSettingsReducer,
   noteCategoriesReducer,
+  noteTypesReducer,
 } from './reducers/chapter.reducer';
 import { settingsReducer } from './reducers/settingsReducer';
 import { VerseNotesComponent } from './components/verse-notes/verse-notes.component';
@@ -64,7 +65,7 @@ export function load(initService: InitService) {
       chapterHistory: chapterHistoryReducter,
       noteSettings: noteSettingsReducer,
       noteCategories: noteCategoriesReducer,
-      noteTypes: noteSettingsReducer,
+      noteTypes: noteTypesReducer,
       settings: settingsReducer,
     }),
     AppRoutingModule,

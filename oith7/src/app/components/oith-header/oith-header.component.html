@@ -13,7 +13,7 @@
 </oith-header-item>
 <oith-header-item
   class="dropdown "
-  (click)="this.noteSettingsDropDown()"
+  (click)="this.noteSettingsDropDown($event)"
   id="noteSettings"
   [ngClass]="{ 'is-active': this.notesDropdown.visible }"
 >
@@ -30,29 +30,17 @@
   </svg>
   <div class="dropdown-menu" id="dropdown-menu" role="menu">
     <div class="dropdown-content" *ngIf="noteSettings">
-      <ng-container *ngFor="let s of noteSettings.noteSettings">
-        <li href="#" class="dropdown-item" (click)="noteSettingsClick($event)">
-          <label for="">
-            <input type="checkbox" name="hgg" id="" />{{ s.label }}
+      <ng-container *ngFor="let noteSetting of noteSettings.noteSettings">
+        <li href="#" class="dropdown-item" *ngIf="noteSetting.display">
+          <label
+            class="checkbox"
+            (click)="noteSettingsClick($event, noteSetting)"
+          >
+            <input type="checkbox" [checked]="noteSetting.enabled" />
+            {{ noteSetting.label }}
           </label>
         </li>
       </ng-container>
-      <a href="#" class="dropdown-item" (click)="noteSettingsClick($event)">
-        Dropdown item
-      </a>
-      <a class="dropdown-item">
-        Other dropdown item
-      </a>
-      <a href="#" class="dropdown-item is-hoverable">
-        Active dropdown item
-      </a>
-      <a href="#" class="dropdown-item">
-        Other dropdown item
-      </a>
-      <hr class="dropdown-divider" />
-      <a href="#" class="dropdown-item">
-        With a divider
-      </a>
     </div>
   </div>
 </oith-header-item>

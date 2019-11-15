@@ -7,7 +7,7 @@ import {
   NoteCategories,
 } from '../../../../oith-lib/src/verse-notes/settings/note-gorup-settings';
 
-export const ADD_NOTE_CATEGORIES = '[NoteType] Add';
+export const ADD_NOTE_CATEGORIES = '[NoteCategories] Add';
 // export const ADD_HISTORY_NOTE_TYPES = '[NoteType] Add Histry';
 
 export class AddNoteCategories implements Action {

@@ -5,7 +5,12 @@ import { take, map, filter } from 'rxjs/operators';
 import { AddSettings } from 'src/app/actions/notetypes.actions';
 import { BackdropService } from 'src/app/services/backdrop.service';
 import { MenuService } from 'src/app/services/menu.service';
-import { NoteSettings } from '../../../../../oith-lib/src/processors/NoteSettings';
+import {
+  NoteSettings,
+  NoteSetting,
+} from '../../../../../oith-lib/src/processors/NoteSettings';
+import { of } from 'rxjs';
+import { AddNoteSettings } from 'src/app/actions/note-settings.actions';
 
 @Component({
   selector: 'oith-header',
@@ -14,7 +19,7 @@ import { NoteSettings } from '../../../../../oith-lib/src/processors/NoteSetting
 })
 export class OithHeaderComponent implements OnInit {
   public dismissMenu = this.menuService.dismissMenu
-    .pipe(filter(o => ancHasID(o, 'noteSettings')))
+    .pipe(filter(o => ancHasID(o, 'noteSettings') === true))
     .subscribe(() => {
       this.notesDropdown.visible = false;
     });
@@ -36,19 +41,34 @@ export class OithHeaderComponent implements OnInit {
         take(1),
         map(settings => {
           settings.displayNav = !settings.displayNav;
-          console.log(settings);
           this.store.dispatch(new AddSettings(settings));
         }),
       )
       .subscribe();
   }
 
-  public noteSettingsClick(evt: Event) {
+  public noteSettingsClick(evt: Event, noteSetting: NoteSetting) {
     event.stopPropagation();
+    console.log(evt);
+
+    of((evt.target as HTMLElement).nodeName.toLowerCase() === 'input')
+      .pipe(filter(o => o))
+      .subscribe(() => {
+        noteSetting.enabled = (evt.target as HTMLInputElement).checked;
+        this.store.dispatch(new AddNoteSettings(this.noteSettings));
+      });
   }
 
-  public noteSettingsDropDown() {
-    this.notesDropdown.visible = !this.notesDropdown.visible;
+  public noteSettingsDropDown(event: Event) {
+    const e = event.srcElement as Element;
+    console.log(e.nodeName);
+
+    if (
+      e.nodeName.toLowerCase() === 'svg' ||
+      e.nodeName.toLowerCase() === 'path'
+    ) {
+      this.notesDropdown.visible = !this.notesDropdown.visible;
+    }
     // this.backdropService.showVisibilty.next(this.notesDropdown);
   }
 }
@@ -67,5 +87,6 @@ export function ancHasID(e: HTMLElement | null, id: string): boolean {
     }
     return ancHasID(e.parentElement, id);
   }
+
   // return ancHasID(e.parentElement, id);/
 }
