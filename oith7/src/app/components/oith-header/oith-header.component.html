@@ -32,7 +32,9 @@
     <div class="dropdown-content" *ngIf="noteSettings">
       <ng-container *ngFor="let s of noteSettings.noteSettings">
         <li href="#" class="dropdown-item" (click)="noteSettingsClick($event)">
-          Dropdown item
+          <label for="">
+            <input type="checkbox" name="hgg" id="" />{{ s.label }}
+          </label>
         </li>
       </ng-container>
       <a href="#" class="dropdown-item" (click)="noteSettingsClick($event)">

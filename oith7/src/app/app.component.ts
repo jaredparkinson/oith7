@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
       this.navHeight = this.sanitizer.bypassSecurityTrustStyle(
         `calc(100vh - ${this.contentTop} )`,
       );
-      this.navOpen = o.nav;
+      this.navOpen = o.displayNav;
     });
   }
   @HostListener('window:resize', ['$event'])
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
   // @HostListener('window:keydown', ['$event'])
   @HostListener('window:click', ['$event'])
   public dismissMenus(evt: Event) {
-    console.log(evt);
+    // console.log(evt);
 
     this.menuService.dismissMenu.next(evt.srcElement as HTMLElement);
   }
