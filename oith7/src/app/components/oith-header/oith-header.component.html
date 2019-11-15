@@ -13,8 +13,9 @@
 </oith-header-item>
 <oith-header-item
   class="dropdown "
-  (click)="this.notesDropdown = !this.notesDropdown"
-  [ngClass]="{ 'is-active': this.notesDropdown }"
+  (click)="this.noteSettingsDropDown()"
+  id="noteSettings"
+  [ngClass]="{ 'is-active': this.notesDropdown.visible }"
   ><svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -29,7 +30,7 @@
   </svg>
   <div class="dropdown-menu" id="dropdown-menu" role="menu">
     <div class="dropdown-content">
-      <a href="#" class="dropdown-item">
+      <a href="#" class="dropdown-item" (click)="noteSettingsClick($event)">
         Dropdown item
       </a>
       <a class="dropdown-item">

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { take, map } from 'rxjs/operators';
+import { take, map, filter } from 'rxjs/operators';
 import { AddSettings } from 'src/app/actions/notetypes.actions';
+import { BackdropService } from 'src/app/services/backdrop.service';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'oith-header',
@@ -10,8 +12,17 @@ import { AddSettings } from 'src/app/actions/notetypes.actions';
   styleUrls: ['./oith-header.component.scss'],
 })
 export class OithHeaderComponent implements OnInit {
-  constructor(public store: Store<AppState>) {}
-  public notesDropdown = false;
+  public dismissMenu = this.menuService.dismissMenu
+    .pipe(filter(o => ancHasID(o, 'noteSettings')))
+    .subscribe(() => {
+      this.notesDropdown.visible = false;
+    });
+  constructor(
+    public store: Store<AppState>,
+    public backdropService: BackdropService,
+    public menuService: MenuService,
+  ) {}
+  public notesDropdown: Visibility = { visible: false };
   ngOnInit() {}
 
   public navOpen() {
@@ -27,4 +38,30 @@ export class OithHeaderComponent implements OnInit {
       )
       .subscribe();
   }
+
+  public noteSettingsClick(evt: Event) {
+    event.stopPropagation();
+  }
+
+  public noteSettingsDropDown() {
+    this.notesDropdown.visible = !this.notesDropdown.visible;
+    // this.backdropService.showVisibilty.next(this.notesDropdown);
+  }
+}
+
+export interface Visibility {
+  visible: boolean;
+}
+
+export function ancHasID(e: HTMLElement | null, id: string): boolean {
+  if (e === null) {
+    return true;
+  }
+  if (e !== null) {
+    if (e.id === id) {
+      return false;
+    }
+    return ancHasID(e.parentElement, id);
+  }
+  // return ancHasID(e.parentElement, id);/
 }

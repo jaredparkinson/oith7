@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ResizeService } from './services/resize.service';
 import { SafeStyle, DomSanitizer } from '@angular/platform-browser';
+import { BackdropService } from './services/backdrop.service';
+import { MenuService } from './services/menu.service';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +31,12 @@ export class AppComponent implements OnInit {
   public contentTop = `48px`;
 
   public constructor(
+    public backdropService: BackdropService,
     public initService: InitService,
     public store: Store<AppState>,
     public sanitizer: DomSanitizer,
     public resizeService: ResizeService,
+    public menuService: MenuService,
   ) {}
   public setupSettings() {
     this.settings.subscribe(o => {
@@ -48,5 +52,10 @@ export class AppComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   public resize(event: Event) {
     this.resizeService.resize$.next(event);
+  }
+
+  @HostListener('window:click', ['$event'])
+  public dismissMenus(evt: Event) {
+    this.menuService.dismissMenu.next(evt.srcElement as HTMLElement);
   }
 }
