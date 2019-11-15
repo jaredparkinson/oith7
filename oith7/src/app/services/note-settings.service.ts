@@ -95,12 +95,17 @@ export class NoteSettingsService {
         : true;
 
       noteCategory.visible = on === true && off === true;
+      if (noteCategory.visible) {
+        settings.vis[noteCategory.category] = true;
+      }
     });
   }
   private setNoteTypesVisible(noteTypes: NoteTypes, settings: Settings) {
     noteTypes.noteTypes.map(noteType => {
       noteType.visibility = settings.vis[noteType.className] === true;
-
+      if (noteType.visibility) {
+        settings.vis[noteType.noteType] = true;
+      }
       console.log(`${noteType.className}-${noteType.visibility}`);
     });
   }
