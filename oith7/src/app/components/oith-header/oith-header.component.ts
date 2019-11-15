@@ -5,6 +5,7 @@ import { take, map, filter } from 'rxjs/operators';
 import { AddSettings } from 'src/app/actions/notetypes.actions';
 import { BackdropService } from 'src/app/services/backdrop.service';
 import { MenuService } from 'src/app/services/menu.service';
+import { NoteSettings } from '../../../../../oith-lib/src/processors/NoteSettings';
 
 @Component({
   selector: 'oith-header',
@@ -17,13 +18,16 @@ export class OithHeaderComponent implements OnInit {
     .subscribe(() => {
       this.notesDropdown.visible = false;
     });
+  public noteSettings?: NoteSettings;
   constructor(
     public store: Store<AppState>,
     public backdropService: BackdropService,
     public menuService: MenuService,
   ) {}
   public notesDropdown: Visibility = { visible: false };
-  ngOnInit() {}
+  ngOnInit() {
+    this.store.select('noteSettings').subscribe(o => (this.noteSettings = o));
+  }
 
   public navOpen() {
     this.store

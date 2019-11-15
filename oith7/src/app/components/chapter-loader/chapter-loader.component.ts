@@ -20,6 +20,7 @@ import { Store, select } from '@ngrx/store';
 import { AddChapter, AddChapterHistory } from 'src/app/actions/chapter.actions';
 import { syncScrolling$ } from '../../../../../oith-lib/src/sync-scrolling/sync-scrolling';
 import { Settings } from 'src/app/services/init.service';
+import { MenuService } from 'src/app/services/menu.service';
 @Component({
   selector: '[chapter-loader]',
   templateUrl: './chapter-loader.component.html',
@@ -42,6 +43,7 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
   public settings$: Observable<Settings>;
 
   constructor(
+    public menuService: MenuService,
     public httpClient: HttpClient,
     public chapterService: ChapterService,
     public activatedRoute: ActivatedRoute,
@@ -148,6 +150,8 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
   }
 
   public scroll() {
+    this.menuService.dismissMenu.next(null);
+
     syncScrolling$.next();
   }
 

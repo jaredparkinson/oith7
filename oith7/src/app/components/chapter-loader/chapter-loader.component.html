@@ -25,4 +25,8 @@
     style="height: calc(100vh - 48px); display: block;"
   ></white-space>
 </div>
-<app-verse-notes [ngStyle]="{ width: this.notePaneWidth }"></app-verse-notes>
+
+<app-verse-notes
+  [ngStyle]="{ width: this.notePaneWidth }"
+  (scroll)="this.menuService.dismissMenu.next(null)"
+></app-verse-notes>

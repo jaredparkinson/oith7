@@ -5,6 +5,8 @@ import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
 import { AddSettings } from '../actions/notetypes.actions';
+import { AddNoteSettings } from '../actions/note-settings.actions';
+import { NoteSettings } from '../../../../oith-lib/src/processors/NoteSettings';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +25,11 @@ export class InitService {
     // let
   }
   public loadSetings() {
+    forkJoin(
+      this.lns<NoteSettings>('note-settings').pipe(
+        map(o => this.store.dispatch(new AddNoteSettings(o))),
+      ),
+    ).subscribe();
     return of(localStorage.getItem('oith7-settings')).pipe(
       map(o => {
         this.store.dispatch(
@@ -34,6 +41,18 @@ export class InitService {
         );
       }),
     );
+  }
+
+  public lns<T>(id: string) {
+    let s = localStorage.getItem(`oith7-${id}`);
+
+    if (s) {
+      return of(JSON.parse(s) as T);
+    }
+    return this.httpClient.get<T>(`/assets/scripture_files/eng-${id}.json`, {
+      responseType: 'json',
+    });
+    // const ids= ['note-settings']
   }
 }
 
