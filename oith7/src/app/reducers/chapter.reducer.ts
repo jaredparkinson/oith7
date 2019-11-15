@@ -70,12 +70,7 @@ export function noteSettingsReducer(
 ) {
   switch (action.type) {
     case ADD_NOTE_SETTINGS: {
-      console.log(action.payload);
-
-      localStorage.setItem(
-        `oith7-${action.payload.id}`,
-        JSON.stringify(action.payload),
-      );
+      saveSetting(action);
       return action.payload;
       break;
     }
@@ -88,10 +83,19 @@ export function noteSettingsReducer(
   }
 }
 
+function saveSetting(
+  action: AddNoteSettings | NoteTypesActions | NoteCategoryActions,
+) {
+  localStorage.setItem(
+    `oith7-${action.payload.id}`,
+    JSON.stringify(action.payload),
+  );
+}
+
 export function noteTypesReducer(state: NoteTypes, action: NoteTypesActions) {
   switch (action.type) {
     case ADD_NOTE_TYPES: {
-      console.log(action);
+      saveSetting(action);
       return action.payload;
       break;
     }
@@ -109,6 +113,7 @@ export function noteCategoriesReducer(
 ) {
   switch (action.type) {
     case ADD_NOTE_CATEGORIES: {
+      saveSetting(action);
       return action.payload;
       break;
     }

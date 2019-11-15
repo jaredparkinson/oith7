@@ -11,6 +11,7 @@ import {
 } from '../../../../../oith-lib/src/processors/NoteSettings';
 import { of } from 'rxjs';
 import { AddNoteSettings } from 'src/app/actions/note-settings.actions';
+import { NoteSettingsService } from 'src/app/services/note-settings.service';
 
 @Component({
   selector: 'oith-header',
@@ -25,6 +26,7 @@ export class OithHeaderComponent implements OnInit {
     });
   public noteSettings?: NoteSettings;
   constructor(
+    public noteSettingsService: NoteSettingsService,
     public store: Store<AppState>,
     public backdropService: BackdropService,
     public menuService: MenuService,
@@ -49,19 +51,18 @@ export class OithHeaderComponent implements OnInit {
 
   public noteSettingsClick(evt: Event, noteSetting: NoteSetting) {
     event.stopPropagation();
-    console.log(evt);
 
     of((evt.target as HTMLElement).nodeName.toLowerCase() === 'input')
       .pipe(filter(o => o))
       .subscribe(() => {
         noteSetting.enabled = (evt.target as HTMLInputElement).checked;
         this.store.dispatch(new AddNoteSettings(this.noteSettings));
+        this.noteSettingsService.noteSettings$.next();
       });
   }
 
   public noteSettingsDropDown(event: Event) {
     const e = event.srcElement as Element;
-    console.log(e.nodeName);
 
     if (
       e.nodeName.toLowerCase() === 'svg' ||
