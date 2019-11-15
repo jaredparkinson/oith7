@@ -67,29 +67,15 @@ export class NoteSettingsService {
     );
     const more = moreSetting ? moreSetting.enabled : false;
 
-    let onPlus = of(more).pipe(
-      filter(o => o),
-      map(() => {
-        return of(
-          noteSettings.noteSettings
-            .filter(noteSetting => noteSetting.enabled)
-            .map(nS => nS.catOnPlus),
-        ).pipe(flatMap$, flatMap$, distinctUntilChanged(), toArray());
-      }),
-      flatMap$,
-    );
-    let on = of(
-      noteSettings.noteSettings
-        .filter(noteSetting => noteSetting.enabled)
-        .map(nS => nS.catOn.concat(nS.overlays)),
-    ).pipe(flatMap$, flatMap$, distinctUntilChanged(), toArray());
-    return forkJoin(on.pipe(toArray()), onPlus.pipe(toArray())).pipe(
-      flatMap$,
-      flatMap$,
-      flatMap$,
+    const on = noteSettings.noteSettings
+      .filter(noteSetting => noteSetting.enabled)
+      .map(nS => nS.catOn.concat(nS.overlays).concat(more ? nS.catOnPlus : []));
+
+    return of(on).pipe(
+      flatMap(o => o),
+      flatMap(o => o),
       map(s => {
         settings.vis[s] = true;
-        console.log(s);
       }),
       toArray(),
     );
