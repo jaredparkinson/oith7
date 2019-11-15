@@ -11,7 +11,7 @@ import { AddSettings } from 'src/app/actions/notetypes.actions';
 })
 export class OithHeaderComponent implements OnInit {
   constructor(public store: Store<AppState>) {}
-
+  public notesDropdown = false;
   ngOnInit() {}
 
   public navOpen() {
