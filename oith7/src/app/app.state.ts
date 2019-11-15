@@ -11,6 +11,6 @@ export interface AppState {
   readonly chapterHistory: ChapterModel[];
   readonly noteSettings: NoteSettings;
   readonly noteCategories: NoteCategories;
-  readonly noteTypes: NoteSettings;
+  readonly noteTypes: NoteTypes;
   readonly settings: Settings;
 }
