@@ -1,5 +1,5 @@
-<ng-container *ngIf="this.noteRefs">
+<ng-container *ngIf="note.formatTag.visible && this.noteRefs">
   <ng-container *ngFor="let noteRef of this.noteRefs">
-    <note-ref [noteRef]="noteRef"></note-ref>
+    <note-ref *ngIf="noteRef.vis" [noteRef]="noteRef"></note-ref>
   </ng-container>
 </ng-container>

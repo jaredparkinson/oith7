@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, forkJoin, of } from 'rxjs';
+import { Subject, forkJoin, of, Observable, Subscription } from 'rxjs';
 import {
   map,
   take,
@@ -27,10 +27,13 @@ import { Chapter } from '../../../../oith-lib/src/models/Chapter';
 })
 export class NoteSettingsService {
   public noteSettings$ = new Subject();
+  public chapter$: Subscription;
+  // public noteGroup
   public updateNoteVisibiliy$ = new Subject();
   constructor(private store: Store<AppState>) {
     this.resetNoteVisibilitySettings();
 
+    this.resetNotesFirstLoad();
     this.updateNoteVisibiliy$
       .pipe(
         map(() =>
@@ -48,6 +51,33 @@ export class NoteSettingsService {
         flatMap$,
       )
       .subscribe(o => o);
+    this.noteSettings$.next();
+  }
+
+  private resetNotesFirstLoad() {
+    this.store
+      .select('chapter')
+      .pipe(filter(o => o !== undefined))
+      .subscribe(() => this.updateNoteVisibiliy$.next());
+    // this.chapter$ = this.store
+    //   .select('chapter')
+    //   .pipe(
+    //     filter(o => o !== undefined),
+    //     map(chapter => {
+    //       return forkJoin(
+    //         of(chapter),
+    //         this.store.select('settings').pipe(take(1)),
+    //         this.store.select('noteCategories').pipe(take(1)),
+    //       ).pipe(
+    //         map(([chapter, settings, noteCategories]) =>
+    //           resetNoteVisibility(chapter, settings, noteCategories),
+    //         ),
+    //         flatMap$,
+    //       );
+    //     }),
+    //     flatMap$,
+    //   )
+    //   .subscribe(o => o);
   }
 
   private resetNoteVisibilitySettings() {
@@ -55,10 +85,22 @@ export class NoteSettingsService {
       .pipe(
         map(() => {
           return forkJoin(
-            this.store.select('settings').pipe(take(1)),
-            this.store.select('noteCategories').pipe(take(1)),
-            this.store.select('noteTypes').pipe(take(1)),
-            this.store.select('noteSettings').pipe(take(1)),
+            this.store.select('settings').pipe(
+              take(1),
+              filter(o => o !== undefined),
+            ),
+            this.store.select('noteCategories').pipe(
+              take(1),
+              filter(o => o !== undefined),
+            ),
+            this.store.select('noteTypes').pipe(
+              take(1),
+              filter(o => o !== undefined),
+            ),
+            this.store.select('noteSettings').pipe(
+              take(1),
+              filter(o => o !== undefined),
+            ),
           ).pipe(
             map(([settings, noteCategories, noteTypes, noteSettings]) => {
               settings.vis = {};
@@ -82,7 +124,7 @@ export class NoteSettingsService {
         flatMap$,
         flatMap$,
       )
-      .subscribe(o => console.log(o));
+      .subscribe(o => o);
   }
 
   private saveSettings(
@@ -143,7 +185,7 @@ export class NoteSettingsService {
       if (noteType.visibility) {
         settings.vis[noteType.noteType] = true;
       }
-      console.log(`${noteType.className}-${noteType.visibility}`);
+      `${noteType.className}-${noteType.visibility}`;
     });
   }
 }
@@ -152,6 +194,31 @@ export function resetNoteVisibility(
   settings: Settings,
   noteCats: NoteCategories,
 ) {
+  return of(chapter.verseNotes).pipe(
+    flatMap$,
+    filter(o => o.noteGroups !== undefined),
+    flatMap(o => o.noteGroups),
+    map(ng => {
+      ng.formatTag.visible =
+        ng.notes
+          .map(note => {
+            note.formatTag.visible = settings.vis[note.noteType] === true;
+            if (note.formatTag.visible) {
+              note.formatTag.visible =
+                note.ref
+                  .map(ref => {
+                    ref.vis = settings.vis[ref.category] === true;
+                    ref.label = `${settings.noteCatList[ref.category]}\u00A0`;
+                    return ref;
+                  })
+                  .filter(r => r.vis).length > 0;
+            }
+            return note;
+          })
+          .filter(r => r.formatTag.visible).length > 0;
+    }),
+    toArray(),
+  );
   return of(chapter.verseNotes).pipe(
     flatMap$,
     flatMap(o => o.notes),
