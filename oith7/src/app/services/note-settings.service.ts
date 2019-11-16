@@ -27,6 +27,7 @@ import { Chapter } from '../../../../oith-lib/src/models/Chapter';
 })
 export class NoteSettingsService {
   public noteSettings$ = new Subject();
+  public resetUnderline$ = new Subject();
   public chapter$: Subscription;
   // public noteGroup
   public updateNoteVisibiliy$ = new Subject();
@@ -50,7 +51,9 @@ export class NoteSettingsService {
         ),
         flatMap$,
       )
-      .subscribe(o => o);
+      .subscribe(o => {
+        this.resetUnderline$.next();
+      });
     this.noteSettings$.next();
   }
 
@@ -199,6 +202,7 @@ export function resetNoteVisibility(
     filter(o => o.noteGroups !== undefined),
     flatMap(o => o.noteGroups),
     map(ng => {
+      ng.formatTag.highlight = false;
       ng.formatTag.visible =
         ng.notes
           .map(note => {

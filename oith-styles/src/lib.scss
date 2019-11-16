@@ -17,3 +17,6 @@ oith-header,
 html {
   overflow-y: hidden !important;
 }
+.highlight:not(:last-child) {
+  margin-bottom: 0 !important;
+}

@@ -79,7 +79,7 @@ export interface Visibility {
 }
 
 export function ancHasID(e: HTMLElement | null, id: string): boolean {
-  if (e === null) {
+  if (e === null || e === undefined) {
     return true;
   }
   if (e !== null) {
