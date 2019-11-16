@@ -12,6 +12,10 @@ import {
   NoteCategories,
 } from '../../../../oith-lib/src/verse-notes/settings/note-gorup-settings';
 import { AddNoteCategories } from '../actions/note-cat.actions';
+import {
+  Params,
+  parseParams,
+} from '../../../../oith-lib/src/shells/build-shells';
 
 @Injectable({
   providedIn: 'root',
@@ -73,7 +77,7 @@ export class Settings {
   public notePaneWidthDisplay = 300;
   public notePaneHeight = 300;
   public notePaneHeightDisplay = 300;
-
+  public noteCatList: Params = {};
   public oithHeaderTop = 0;
   public contentTop = 48;
   public lang = 'eng';

@@ -20,17 +20,37 @@ import {
 import { AddSettings, AddNoteTypes } from '../actions/notetypes.actions';
 import { AddNoteSettings } from '../actions/note-settings.actions';
 import { AddNoteCategories } from '../actions/note-cat.actions';
+import { Chapter } from '../../../../oith-lib/src/models/Chapter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoteSettingsService {
   public noteSettings$ = new Subject();
+  public updateNoteVisibiliy$ = new Subject();
   constructor(private store: Store<AppState>) {
-    this.updateNoteVisibility();
+    this.resetNoteVisibilitySettings();
+
+    this.updateNoteVisibiliy$
+      .pipe(
+        map(() =>
+          forkJoin(
+            store.select('chapter').pipe(take(1)),
+            store.select('settings').pipe(take(1)),
+            store.select('noteCategories').pipe(take(1)),
+          ).pipe(
+            map(([chapter, settings, noteCategories]) =>
+              resetNoteVisibility(chapter, settings, noteCategories),
+            ),
+            flatMap$,
+          ),
+        ),
+        flatMap$,
+      )
+      .subscribe(o => o);
   }
 
-  private updateNoteVisibility() {
+  private resetNoteVisibilitySettings() {
     this.noteSettings$
       .pipe(
         map(() => {
@@ -42,14 +62,18 @@ export class NoteSettingsService {
           ).pipe(
             map(([settings, noteCategories, noteTypes, noteSettings]) => {
               settings.vis = {};
+              settings.noteCatList = {};
               return this.extractNoteSettings(noteSettings, settings).pipe(
                 map(() => {
                   this.setNoteCategoriesVisible(noteCategories, settings);
                   this.setNoteTypesVisible(noteTypes, settings);
-                  this.store.dispatch(new AddSettings(settings));
-                  this.store.dispatch(new AddNoteSettings(noteSettings));
-                  this.store.dispatch(new AddNoteCategories(noteCategories));
-                  this.store.dispatch(new AddNoteTypes(noteTypes));
+                  this.saveSettings(
+                    settings,
+                    noteSettings,
+                    noteCategories,
+                    noteTypes,
+                  );
+                  this.updateNoteVisibiliy$.next();
                 }),
               );
             }),
@@ -59,6 +83,18 @@ export class NoteSettingsService {
         flatMap$,
       )
       .subscribe(o => console.log(o));
+  }
+
+  private saveSettings(
+    settings: Settings,
+    noteSettings: NoteSettings,
+    noteCategories: NoteCategories,
+    noteTypes: NoteTypes,
+  ) {
+    this.store.dispatch(new AddSettings(settings));
+    this.store.dispatch(new AddNoteSettings(noteSettings));
+    this.store.dispatch(new AddNoteCategories(noteCategories));
+    this.store.dispatch(new AddNoteTypes(noteTypes));
   }
 
   private extractNoteSettings(noteSettings: NoteSettings, settings: Settings) {
@@ -86,6 +122,7 @@ export class NoteSettingsService {
     settings: Settings,
   ) {
     noteCategories.noteCategories.map(noteCategory => {
+      settings.noteCatList[noteCategory.category] = noteCategory.label;
       const on =
         noteCategory.on.filter(on => settings.vis[on]).length ===
         noteCategory.on.length;
@@ -109,4 +146,25 @@ export class NoteSettingsService {
       console.log(`${noteType.className}-${noteType.visibility}`);
     });
   }
+}
+export function resetNoteVisibility(
+  chapter: Chapter,
+  settings: Settings,
+  noteCats: NoteCategories,
+) {
+  return of(chapter.verseNotes).pipe(
+    flatMap$,
+    flatMap(o => o.notes),
+    map(note => {
+      note.formatTag.visible = settings.vis[note.noteType] === true;
+      if (note.formatTag.visible) {
+        note.ref.map(ref => {
+          ref.vis = settings.vis[ref.category] === true;
+          ref.label = `${settings.noteCatList[ref.category]}\u00A0`;
+        });
+      } else {
+      }
+    }),
+    toArray(),
+  );
 }

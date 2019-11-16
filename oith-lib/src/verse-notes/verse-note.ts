@@ -24,6 +24,7 @@ export class NoteRef {
   public category?: number;
   public text?: string;
   public vis?: boolean;
+ public label: string;
   public constructor(noteC: number, text: string) {
     this.category = noteC;
     this.text = text;
