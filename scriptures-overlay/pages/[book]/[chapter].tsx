@@ -11,13 +11,16 @@ import {
   Verse,
   FormatGroup,
   FormatText,
-  Chapter
-} from "../../oith-lib/src/models/Chapter";
+  Chapter,
+  VersePlaceholder
+} from "../../../oith-lib/src/models/Chapter";
+
+import { store } from "./Store";
+import { HeaderComponent } from "../../components/header.component";
 import {
   addVersesToBody,
   buildNewShell
-} from "../../oith-lib/src/shells/build-shells";
-import { store } from "./Store";
+} from "../../app/src/services/build-shell";
 
 // import { fetch } from "http";
 function Testat() {
@@ -85,19 +88,17 @@ function formatVerses(verses?: Verse[]) {
   }
   return;
 }
-function formatGroup(grp: FormatGroup, verse?: Verse) {
-  return (
-    <Fragment>
-      {formatGroups(grp.grps, verse)}
-      {formatVerses(grp.verses)}
-    </Fragment>
-  );
+function formatGroup(grp: FormatGroup) {
+  return <Fragment>{formatGroups(grp.grps)}</Fragment>;
 }
 
-function formatGroups(grps?: (FormatGroup | FormatText)[], verse?: Verse) {
+function formatGroups(
+  grps?: (FormatGroup | FormatText | VersePlaceholder)[],
+  verse?: Verse
+) {
   if (grps) {
     return grps.map(grpTxt => {
-      if (grpTxt.docType === 4) {
+      if ((grpTxt as FormatText).docType === 4) {
         const grp = grpTxt as FormatGroup;
 
         if (
@@ -111,71 +112,70 @@ function formatGroups(grps?: (FormatGroup | FormatText)[], verse?: Verse) {
           (grp.attrs as { class?: string }).class = undefined;
         }
         // return <h1>{grp.name}</h1>;
-        switch (grp.name) {
-          case "HEADER": {
-            return <header {...grp.attrs}>{formatGroup(grp, verse)}</header>;
+        const name = grp.name ? grp.name.toLowerCase() : "";
+        switch (name) {
+          case "header": {
+            return <header {...grp.attrs}>{formatGroup(grp)}</header>;
           }
-          case "SECTION": {
-            return <section {...grp.attrs}>{formatGroup(grp, verse)}</section>;
+          case "section": {
+            return <section {...grp.attrs}>{formatGroup(grp)}</section>;
           }
-          case "UL": {
-            return <ul {...grp.attrs}>{formatGroup(grp, verse)}</ul>;
+          case "ul": {
+            return <ul {...grp.attrs}>{formatGroup(grp)}</ul>;
           }
-          case "LI": {
-            return <li {...grp.attrs}>{formatGroup(grp, verse)}</li>;
+          case "li": {
+            return <li {...grp.attrs}>{formatGroup(grp)}</li>;
           }
-          case "DL": {
-            return <dl {...grp.attrs}>{formatGroup(grp, verse)}</dl>;
+          case "dl": {
+            return <dl {...grp.attrs}>{formatGroup(grp)}</dl>;
           }
           case "h1": {
-            return <h1 {...grp.attrs}>{formatGroup(grp, verse)}</h1>;
+            return <h1 {...grp.attrs}>{formatGroup(grp)}</h1>;
           }
           case "h2": {
-            return <h2 {...grp.attrs}>{formatGroup(grp, verse)}</h2>;
+            return <h2 {...grp.attrs}>{formatGroup(grp)}</h2>;
           }
           case "h3": {
-            return <h3 {...grp.attrs}>{formatGroup(grp, verse)}</h3>;
+            return <h3 {...grp.attrs}>{formatGroup(grp)}</h3>;
           }
           case "h4": {
-            return <h4 {...grp.attrs}>{formatGroup(grp, verse)}</h4>;
+            return <h4 {...grp.attrs}>{formatGroup(grp)}</h4>;
           }
           case "p": {
-            return <p {...grp.attrs}>{formatGroup(grp, verse)}</p>;
+            return <p {...grp.attrs}>{formatGroup(grp)}</p>;
           }
           case "em": {
-            return <em {...grp.attrs}>{formatGroup(grp, verse)}</em>;
+            return <em {...grp.attrs}>{formatGroup(grp)}</em>;
           }
-          case "DD": {
-            return <dd {...grp.attrs}>{formatGroup(grp, verse)}</dd>;
+          case "dd": {
+            return <dd {...grp.attrs}>{formatGroup(grp)}</dd>;
           }
-          case "FIGURE": {
-            return <figure {...grp.attrs}>{formatGroup(grp, verse)}</figure>;
+          case "figure": {
+            return <figure {...grp.attrs}>{formatGroup(grp)}</figure>;
           }
-          case "DIV": {
-            return <div {...grp.attrs}>{formatGroup(grp, verse)}</div>;
+          case "div": {
+            return <div {...grp.attrs}>{formatGroup(grp)}</div>;
           }
-          case "OL": {
-            return <ol {...grp.attrs}>{formatGroup(grp, verse)}</ol>;
+          case "ol": {
+            return <ol {...grp.attrs}>{formatGroup(grp)}</ol>;
           }
-          case "FIGCAPTION":
+          case "figcaption":
           case "figcaption": {
-            return (
-              <figcaption {...grp.attrs}>{formatGroup(grp, verse)}</figcaption>
-            );
+            return <figcaption {...grp.attrs}>{formatGroup(grp)}</figcaption>;
           }
-          case "SPAN":
+          case "span":
           case "span": {
-            return <span {...grp.attrs}>{formatGroup(grp, verse)}</span>;
+            return <span {...grp.attrs}>{formatGroup(grp)}</span>;
           }
-          case "A":
+          case "a":
           case "a": {
-            return renderLinks(grp, verse);
+            return renderLinks(grp);
           }
           case "i": {
-            return <i {...grp.attrs}>{formatGroup(grp, verse)}</i>;
+            return <i {...grp.attrs}>{formatGroup(grp)}</i>;
           }
           case "cite": {
-            return <cite {...grp.attrs}>{formatGroup(grp, verse)}</cite>;
+            return <cite {...grp.attrs}>{formatGroup(grp)}</cite>;
           }
           case "br": {
             return (
@@ -184,7 +184,7 @@ function formatGroups(grps?: (FormatGroup | FormatText)[], verse?: Verse) {
                 <br />
               </h1>
             );
-            // return <br {...grp.attrs}>{formatGroup(grp, verse)}</br>;
+            // return <br {...grp.attrs}>{formatGroup(grp)}</br>;
           }
 
           case "IMG": {
@@ -198,10 +198,10 @@ function formatGroups(grps?: (FormatGroup | FormatText)[], verse?: Verse) {
           }
 
           default: {
-            return <span {...grp.attrs}>{formatGroup(grp, verse)}</span>;
+            return <span {...grp.attrs}>{formatGroup(grp)}</span>;
           }
         }
-      } else if (grpTxt.docType === 5 && verse) {
+      } else if ((grpTxt as FormatText).docType === 5 && verse) {
         const txt = grpTxt as FormatText;
         if (txt.formatMerged) {
           return (
@@ -231,6 +231,7 @@ const ChapterParent: NextPage<{ a: string; chapter: Chapter }> = ({
       <Head>
         <title>{chapter.title}</title>
       </Head>
+      <HeaderComponent></HeaderComponent>
       <Layout title={chapter.title} shortTitle={chapter.shortTitle}>
         <ChapterComponent chapter={chapter} />
         {formatGroups(chapter.body.grps)}
@@ -262,16 +263,16 @@ ChapterParent.getInitialProps = async ({ query }) => {
 
 export default ChapterParent;
 
-function renderLinks(grp: FormatGroup, verse: Verse): JSX.Element {
+function renderLinks(grp: FormatGroup): JSX.Element {
   const attrs = grp.attrs as { href: string };
 
   if (attrs.href && attrs.href.includes("#note")) {
-    return <span {...grp.attrs}>{formatGroup(grp, verse)}</span>;
+    return <span {...grp.attrs}>{formatGroup(grp)}</span>;
   }
 
   return (
     <Link {...attrs}>
-      <a>{formatGroup(grp, verse)}</a>
+      <a>{formatGroup(grp)}</a>
     </Link>
   );
 }

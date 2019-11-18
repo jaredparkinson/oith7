@@ -2,10 +2,9 @@ import Header from "./header";
 // import { NextPage } from "react";
 import { ChapterComponent } from "../components/chapter.component";
 import axios from "axios";
-import { Chapter } from "../processors/src/processors/Chapter";
+import { Chapter } from "../../oith-lib/src/models/Chapter";
 import { NextPage } from "next";
 import Layout from "../components/layout";
-import "`normalize.css";
 // import { fetch } from "http";
 function Testat() {
   return <h1>Test</h1>;
