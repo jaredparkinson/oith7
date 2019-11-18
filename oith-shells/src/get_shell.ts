@@ -2,14 +2,14 @@ import { Params } from './Params';
 import { Chapter } from '../../oith-lib/src/models/Chapter';
 import { addChapterToHistory } from './store/functions/addChapterToHistory';
 import { Observable, forkJoin, of } from 'rxjs';
-import { map, flatMap, delay } from 'rxjs/operators';
+import { map, flatMap, delay, toArray } from 'rxjs/operators';
 import { get$ } from './store/functions/get';
 import { flatMap$ } from '../../oith-lib/src/rx/flatMap$';
 import { findInDatabase } from './findInDatabase';
 import { findInRemote } from './findInRemote';
 import { findInHistory } from './findInHistory';
 import { buildID } from './buildID';
-import { buildNewShell } from './shells/build-shells';
+import { buildNewShell, addVersesToBody } from './shells/build-shells';
 import { highlightVerses } from './shells/highlightVerses';
 import { chapter$ } from './store/store';
 // import {  } from "../../oith-lib/src";
@@ -62,8 +62,11 @@ function buildShell(buildShellOptions: BuildShellOptions) {
     return forkJoin(
       highlightVerses(buildShellOptions.chapter.verses, buildShellOptions),
       buildNewShell(buildShellOptions.chapter),
+      addVersesToBody(buildShellOptions.chapter),
     ).pipe(
       map(() => {
+        console.log('buildshell');
+
         return buildShellOptions;
       }),
     );
@@ -91,8 +94,9 @@ export function getShell(
     notesTops: 0,
   },
 ) {
-  return addChapterToHistory()
+  return of()
     .pipe(
+      toArray(),
       map(() => buildID(buildShellOptions)),
       flatMap$,
       map(buildShellOptions => findInHistory(buildShellOptions)),
@@ -103,16 +107,20 @@ export function getShell(
       flatMap(o => o),
     )
     .pipe(
-      map(buildShellOptions => buildShell(buildShellOptions)),
+      map(buildShellOptions => {
+        console.log('buildShellOptions');
+
+        return buildShell(buildShellOptions);
+      }),
       flatMap(o => o),
       map(buildShellOptions => {
         if (buildShellOptions.chapter) {
           chapter$.next(buildShellOptions.chapter);
+          console.log('buildShellOptions.chapter');
           return buildShellOptions;
         }
         throw new Error(`No chapter was found.`);
       }),
-      delay(200),
       // map(buildShellOptions => {}),
     );
 }

@@ -1,3 +1,4 @@
+import { getShell } from '../../../../../oith-shells/src/get_shell';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ChapterService } from 'src/app/services/chapter.service';
@@ -38,6 +39,7 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
 
   public chapter: Store<Chapter>;
 
+  public testChapter: Observable<Chapter>;
   public ssettings: Settings;
   public isManual$?: Subscription;
   public settings$: Observable<Settings>;
@@ -64,43 +66,62 @@ export class ChapterLoaderComponent implements OnInit, OnDestroy {
       console.log(settings);
     });
   }
+  private get(id: string) {
+    return this.httpClient.get<Chapter>(id, { responseType: 'json' });
+  }
 
   ngOnInit() {
     this.isManual$ = this.manualOrChapter().subscribe();
     this.loadSettings();
-    this.activatedRoute.params
-      .pipe(
-        map(params => {
-          const chapterParams = parseParams(params);
+    this.testChapter = this.activatedRoute.params.pipe(
+      map(params =>
+        getShell({
+          chapterParams: params,
+          checkDatabase: true,
+          settings: new Settings(),
+          scrollToVerse: false,
+          checkHistory: false,
+          notesTops: 0,
+          chapterTop: 0,
+          get: this.get,
+        }),
+      ),
+      flatMap(o => o),
+      map(o => o.chapter),
+    );
+    // this.activatedRoute.params
+    //   .pipe(
+    //     map(params => {
+    //       const chapterParams = parseParams(params);
 
-          return forkJoin(of(chapterParams)).pipe(
-            map(o => {
-              this.addToHistory();
-              return o[0];
-            }),
-          );
-        }),
-        flatMap(o => o),
-        map(chapterParams => {
-          return this.getChapter(chapterParams);
-        }),
-        flatMap(o => o),
-        map(o => {
-          // this.chapterService.chapter = o[1];
-          // this.chapterService.testChapter.next(o[1]);
-          // this.store.dispatch(
-          //   new AddChapterHistory({ chapter: o[1], id: o[1].id }),
-          // );
-          this.store.dispatch(new AddChapter(o[1]));
-        }),
-        delay(100),
-        map(() => {
-          return scrollIntoView('.context,.highlight');
-        }),
+    //       return forkJoin(of(chapterParams)).pipe(
+    //         map(o => {
+    //           this.addToHistory();
+    //           return o[0];
+    //         }),
+    //       );
+    //     }),
+    //     flatMap(o => o),
+    //     map(chapterParams => {
+    //       return this.getChapter(chapterParams);
+    //     }),
+    //     flatMap(o => o),
+    //     map(o => {
+    //       // this.chapterService.chapter = o[1];
+    //       // this.chapterService.testChapter.next(o[1]);
+    //       // this.store.dispatch(
+    //       //   new AddChapterHistory({ chapter: o[1], id: o[1].id }),
+    //       // );
+    //       this.store.dispatch(new AddChapter(o[1]));
+    //     }),
+    //     delay(100),
+    //     map(() => {
+    //       return scrollIntoView('.context,.highlight');
+    //     }),
 
-        flatMap$,
-      )
-      .subscribe(o => {});
+    //     flatMap$,
+    //   )
+    //   .subscribe(o => {});
   }
   private addToHistory() {
     const addingToHistory = this.store
