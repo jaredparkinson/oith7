@@ -143,8 +143,9 @@ function comeFollowMeAndTopLevelNavigation(
       return parseTopLevelNav($, c);
     }
   });
+  const firstChild = element.children.filter(n => n.name !== undefined)[0];
 
-  const navItem = parseNavigationItem($, element);
+  const navItem = parseNavigationItem($, firstChild);
   navItem.navigationItems = navItems;
 
   return navItem;
