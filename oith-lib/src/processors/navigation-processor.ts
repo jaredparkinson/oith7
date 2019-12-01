@@ -1,9 +1,10 @@
 import { parseDocID } from './parseDocID';
 import { of, forkJoin } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, elementAt } from 'rxjs/operators';
 import { decode } from 'he';
 import { uniq, isEqual } from 'lodash';
 import { writeFile$ } from '../fs$';
+import { flatMap$ } from '../rx/flatMap$';
 function parseNavId($: CheerioStatic) {
   return parseDocID($).pipe(map(o => o.replace('_manifest', 'manifest')));
 }
@@ -57,40 +58,39 @@ function filterTextNodes(element: CheerioElement) {
   return element.children.filter(c => c.name !== undefined);
 }
 
-function parseNavigation($: CheerioStatic, listItems: CheerioElement[]) {
+function parseNavigationItems($: CheerioStatic, listItems: CheerioElement[]) {
   return listItems.map(li => {
-    const dateStart = li.attribs['data-date-start'];
-    const dateEnd = li.attribs['data-date-end'];
-    const href = $(li)
-      .find('a')
-      .attr('href');
-    const title = $(li)
-      .find('.title')
-      .first()
-      .text();
-    const shortTitle = $(li)
-      .find('.title,.title-number')
-      .first()
-      .text();
-
-    return new NavigationItem(
-      title,
-      shortTitle,
-      href,
-      undefined,
-      dateStart,
-      dateEnd,
-    );
+    return parseNavigationItem($, li);
   });
 }
 
-function parseTopLevelNav($: CheerioStatic, elem: CheerioElement) {
-  return parseNavigation(
-    $,
-    $(elem)
-      .find('li')
-      .toArray(),
+function parseNavigationItem($: CheerioStatic, li: CheerioElement) {
+  const dateStart = li.attribs['data-date-start'];
+  const dateEnd = li.attribs['data-date-end'];
+  const href = $(li)
+    .find('a')
+    .attr('href');
+  const title = $(li)
+    .find('.title')
+    .first()
+    .text();
+  const shortTitle = $(li)
+    .find('.title,.title-number')
+    .first()
+    .text();
+  return new NavigationItem(
+    title,
+    shortTitle,
+    href,
+    undefined,
+    dateStart,
+    dateEnd,
   );
+}
+
+function parseTopLevelNav($: CheerioStatic, elem: CheerioElement) {
+  return parseNavigationItem($, elem);
+  // return { test2: nav };
 }
 
 function parseNav($: CheerioStatic, elem: CheerioElement) {
@@ -103,13 +103,13 @@ function parseNav($: CheerioStatic, elem: CheerioElement) {
     .first()
     .text();
 
-  const childNavigation = parseNavigation(
+  const childNavigation = parseNavigationItems(
     $,
     $(elem)
       .find('li')
       .toArray(),
   );
-  return new NavigationItem(
+  const nav = new NavigationItem(
     monthOrTitle,
     monthOrShortTitle,
     undefined,
@@ -117,6 +117,9 @@ function parseNav($: CheerioStatic, elem: CheerioElement) {
     undefined,
     undefined,
   );
+
+  // return { test1: nav };
+  return nav;
 }
 // Top Level Navigation is are items that are only children of the manifest, like single chapter books. Jarom and Omni are examples of this, or the Introduction of back matter
 function comeFollowMeAndTopLevelNavigation(
@@ -138,7 +141,11 @@ function comeFollowMeAndTopLevelNavigation(
       return parseNav($, c);
       // console.log(cfmNav);
     } else {
-      return parseTopLevelNav($, element);
+      // console.log($(element).attr('name'));
+      console.log(c.name);
+      console.log(c.attribs);
+
+      return parseTopLevelNav($, c);
       // console.log('topLevel');
 
       // console.log(topLevel);
@@ -169,7 +176,7 @@ function parseManifest($: CheerioStatic) {
         // filterTextNodes(topLevelElement).map(e => {
         // });
 
-        return parseNav($, topLevelElement);
+        return [parseNav($, topLevelElement)];
         // console.log(asdf);
       }
       return [];
@@ -183,11 +190,19 @@ export function navigationProcessor($: CheerioStatic) {
     parseNavId($),
     parseNavTitle($),
     parseNavShortTitle($),
-    parseManifest($),
+    parseManifest($).pipe(flatMap$),
   )
     .pipe(
-      map(o => {
-        return writeFile$(`./${o[0]}.json`, JSON.stringify(o[3]));
+      map(([id, title, shortTitle, navigation]) => {
+        const navItem = new NavigationItem(
+          title,
+          shortTitle,
+          undefined,
+          navigation,
+          undefined,
+          undefined,
+        );
+        return writeFile$(`./${id}.json`, JSON.stringify(navItem));
       }),
       flatMap(o => o),
     )
