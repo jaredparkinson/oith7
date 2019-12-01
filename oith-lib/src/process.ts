@@ -24,11 +24,6 @@ export function processExistingNotes($: CheerioStatic) {
   const verseNotes = $(
     'footer.study-notes [data-type*="verse"] > li',
   ).toArray();
-  // console.log(
-  //   $('[href*="note"][offsets]')
-  //     .toArray()
-  //     .map(o => $(o).attr('offsets')),
-  // );
 
   verseNotes.map(verseNote => {
     const notes = $(verseNote)
@@ -36,23 +31,9 @@ export function processExistingNotes($: CheerioStatic) {
       .toArray();
     notes.map(note => {
       const verseRef = $(`[href="#${note.attribs['id']}"]`);
-      // const offsets = $(verseRef)
-      //   .find('[offsets]')
-      //   .toArray();
-
-      // console.log(verseRef.attr());
-
-      // console.log(verseRef.html());
-
-      console.log($(verseRef).attr('offsets'));
-      console.log(
-        $(verseRef)
-          .parent()
-          .attr('offsets'),
-      );
+      verseRef;
     });
   });
-  // console.log(verseNotes.length);
 }
 
 export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
@@ -66,7 +47,7 @@ export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
         switch (fileType) {
           case 'book':
           case 'manifest': {
-            navigationProcessor($)
+            navigationProcessor($);
             break;
           }
           case 'overlay-note': {
@@ -77,7 +58,6 @@ export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
             return chapterProcessor($).pipe(
               map(([chapter, $]) => {
                 processExistingNotes($);
-                // console.log(chapter.id);
 
                 return chapter;
               }),

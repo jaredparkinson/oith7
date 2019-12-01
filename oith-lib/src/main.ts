@@ -96,7 +96,7 @@ export function loadnoteSettings(): Observable<
     .pipe(
       map(o => new AdmZip(o).getEntries()),
       map(o => {
-        console.log(o.map(i => i.name));
+        // console.log(o.map(i => i.name));
 
         return forkJoin(
           of(o.find(i => i.name === 'note_types.html') as IZipEntry).pipe(

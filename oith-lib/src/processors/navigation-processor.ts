@@ -139,16 +139,8 @@ function comeFollowMeAndTopLevelNavigation(
     const nodeNames = parseChildNodeNames(c);
     if (isEqual(aUL, nodeNames) || isEqual(pUL, nodeNames)) {
       return parseNav($, c);
-      // console.log(cfmNav);
     } else {
-      // console.log($(element).attr('name'));
-      console.log(c.name);
-      console.log(c.attribs);
-
       return parseTopLevelNav($, c);
-      // console.log('topLevel');
-
-      // console.log(topLevel);
     }
   });
 }
@@ -177,10 +169,8 @@ function parseManifest($: CheerioStatic) {
         // });
 
         return [parseNav($, topLevelElement)];
-        // console.log(asdf);
       }
       return [];
-      console.log('oiasjdfoiajsdfoiajsd foiajsdofij');
     });
   return of(topLevel);
 }

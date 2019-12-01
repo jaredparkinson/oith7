@@ -20,9 +20,6 @@ function parseNoteType(
   noteElement: CheerioElement,
   noteTypes: NoteTypes,
 ) {
-  // console.log(
-  // noteTypes.noteTypes.find(o => o.className === $(noteElement).attr('class')),
-  // );
   return of(noteTypes.noteTypes).pipe(
     flatMap$,
     find(o => o.className === $(noteElement).attr('class')),
@@ -43,7 +40,6 @@ function parseNoteCategory(
     // noteRefLabel.parent.;
     return of(nc.category);
   }
-  // console.log(not);
 
   console.log(`Not valid ${$(noteRefLabel).attr('class')} `);
   return of(-1);

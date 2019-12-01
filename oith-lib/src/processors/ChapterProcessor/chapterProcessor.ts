@@ -345,7 +345,6 @@ function newParseChildre(
         } as VersePlaceholder);
       }
       if ($(o).hasClass('study-notes')) {
-        // console.log(o);
         return EMPTY;
       }
       return newParseChildre($, $(o));
