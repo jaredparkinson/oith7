@@ -135,7 +135,7 @@ function comeFollowMeAndTopLevelNavigation(
   // Similar ot Come Follow Me, just with title and short title instead of months
   const pUL = ['p', 'ul'];
 
-  return filterTextNodes(element).map(c => {
+  const navItems = filterTextNodes(element).map(c => {
     const nodeNames = parseChildNodeNames(c);
     if (isEqual(aUL, nodeNames) || isEqual(pUL, nodeNames)) {
       return parseNav($, c);
@@ -143,6 +143,11 @@ function comeFollowMeAndTopLevelNavigation(
       return parseTopLevelNav($, c);
     }
   });
+
+  const navItem = parseNavigationItem($, element);
+  navItem.navigationItems = navItems;
+
+  return navItem;
 }
 
 function parseManifest($: CheerioStatic) {
@@ -168,11 +173,12 @@ function parseManifest($: CheerioStatic) {
         // filterTextNodes(topLevelElement).map(e => {
         // });
 
-        return [parseNav($, topLevelElement)];
+        return parseNav($, topLevelElement);
       }
-      return [];
-    });
-  return of(topLevel);
+      return undefined;
+    })
+    .filter(o => o !== undefined);
+  return of(topLevel as NavigationItem[]);
 }
 
 export function navigationProcessor($: CheerioStatic) {
@@ -180,7 +186,7 @@ export function navigationProcessor($: CheerioStatic) {
     parseNavId($),
     parseNavTitle($),
     parseNavShortTitle($),
-    parseManifest($).pipe(flatMap$),
+    parseManifest($), //.pipe(flatMap$),
   )
     .pipe(
       map(([id, title, shortTitle, navigation]) => {
