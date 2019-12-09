@@ -32,9 +32,10 @@ function parseNoteCategory(
   noteRefLabel: Cheerio,
   noteCategories: NoteCategories,
 ) {
-  const nc = noteCategories.noteCategories.find(
-    n => n.className === $(noteRefLabel).attr('class'),
-  );
+  const nc = noteCategories.noteCategories.find(n => {
+    const classList = $(noteRefLabel).attr('class');
+    return classList ? classList.includes(n.className) : false;
+  });
   if (nc) {
     $(noteRefLabel).remove();
     // noteRefLabel.parent.;
