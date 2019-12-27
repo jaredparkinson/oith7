@@ -47,7 +47,7 @@ export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
         switch (fileType) {
           case 'book':
           case 'manifest': {
-            navigationProcessor($);
+            // navigationProcessor($);
             break;
           }
           case 'overlay-note': {
