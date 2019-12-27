@@ -33,8 +33,9 @@ function parseNoteCategory(
   noteCategories: NoteCategories,
 ) {
   const nc = noteCategories.noteCategories.find(n => {
-    const classList = $(noteRefLabel).attr('class');
-    return classList ? classList.includes(n.className) : false;
+    // const classList = $(noteRefLabel).attr('class');
+    return noteRefLabel.hasClass(n.className);
+    // return classList ? classList.includes(n.className) : false;
   });
   if (nc) {
     $(noteRefLabel).remove();
