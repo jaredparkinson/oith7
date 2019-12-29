@@ -97,17 +97,27 @@ function parseNoteMap(
   noteTypes: NoteTypes,
   noteCategories: NoteCategories,
 ) {
+  const parseNoteRefs = () => {
+    const refs = $('.note-reference', noteElement)
+      .toArray()
+      .map(nre => {
+        return parseNoteRef($, nre, noteCategories).toPromise();
+      });
+
+    return Promise.all(refs);
+  };
   return forkJoin(
     parseNotePhrase($, noteElement),
     parseNoteType($, noteElement, noteTypes),
-    of($('.note-reference', noteElement)).pipe(
-      flatMap(o => o),
-      map(nre => {
-        return parseNoteRef($, nre, noteCategories);
-      }),
-      flatMap$,
-      toArray(),
-    ),
+    // of($('.note-reference', noteElement)).pipe(
+    //   flatMap(o => o),
+    //   map(nre => {
+    //     return parseNoteRef($, nre, noteCategories);
+    //   }),
+    //   flatMap$,
+    //   toArray(),
+    // ),
+    of(parseNoteRefs()).pipe(flatMap$),
     parseOffsets(noteElement),
     parseNoteUrl($, noteElement),
     parseNotePronunciation(noteElement),

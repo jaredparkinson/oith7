@@ -36,7 +36,10 @@ export function processExistingNotes($: CheerioStatic) {
   });
 }
 
-export function process(noteTypes: NoteTypes, noteCategories: NoteCategories) {
+export function process(
+  noteTypes: NoteTypes,
+  noteCategories: NoteCategories,
+): Observable<void[]> {
   console.log('Processing Files');
 
   return loadFiles()

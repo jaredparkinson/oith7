@@ -296,6 +296,17 @@ function parseVerse($: CheerioStatic, verseE: CheerioElement) {
 }
 
 function parseVerses($: CheerioStatic) {
+  // const parse = () => {
+  //   return $('body [data-aid]')
+  //     .toArray()
+  //     .filter(o => {
+  //       const id = o.attribs['id'];
+
+  //       return id !== undefined && !id.includes('note');
+  //     })
+  //     .map(o => parseVerse($, o).toPromise());
+  // };
+  // return of(Promise.all(parse())).pipe(flatMap$);
   return of($('body [data-aid]').toArray()).pipe(
     flatMap$,
     filter(o => {
@@ -438,11 +449,8 @@ function removeUnneededClasses($: CheerioStatic) {
 
 function removeUnneededElements($: CheerioStatic) {
   // /, 'footer.study-notes'
-  return of(['sup.marker']).pipe(
-    flatMap$,
-    map(o => $(o).remove()),
-    toArray(),
-  );
+
+  return of(['sup.marker'].map(sel => $(sel).remove()));
 }
 
 function prepChapter($: CheerioStatic) {
