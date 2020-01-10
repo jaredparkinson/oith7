@@ -394,7 +394,7 @@ function parseBody($: CheerioStatic) {
 function parseTitle($: CheerioStatic) {
   return of(
     decode(
-      $('[type=citation]')
+      $('[type=navigation]')
         .first()
         .text(),
     ),

@@ -43,7 +43,9 @@ function parseNoteCategory(
     return of(nc.category);
   }
 
-  console.log(`Not valid ${$(noteRefLabel).attr('class')} `);
+  console.log(
+    `Not valid ${$(noteRefLabel).attr('class')} ${$(noteRefLabel).text()} `,
+  );
   return of(-1);
   // throw noteRefLabel.innerHTML;
 }
