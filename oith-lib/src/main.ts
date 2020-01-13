@@ -121,29 +121,78 @@ export function loadnoteSettings(): Observable<
     )
     .pipe(flatMap(o => o));
 }
-
-forkJoin(hasArg('ns', 'string'), hasArg('i', 'string'))
+hasArg('all', 'boolean')
   .pipe(
-    map(() => prepCache()),
-    flatMap$,
-    map(() => unzipFiles(argv.i as string)),
-    flatMap$,
-    map(() => {
-      return loadnoteSettings().pipe(
-        map(([nt, nc, ns]) => {
-          // return of(nt);
-          return forkJoin(
-            writeFile$(`${flatPath}/note_categories.json`, JSON.stringify(nc)),
-            writeFile$(`${flatPath}/note_types.json`, JSON.stringify(nt)),
-            writeFile$(`${flatPath}/note_settings.json`, JSON.stringify(ns)),
-            process(nt, nc),
+    map(() =>
+      forkJoin(hasArg('ns', 'string'), hasArg('i', 'string')).pipe(
+        map(() => prepCache()),
+        flatMap$,
+        map(() => unzipFiles(argv.i as string)),
+        flatMap$,
+        map(() => {
+          return loadnoteSettings().pipe(
+            map(([nt, nc, ns]) => {
+              // return of(nt);
+              return forkJoin(
+                writeFile$(
+                  `${flatPath}/note_categories.json`,
+                  JSON.stringify(nc),
+                ),
+                writeFile$(`${flatPath}/note_types.json`, JSON.stringify(nt)),
+                writeFile$(
+                  `${flatPath}/note_settings.json`,
+                  JSON.stringify(ns),
+                ),
+                process(nt, nc),
+              );
+            }),
+            flatMap$,
           );
         }),
-        flatMap$,
-      );
-    }),
-    flatMap(o => o),
+        flatMap(o => o),
+      ),
+    ),
+    flatMap$,
   )
+
+  .subscribe(o => o);
+
+hasArg('settings', 'string')
+  .pipe(
+    map(() =>
+      forkJoin(hasArg('ns', 'string'), hasArg('i', 'string')).pipe(
+        map(() => prepCache()),
+        flatMap$,
+        map(() => unzipFiles(argv.i as string)),
+        flatMap$,
+        map(() => {
+          return loadnoteSettings().pipe(
+            map(([nt, nc, ns]) => {
+              // return of(nt);
+              return forkJoin(
+                writeFile$(
+                  `${flatPath}/${argv['settings']}-noteCategories.json`,
+                  JSON.stringify(nc),
+                ),
+                writeFile$(
+                  `${flatPath}/${argv['settings']}-noteTypes.json`,
+                  JSON.stringify(nt),
+                ),
+                writeFile$(
+                  `${flatPath}/${argv['settings']}-noteSettings.json`,
+                  JSON.stringify(ns),
+                ),
+              );
+            }),
+            flatMap$,
+          );
+        }),
+        flatMap(o => o),
+      ),
+    ),
+    flatMap$,
+  )
+
   .subscribe(o => o);
 
 // export const parseDocument = map(([buffer, extension]: [Buffer, string]) => {});

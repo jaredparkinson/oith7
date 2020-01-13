@@ -1,6 +1,6 @@
 # Copy-Item ~\OneDrive\OneInThineHand.org\notes\Overlay_Test.zip ..\scripture_files\november_subdomains\oneinthinehand.org
 # Copy-Item ~\OneDrive\OneInThineHand.org\notes\Overlay_Types_Dev.zip ..\scripture_files\november_subdomains\oneinthinehand.org
-ts-node.cmd .\src\main.ts --i ..\scripture_files\november_subdomains\oneinthinehand.org --ns ..\scripture_files\november_subdomains\oneinthinehand.org\Overlay_Types_Dev.zip --all
+ts-node.cmd .\src\main.ts --i ..\scripture_files\november_subdomains\oneinthinehand.org --ns '..\scripture_files\november_subdomains\note_settings_a.zip' --settings 'eng-a'
 # Get-ChildItem .\.cache\flat\ | ForEach-Object { $_.BaseName.Split('-')[0] } | Get-Unique | ForEach-Object {
 #     if ($_.Length -eq 3) {
 #         mkdir ('.cache\flat\' + $_)
@@ -9,4 +9,4 @@ ts-node.cmd .\src\main.ts --i ..\scripture_files\november_subdomains\oneinthineh
 #     }
 # }
 
-rclone move .\.cache\flat\ azure:blobtest
+# rclone move .\.cache\flat\ azure:blobtest
