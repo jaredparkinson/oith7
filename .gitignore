@@ -72,3 +72,5 @@ oith-lib/*-sacrament-manifest.json
 oith-lib/*-tg-manifest.json
 oith-lib/*-triple-index-manifest.json
 oith-lib/*-triple-manifest.json
+oith-lib/.cache2/
+scripture_files2/
