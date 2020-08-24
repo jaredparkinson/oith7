@@ -15,185 +15,189 @@ import { asap } from 'rxjs/internal/scheduler/asap';
 
 export const fixLink = map((i: Cheerio) => {
   const output = i.attr('href');
-  if (
-    output.endsWith(
-      'manual/come-follow-me-for-individuals-and-families-new-testament-2019',
-    )
-  ) {
-    i.attr(
-      'href',
-      `/manual/come-follow-me-for-individuals-and-families-new-testament-2019/title`,
+  if (output) {
+    if (
+      output.endsWith(
+        'manual/come-follow-me-for-individuals-and-families-new-testament-2019',
+      )
+    ) {
+      i.attr(
+        'href',
+        `/manual/come-follow-me-for-individuals-and-families-new-testament-2019/title`,
+      );
+    }
+    const r7 = /^.*(manual\/come-follow-me.*)\.html/g.exec(output);
+
+    if (r7) {
+      i.attr('href', `/${r7[1]}`);
+      return;
+    }
+
+    const r2 = /^.*scriptures\/(gs)\/([a-z\d\-]+)\.html#(sec[a-z\d_]+)$/g.exec(
+      output,
     );
-  }
-  const r7 = /^.*(manual\/come-follow-me.*)\.html/g.exec(output);
+    if (r2) {
+      i.attr('href', `/${r2[1]}/${r2[2]}`);
+      return;
+    }
 
-  if (r7) {
-    i.attr('href', `/${r7[1]}`);
-    return;
-  }
+    const r3 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+\.html\?span=[^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r3) {
+      i.attr('href', `/${r3[2]}/${r3[3]}`);
+      return;
+    }
 
-  const r2 = /^.*scriptures\/(gs)\/([a-z\d\-]+)\.html#(sec[a-z\d_]+)$/g.exec(
-    output,
-  );
-  if (r2) {
-    i.attr('href', `/${r2[1]}/${r2[2]}`);
-    return;
-  }
+    const r4 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(note|)(\d+)[a-z]#(note|)\d+[a-z]$/g.exec(
+      output,
+    );
+    if (r4) {
+      i.attr('href', `/${r4[2]}/${r4[3]}.${r4[5]}`);
+      return;
+    }
 
-  const r3 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+\.html\?span=[^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r3) {
-    i.attr('href', `/${r3[2]}/${r3[3]}`);
-    return;
-  }
+    const r5 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(\d+)&amp;context=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r5) {
+      i.attr('href', `/${r5[2]}/${r5[3]}.${r5[4]}.${r5[5]}`);
+      return;
+    }
+    const r51 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r51) {
+      i.attr('href', `/${r51[2]}/${r51[3]}.${r51[4]}`);
+      return;
+    }
 
-  const r4 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(note|)(\d+)[a-z]#(note|)\d+[a-z]$/g.exec(
-    output,
-  );
-  if (r4) {
-    i.attr('href', `/${r4[2]}/${r4[3]}.${r4[5]}`);
-    return;
-  }
+    const r6 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html$/g.exec(
+      output,
+    );
+    if (r6) {
+      i.attr('href', `/${r6[2]}/${r6[3]}`);
+      return;
+    }
 
-  const r5 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(\d+)&amp;context=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r5) {
-    i.attr('href', `/${r5[2]}/${r5[3]}.${r5[4]}.${r5[5]}`);
-    return;
-  }
-  const r51 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r51) {
-    i.attr('href', `/${r51[2]}/${r51[3]}.${r51[4]}`);
-    return;
-  }
+    const r61 = /^.*scriptures\/jst\/(jst-[a-z\d\-]+\/\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r61) {
+      i.attr('href', `/${r61[1]}`);
+      return;
+    }
 
-  const r6 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html$/g.exec(
-    output,
-  );
-  if (r6) {
-    i.attr('href', `/${r6[2]}/${r6[3]}`);
-    return;
-  }
+    const r62 = /^.*scriptures(\/(bible|history)-maps\/map-\d+)\.html$/g.exec(
+      output,
+    );
+    if (r62) {
+      i.attr('href', `/${r62[1]}`);
+      return;
+    }
 
-  const r61 = /^.*scriptures\/jst\/(jst-[a-z\d\-]+\/\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r61) {
-    i.attr('href', `/${r61[1]}`);
-    return;
-  }
+    const r8 = /^.*\/((manual|general-conference|ensign|liahona|new-era|friend).+)/g.exec(
+      output,
+    );
 
-  const r62 = /^.*scriptures(\/(bible|history)-maps\/map-\d+)\.html$/g.exec(
-    output,
-  );
-  if (r62) {
-    i.attr('href', `/${r62[1]}`);
-    return;
-  }
-
-  const r8 = /^.*\/((manual|general-conference|ensign|liahona|new-era|friend).+)/g.exec(
-    output,
-  );
-
-  if (r8) {
-    i.attr('href', `https://churchofjesuschrist.org/study/${r8[1]}/`);
-    return;
+    if (r8) {
+      i.attr('href', `https://churchofjesuschrist.org/study/${r8[1]}/`);
+      return;
+    }
   }
 });
 
 export const fixLinkOther = (i: Cheerio) => {
   const output = i.attr('href');
-  if (
-    output.endsWith(
-      'manual/come-follow-me-for-individuals-and-families-new-testament-2019',
-    )
-  ) {
-    i.attr(
-      'href',
-      `/manual/come-follow-me-for-individuals-and-families-new-testament-2019/title`,
+  if (output) {
+    if (
+      output.endsWith(
+        'manual/come-follow-me-for-individuals-and-families-new-testament-2019',
+      )
+    ) {
+      i.attr(
+        'href',
+        `/manual/come-follow-me-for-individuals-and-families-new-testament-2019/title`,
+      );
+    }
+    const r7 = /^.*(manual\/come-follow-me.*)\.html/g.exec(output);
+
+    if (r7) {
+      i.attr('href', `/${r7[1]}`);
+      return;
+    }
+
+    const r2 = /^.*scriptures\/(gs)\/([a-z\d\-]+)\.html#(sec[a-z\d_]+)$/g.exec(
+      output,
     );
-  }
-  const r7 = /^.*(manual\/come-follow-me.*)\.html/g.exec(output);
+    if (r2) {
+      i.attr('href', `/${r2[1]}/${r2[2]}`);
+      return;
+    }
 
-  if (r7) {
-    i.attr('href', `/${r7[1]}`);
-    return;
-  }
+    const r3 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+\.html\?span=[^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r3) {
+      i.attr('href', `/${r3[2]}/${r3[3]}`);
+      return;
+    }
 
-  const r2 = /^.*scriptures\/(gs)\/([a-z\d\-]+)\.html#(sec[a-z\d_]+)$/g.exec(
-    output,
-  );
-  if (r2) {
-    i.attr('href', `/${r2[1]}/${r2[2]}`);
-    return;
-  }
+    const r4 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(note|)(\d+)[a-z]#(note|)\d+[a-z]$/g.exec(
+      output,
+    );
+    if (r4) {
+      i.attr('href', `/${r4[2]}/${r4[3]}.${r4[5]}`);
+      return;
+    }
 
-  const r3 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+\.html\?span=[^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r3) {
-    i.attr('href', `/${r3[2]}/${r3[3]}`);
-    return;
-  }
+    const r5 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(\d+)&amp;context=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r5) {
+      i.attr('href', `/${r5[2]}/${r5[3]}.${r5[4]}.${r5[5]}`);
+      return;
+    }
+    const r51 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r51) {
+      i.attr('href', `/${r51[2]}/${r51[3]}.${r51[4]}`);
+      return;
+    }
 
-  const r4 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(note|)(\d+)[a-z]#(note|)\d+[a-z]$/g.exec(
-    output,
-  );
-  if (r4) {
-    i.attr('href', `/${r4[2]}/${r4[3]}.${r4[5]}`);
-    return;
-  }
+    const r6 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html$/g.exec(
+      output,
+    );
+    if (r6) {
+      i.attr('href', `/${r6[2]}/${r6[3]}`);
+      return;
+    }
 
-  const r5 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=(\d+)&amp;context=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r5) {
-    i.attr('href', `/${r5[2]}/${r5[3]}.${r5[4]}.${r5[5]}`);
-    return;
-  }
-  const r51 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r51) {
-    i.attr('href', `/${r51[2]}/${r51[3]}.${r51[4]}`);
-    return;
-  }
+    const r61 = /^.*scriptures\/jst\/(jst-[a-z\d\-]+\/\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
+      output,
+    );
+    if (r61) {
+      i.attr('href', `/${r61[1]}`);
+      return;
+    }
 
-  const r6 = /^.*scriptures\/(ot|nt|bofm|dc-testament|pgp)\/([a-z\d\-]+)\/(\d+)\.html$/g.exec(
-    output,
-  );
-  if (r6) {
-    i.attr('href', `/${r6[2]}/${r6[3]}`);
-    return;
-  }
+    const r62 = /^.*scriptures(\/(bible|history)-maps\/map-\d+)\.html$/g.exec(
+      output,
+    );
+    if (r62) {
+      i.attr('href', `/${r62[1]}`);
+      return;
+    }
 
-  const r61 = /^.*scriptures\/jst\/(jst-[a-z\d\-]+\/\d+)\.html\?verse=([^#]+)#p\d+$/g.exec(
-    output,
-  );
-  if (r61) {
-    i.attr('href', `/${r61[1]}`);
-    return;
-  }
+    const r8 = /^.*\/((manual|general-conference|ensign|liahona|new-era|friend).+)/g.exec(
+      output,
+    );
 
-  const r62 = /^.*scriptures(\/(bible|history)-maps\/map-\d+)\.html$/g.exec(
-    output,
-  );
-  if (r62) {
-    i.attr('href', `/${r62[1]}`);
-    return;
-  }
-
-  const r8 = /^.*\/((manual|general-conference|ensign|liahona|new-era|friend).+)/g.exec(
-    output,
-  );
-
-  if (r8) {
-    i.attr('href', `https://churchofjesuschrist.org/study/${r8[1]}/`);
-    return;
+    if (r8) {
+      i.attr('href', `https://churchofjesuschrist.org/study/${r8[1]}/`);
+      return;
+    }
   }
 };
 
@@ -207,9 +211,7 @@ function parseVerseFormat(
   count: { count: number },
 ): Observable<FormatGroup[] | FormatText[]> {
   const isTextNode = verseE.type === 'text';
-  $(verseE)
-    .children()
-    .toArray().length === 0;
+  $(verseE).children().toArray().length === 0;
 
   if (isTextNode) {
     const txt = decode($(verseE).text());
@@ -235,9 +237,7 @@ function parseVerseFormat(
     }
 
     if (ft) {
-      $(verseE)
-        .parent()
-        .attr('offsets', `${ft.offsets}`);
+      $(verseE).parent().attr('offsets', `${ft.offsets}`);
 
       $(verseE).attr('offsets', `${ft.offsets}`);
     }
@@ -246,10 +246,10 @@ function parseVerseFormat(
   } else {
     return of(verseE.children).pipe(
       flatMap$,
-      map(i => {
+      map((i) => {
         return forkJoin(of(i), parseVerseFormat($, i, count));
       }),
-      flatMap(o => o),
+      flatMap((o) => o),
       map(
         ([e, ft]): FormatGroup => {
           return {
@@ -261,7 +261,7 @@ function parseVerseFormat(
         },
       ),
       toArray(),
-      map(o => o),
+      map((o) => o),
     );
   }
 }
@@ -309,12 +309,12 @@ function parseVerses($: CheerioStatic) {
   // return of(Promise.all(parse())).pipe(flatMap$);
   return of($('body [data-aid]').toArray()).pipe(
     flatMap$,
-    filter(o => {
+    filter((o) => {
       const id = o.attribs['id'];
 
       return id !== undefined && !id.includes('note');
     }),
-    map(o => parseVerse($, o)),
+    map((o) => parseVerse($, o)),
     flatMap$,
     toArray(),
   );
@@ -324,9 +324,9 @@ function fixLinks($: CheerioStatic) {
   const links = $('[href]').toArray();
 
   return of(links).pipe(
-    filter(o => o.length > 0),
+    filter((o) => o.length > 0),
     flatMap$,
-    map(o => $(o)),
+    map((o) => $(o)),
     fixLink,
     toArray(),
   );
@@ -336,11 +336,7 @@ export function childrenToArray(
   $: CheerioStatic,
   selector: string | CheerioElement | Cheerio,
 ) {
-  return of(
-    $(selector)
-      .children()
-      .toArray(),
-  ).pipe(flatMap(o => o));
+  return of($(selector).children().toArray()).pipe(flatMap((o) => o));
 }
 
 function newParseChildre(
@@ -349,7 +345,7 @@ function newParseChildre(
 ): Observable<FormatGroup> {
   return of(element.children().toArray()).pipe(
     flatMap$,
-    map(o => {
+    map((o) => {
       if (typeof $(o).prop('data-aid') === 'string') {
         return of({
           v: parseVerseID($(o).prop('id') as string),
@@ -360,7 +356,7 @@ function newParseChildre(
       }
       return newParseChildre($, $(o));
     }),
-    flatMap(o => o),
+    flatMap((o) => o),
     toArray(),
     map(
       (o): Observable<FormatGroup> => {
@@ -392,13 +388,7 @@ function parseBody($: CheerioStatic) {
 }
 
 function parseTitle($: CheerioStatic) {
-  return of(
-    decode(
-      $('[type=navigation]')
-        .first()
-        .text(),
-    ),
-  );
+  return of(decode($('[type=navigation]').first().text()));
 }
 
 function parseShortTitle($: CheerioStatic) {
@@ -437,20 +427,20 @@ export function chapterProcessor(
         }),
       );
     }),
-    flatMap(o => o),
+    flatMap((o) => o),
   );
 }
 
 function removeUnneededClasses($: CheerioStatic) {
   return of(
-    ['scripture-ref', 'study-note-ref'].map(s => $(`.${s}`).removeClass(s)),
+    ['scripture-ref', 'study-note-ref'].map((s) => $(`.${s}`).removeClass(s)),
   );
 }
 
 function removeUnneededElements($: CheerioStatic) {
   // /, 'footer.study-notes'
 
-  return of(['sup.marker'].map(sel => $(sel).remove()));
+  return of(['sup.marker'].map((sel) => $(sel).remove()));
 }
 
 function prepChapter($: CheerioStatic) {

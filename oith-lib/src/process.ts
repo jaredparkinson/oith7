@@ -16,8 +16,10 @@ export const filterUndefined$ = filter(
   <T>(o: T) => o !== undefined && o !== null,
 );
 
-export function getFileType(document: CheerioStatic): Observable<string> {
-  return of(document('html').attr('data-content-type'));
+export function getFileType(
+  document: CheerioStatic,
+): Observable<string | undefined> {
+  return of(document('html,book').attr('data-content-type'));
 }
 
 export function processExistingNotes($: CheerioStatic) {
@@ -25,11 +27,9 @@ export function processExistingNotes($: CheerioStatic) {
     'footer.study-notes [data-type*="verse"] > li',
   ).toArray();
 
-  verseNotes.map(verseNote => {
-    const notes = $(verseNote)
-      .find('li[id*="note"]')
-      .toArray();
-    notes.map(note => {
+  verseNotes.map((verseNote) => {
+    const notes = $(verseNote).find('li[id*="note"]').toArray();
+    notes.map((note) => {
       const verseRef = $(`[href="#${note.attribs['id']}"]`);
       verseRef;
     });
@@ -44,8 +44,8 @@ export function process(
 
   return loadFiles()
     .pipe(
-      map(d => forkJoin(of(d), getFileType(d))),
-      flatMap(o => o),
+      map((d) => forkJoin(of(d), getFileType(d))),
+      flatMap((o) => o),
       map(([$, fileType]) => {
         switch (fileType) {
           case 'book':
@@ -69,26 +69,26 @@ export function process(
         }
         return EMPTY;
       }),
-      flatMap(o => o),
+      flatMap((o) => o),
       bufferCount(100),
-      map(o => writeFile$(`${sortPath}/${cuid()}.json`, JSON.stringify(o))),
-      flatMap(o => o),
+      map((o) => writeFile$(`${sortPath}/${cuid()}.json`, JSON.stringify(o))),
+      flatMap((o) => o),
       toArray(),
     )
     .pipe(
       map(() => sort()),
-      flatMap(o => o),
-      map(o => writeFile$(`${flatPath}/${o.id}.json`, JSON.stringify(o))),
-      flatMap(o => o),
+      flatMap((o) => o),
+      map((o) => writeFile$(`${flatPath}/${o.id}.json`, JSON.stringify(o))),
+      flatMap((o) => o),
       toArray(),
     );
 }
 function loadFiles() {
   return fastGlob$(unzipPath).pipe(
     flatMap$,
-    map(o =>
+    map((o) =>
       readFile$(o).pipe(
-        map(file => {
+        map((file) => {
           return cheerio.load(file, { xmlMode: true, decodeEntities: false });
         }),
       ),

@@ -38,7 +38,7 @@ export const sortPath = normalizePath(`${cache}/sort`);
 
 // main();
 export function hasArg(arg: string, argType: string) {
-  return of(typeof argv[arg] === argType).pipe(filter(o => o));
+  return of(typeof argv[arg] === argType).pipe(filter((o) => o));
 }
 
 export function prepCache() {
@@ -56,28 +56,28 @@ export function normalizePath$(pathName: string) {
 }
 export function fastGlob$(pathName: string): Observable<string[]> {
   return normalizePath$(`${pathName}/**/**`).pipe(
-    map(o => FastGlob(o)),
+    map((o) => FastGlob(o)),
     flatMap$,
     // flatMap$,
   );
 }
 
 export function endsWith(i: string[], val: string) {
-  return i.filter(o => val.endsWith(o)).length > 0;
+  return i.filter((o) => val.endsWith(o)).length > 0;
 }
 
 export function unzipFiles(pathName: string): Observable<void[]> {
   return fastGlob$(pathName)
     .pipe(
       flatMap$,
-      filter(o => o.endsWith('.zip')),
+      filter((o) => o.endsWith('.zip')),
       readFileMap,
       flatMap$,
-      flatMap(o => new AdmZip(o).getEntries()),
-      filter(o => endsWith(['.xml', '.html'], o.name)),
+      flatMap((o) => new AdmZip(o).getEntries()),
+      filter((o) => endsWith(['.xml', '.html'], o.name)),
     )
     .pipe(
-      map(o =>
+      map((o) =>
         writeFile$(
           normalizePath(`${unzipPath}/${cuid()}.${o.name.split('.').pop()}`),
           o.getData(),
@@ -94,32 +94,36 @@ export function loadnoteSettings(): Observable<
 > {
   return readFile$(argv.ns as string)
     .pipe(
-      map(o => new AdmZip(o).getEntries()),
-      map(o => {
+      map((o) => new AdmZip(o).getEntries()),
+      map((o) => {
         // console.log(o.map(i => i.name));
 
         return forkJoin(
-          of(o.find(i => i.name === 'note_types.html') as IZipEntry).pipe(
+          of(o.find((i) => i.name === 'note_types.html') as IZipEntry).pipe(
             filterUndefined$,
-            map(i => noteTypeProcessor(new JSDOM(i.getData()).window.document)),
+            map((i) =>
+              noteTypeProcessor(new JSDOM(i.getData()).window.document),
+            ),
             flatMap$,
           ),
-          of(o.find(i => i.name === 'note_categories.html') as IZipEntry).pipe(
+          of(
+            o.find((i) => i.name === 'note_categories.html') as IZipEntry,
+          ).pipe(
             filterUndefined$,
-            map(i =>
+            map((i) =>
               noteCategoryProcessor(new JSDOM(i.getData()).window.document),
             ),
             flatMap$,
           ),
-          of(o.find(i => i.name === 'note_groups.html') as IZipEntry).pipe(
+          of(o.find((i) => i.name === 'note_groups.html') as IZipEntry).pipe(
             filterUndefined$,
-            map(i => noteGroupProcessor(cheerio.load(i.getData()))),
+            map((i) => noteGroupProcessor(cheerio.load(i.getData()))),
             flatMap$,
           ),
         );
       }),
     )
-    .pipe(flatMap(o => o));
+    .pipe(flatMap((o) => o));
 }
 hasArg('all', 'boolean')
   .pipe(
@@ -135,12 +139,15 @@ hasArg('all', 'boolean')
               // return of(nt);
               return forkJoin(
                 writeFile$(
-                  `${flatPath}/note_categories.json`,
+                  `${flatPath}/eng-noteCategories.json`,
                   JSON.stringify(nc),
                 ),
-                writeFile$(`${flatPath}/note_types.json`, JSON.stringify(nt)),
                 writeFile$(
-                  `${flatPath}/note_settings.json`,
+                  `${flatPath}/eng-noteTypes.json`,
+                  JSON.stringify(nt),
+                ),
+                writeFile$(
+                  `${flatPath}/eng-noteSettings.json`,
                   JSON.stringify(ns),
                 ),
                 process(nt, nc),
@@ -149,13 +156,14 @@ hasArg('all', 'boolean')
             flatMap$,
           );
         }),
-        flatMap(o => o),
+        flatMap((o) => o),
       ),
     ),
     flatMap$,
   )
 
-  .subscribe(o => o);
+  .subscribe((o) => o);
+console.log(argv);
 
 hasArg('settings', 'string')
   .pipe(
@@ -187,13 +195,13 @@ hasArg('settings', 'string')
             flatMap$,
           );
         }),
-        flatMap(o => o),
+        flatMap((o) => o),
       ),
     ),
     flatMap$,
   )
 
-  .subscribe(o => o);
+  .subscribe((o) => o);
 
 // export const parseDocument = map(([buffer, extension]: [Buffer, string]) => {});
 

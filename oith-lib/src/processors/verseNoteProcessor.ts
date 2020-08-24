@@ -1,6 +1,6 @@
 import { forkJoin, of } from 'rxjs';
 import { filter, find, flatMap, map, toArray } from 'rxjs/operators';
-import { flatMap$ } from '../main';
+import { flatMap$, loadnoteSettings } from '../main';
 import {
   NoteCategories,
   NoteTypes,
@@ -22,8 +22,13 @@ function parseNoteType(
 ) {
   return of(noteTypes.noteTypes).pipe(
     flatMap$,
-    find(o => o.className === $(noteElement).attr('class')),
-    map(o => (o ? o.noteType : -1)),
+    find((o) => o.className === $(noteElement).attr('class')),
+    map((o) => {
+      if (!o) {
+        console.log($(noteElement).attr('class'));
+      }
+      return o ? o.noteType : -1;
+    }),
   );
 }
 
@@ -32,9 +37,11 @@ function parseNoteCategory(
   noteRefLabel: Cheerio,
   noteCategories: NoteCategories,
 ) {
-  const nc = noteCategories.noteCategories.find(n => {
+  const noteCategoryAttr = $(noteRefLabel).attr('category-type');
+
+  const nc = noteCategories.noteCategories.find((n) => {
     // const classList = $(noteRefLabel).attr('class');
-    return noteRefLabel.hasClass(n.className);
+    return `reference-label-${noteCategoryAttr}` === `${n.className}`;
     // return classList ? classList.includes(n.className) : false;
   });
   if (nc) {
@@ -42,6 +49,8 @@ function parseNoteCategory(
     // noteRefLabel.parent.;
     return of(nc.category);
   }
+
+  // console.log($(noteRefLabel));
 
   console.log(
     `Not valid ${$(noteRefLabel).attr('class')} ${$(noteRefLabel).text()} `,
@@ -54,9 +63,9 @@ function parseNoteRef(
   noteRefElement: CheerioElement,
   noteCategories: NoteCategories,
 ) {
-  const refLabelElement = $('[class*="reference-label"]', noteRefElement);
+  const refLabelElement = $('[class*="note-reference"]', noteRefElement);
   if (refLabelElement) {
-    return parseNoteCategory($, refLabelElement.first(), noteCategories).pipe(
+    return parseNoteCategory($, $(noteRefElement), noteCategories).pipe(
       map(
         (noteCategory): NoteRef => {
           return new NoteRef(noteCategory, $(noteRefElement).html() as string);
@@ -102,7 +111,7 @@ function parseNoteMap(
   const parseNoteRefs = () => {
     const refs = $('.note-reference', noteElement)
       .toArray()
-      .map(nre => {
+      .map((nre) => {
         return parseNoteRef($, nre, noteCategories).toPromise();
       });
 
@@ -145,8 +154,8 @@ function parseNotes(
   noteCategories: NoteCategories,
 ) {
   return of($('note', verseNoteElement).toArray()).pipe(
-    flatMap(o => o),
-    map(o => parseNoteMap($, o, noteTypes, noteCategories)),
+    flatMap((o) => o),
+    map((o) => parseNoteMap($, o, noteTypes, noteCategories)),
     flatMap$,
     toArray(),
   );
@@ -162,11 +171,11 @@ function parseVerseNote(
   return forkJoin(
     parseVerseNoteElementID($, verseNoteElement),
     parseNotes($, verseNoteElement, noteTypes, noteCategories).pipe(
-      filter(o => o.length > 0),
+      filter((o) => o.length > 0),
     ),
   ).pipe(
     map(([id, notes]) => {
-      return new VerseNote(id, notes);
+      return new VerseNote(id as string, notes);
     }),
   );
 }
@@ -179,8 +188,8 @@ export function verseNoteProcessor(
   noteTypes;
   noteCategories;
   return of(document('verse-notes').toArray()).pipe(
-    flatMap(o => o),
-    map(verseNoteElement => {
+    flatMap((o) => o),
+    map((verseNoteElement) => {
       return parseVerseNote(
         document,
         verseNoteElement,
