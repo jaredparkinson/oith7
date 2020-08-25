@@ -102,6 +102,9 @@ function parseNotePronunciation(noteElement: CheerioElement) {
   // return of(popupElement.attr('url'));
 }
 
+function parseSup(noteElement: CheerioElement) {
+  return of(noteElement.attribs['note-marker']);
+}
 function parseNoteMap(
   $: CheerioStatic,
   noteElement: CheerioElement,
@@ -132,8 +135,9 @@ function parseNoteMap(
     parseOffsets(noteElement),
     parseNoteUrl($, noteElement),
     parseNotePronunciation(noteElement),
+    parseSup(noteElement),
   ).pipe(
-    map(([notePhrase, noteType, noteRefs, offsets, url, speak]) => {
+    map(([notePhrase, noteType, noteRefs, offsets, url, speak, sup]) => {
       return new Note(
         noteElement.attribs['id'],
         noteRefs,
@@ -142,6 +146,7 @@ function parseNoteMap(
         offsets,
         url,
         speak,
+        sup,
       );
     }),
   );

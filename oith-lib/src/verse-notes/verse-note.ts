@@ -24,7 +24,7 @@ export class NoteRef {
   public category?: number;
   public text?: string;
   public vis?: boolean;
- public label: string;
+  public label: string;
   public constructor(noteC: number, text: string) {
     this.category = noteC;
     this.text = text;
@@ -40,6 +40,7 @@ export class Note extends Doc {
   public ref: NoteRef[];
   public speak?: string;
   public noteType: number;
+  public sup?: string;
   // public docType: DocType = DocType.NOTE;
   public constructor(
     vid: string,
@@ -49,6 +50,7 @@ export class Note extends Doc {
     offsets: string,
     url?: string,
     speak?: string,
+    sup?: string,
   ) {
     super(vid, DocType.NOTE);
     // this.id = vid;
@@ -61,6 +63,8 @@ export class Note extends Doc {
       url: url,
       speak: speak,
     };
+
+    this.sup = sup;
   }
 }
 
@@ -533,7 +537,7 @@ export class FormatTagNotePronunciation extends FormatTagNoteOffsets {
     super(offsets, _id, offsets, notes, FormatTagType.NOTEOFFSETSPRONUNCIATION);
     this.noteGroupID = noteGroupID;
     this.id = _id;
-    const note = notes.find(note => note.href !== undefined);
+    const note = notes.find((note) => note.href !== undefined);
     if (note) {
       this.href = note.href;
     }
