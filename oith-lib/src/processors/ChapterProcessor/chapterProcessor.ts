@@ -11,7 +11,6 @@ import {
 import { flatMap$ } from '../../rx/flatMap$';
 import { DocType } from '../../verse-notes/verse-note';
 import { parseDocID } from '../parseDocID';
-import { asap } from 'rxjs/internal/scheduler/asap';
 
 export const fixLink = map((i: Cheerio) => {
   const output = i.attr('href');
