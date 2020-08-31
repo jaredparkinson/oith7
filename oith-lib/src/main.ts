@@ -1,25 +1,22 @@
-import { Observable, of, forkJoin } from 'rxjs';
-import { flatMap, map, filter, toArray, retry } from 'rxjs/operators';
-import cheerio from 'cheerio';
-import { emptyDir } from 'fs-extra';
-import normalizePath = require('normalize-path');
-import { emptyDir$, readFileMap, writeFile$, readFile$ } from './fs$';
-import { argv$ } from './rx/argv$';
-import { argv } from 'yargs';
-import FastGlob from 'fast-glob';
 import AdmZip, { IZipEntry } from 'adm-zip';
-import cuid = require('cuid');
-import { process, filterUndefined$ } from './process';
-import {
-  NoteType,
-  NoteTypes,
-  NoteCategories,
-} from './verse-notes/settings/note-gorup-settings';
-import { noteCategoryProcessor } from './processors/note-categories-processor';
+import cheerio from 'cheerio';
+import FastGlob from 'fast-glob';
 import { JSDOM } from 'jsdom';
-import { noteTypeProcessor } from './processors/note-types-processor';
+import { forkJoin, Observable, of } from 'rxjs';
+import { filter, flatMap, map, toArray } from 'rxjs/operators';
+import { argv } from 'yargs';
+import { emptyDir$, readFile$, readFileMap, writeFile$ } from './fs$';
+import { filterUndefined$, process } from './process';
+import { noteCategoryProcessor } from './processors/note-categories-processor';
 import { noteGroupProcessor } from './processors/note-groups-processor';
+import {
+  NoteOverlays,
+  noteOverlaysProcessor,
+} from './processors/note-types-processor';
 import { NoteSettings } from './processors/NoteSettings';
+import { NoteCategories } from './verse-notes/settings/note-gorup-settings';
+import normalizePath = require('normalize-path');
+import cuid = require('cuid');
 export class ChapterProcessor {
   public chapterProcessor = map((document: Document) => {
     of(document.querySelectorAll('body > *'));
@@ -90,7 +87,7 @@ export function unzipFiles(pathName: string): Observable<void[]> {
 }
 
 export function loadnoteSettings(): Observable<
-  [NoteTypes, NoteCategories, NoteSettings]
+  [NoteOverlays, NoteCategories, NoteSettings]
 > {
   return readFile$(argv.ns as string)
     .pipe(
@@ -102,9 +99,8 @@ export function loadnoteSettings(): Observable<
           of(o.find((i) => i.name === 'note_types.html') as IZipEntry).pipe(
             filterUndefined$,
             map((i) =>
-              noteTypeProcessor(new JSDOM(i.getData()).window.document),
+              noteOverlaysProcessor(new JSDOM(i.getData()).window.document),
             ),
-            flatMap$,
           ),
           of(
             o.find((i) => i.name === 'note_categories.html') as IZipEntry,

@@ -1,4 +1,4 @@
-import { Doc } from '../verse-note';
+import { Doc, DocType } from '../verse-note';
 
 export interface NoteGroupSetting {
   categoriesOn: string[];
@@ -28,50 +28,66 @@ export class TruthSetting {
   public onPlus?: string;
 }
 
-export class NoteCategories {
-  // tslint:disable:variable-name
-  public id: string;
-  public _rev?: string | undefined;
+export class NoteCategories extends Doc {
   public noteCategories: NoteCategory[];
-  public truthSettings?: TruthSetting[];
-  public visibilitySettings: NoteCategorySetting[][];
-
-  public constructor(
-    id: string,
-    noteCategories: NoteCategory[],
-    visibilitySettings: NoteCategorySetting[][],
-  ) {
-    this.id = id;
+  constructor(id: string, noteCategories: NoteCategory[]) {
+    super(id, DocType.NOTE);
     this.noteCategories = noteCategories;
-    this.visibilitySettings = visibilitySettings;
   }
+  public docType: DocType;
 }
+
 export class NoteCategory {
-  public className: string;
-  public label: string;
   public name: string;
-  public category: number;
-  public off?: string[];
-  public on: string[];
-  public visible?: boolean;
-  public constructor(
-    noteCategory: number,
-    className: string,
+  public label: string;
+  public className: string;
+  public categoriesOn?: string[];
+  public categoriesOff?: string[];
+  public noteCategory: number;
+
+  constructor(
     name: string,
     label: string,
-    on: string[],
-    off?: string[],
-    visible?: boolean,
+    className: string,
+    noteCategory: string,
+    categoriesOn?: string | null,
+    categoriesOff?: string | null,
   ) {
-    this.visible = visible;
-    this.category = noteCategory;
-    this.className = className;
     this.name = name;
     this.label = label;
-    this.on = on;
-    this.off = off;
+    this.className = className;
+    this.categoriesOn = categoriesOn?.split(',');
+    this.noteCategory = parseInt(noteCategory);
+    this.categoriesOff = categoriesOff?.split(',');
   }
 }
+
+// export class NoteCategory {
+//   public className: string;
+//   public label: string;
+//   public name: string;
+//   public category: number;
+//   public off?: string[];
+//   public on: string[];
+//   public visible?: boolean;
+//   public constructor(
+//     noteCategory: number,
+//     className: string,
+//     name: string,
+//     label: string,
+//     on: string[],
+//     off?: string[],
+//     visible?: boolean,
+//   ) {
+//     this.visible = visible;
+//     this.category = noteCategory;
+//     this.className = className;
+//     this.name = name;
+//     this.label = label;
+//     this.on = on;
+//     this.off = off;
+//   }
+// }
 export class NoteType {
   public className: string;
   public name: string;
@@ -91,18 +107,4 @@ export class NoteType {
     this.visibility = visibility;
     this.noteType = sort;
   }
-}
-
-export class NoteTypes {
-  public id: string;
-  public _rev?: string;
-  public noteTypes: NoteType[];
-  public constructor(id: string, noteTypes: NoteType[]) {
-    this.id = id;
-    this.noteTypes = noteTypes;
-  }
-
-  /**
-   * queryNoteTypeByClassName
-   */
 }

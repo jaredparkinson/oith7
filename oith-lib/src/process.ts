@@ -2,16 +2,13 @@ import cheerio from 'cheerio';
 import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 import { bufferCount, filter, flatMap, map, toArray } from 'rxjs/operators';
 import { readFile$, writeFile$ } from './fs$';
-import { fastGlob$, flatMap$, sortPath, unzipPath, flatPath } from './main';
+import { fastGlob$, flatMap$, flatPath, sortPath, unzipPath } from './main';
 import { chapterProcessor } from './processors/ChapterProcessor/chapterProcessor';
-import { verseNoteProcessor } from './processors/verseNoteProcessor';
-import {
-  NoteCategories,
-  NoteTypes,
-} from './verse-notes/settings/note-gorup-settings';
-import cuid = require('cuid');
+import { NoteOverlays } from './processors/note-types-processor';
 import { sort } from './processors/sort';
-import { navigationProcessor } from './processors/navigation-processor';
+import { verseNoteProcessor } from './processors/verseNoteProcessor';
+import { NoteCategories } from './verse-notes/settings/note-gorup-settings';
+import cuid = require('cuid');
 export const filterUndefined$ = filter(
   <T>(o: T) => o !== undefined && o !== null,
 );
@@ -37,7 +34,7 @@ export function processExistingNotes($: CheerioStatic) {
 }
 
 export function process(
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
   noteCategories: NoteCategories,
 ): Observable<void[]> {
   console.log('Processing Files');

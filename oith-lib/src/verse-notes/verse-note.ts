@@ -14,6 +14,7 @@ export enum DocType {
 export class Doc {
   public id: string;
   public docType: DocType;
+  public _rev?: string;
   public constructor(id: string, docType: DocType) {
     this.id = id;
     this.docType = docType;

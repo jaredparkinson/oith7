@@ -1,11 +1,9 @@
 import { forkJoin, of } from 'rxjs';
 import { filter, find, flatMap, map, toArray } from 'rxjs/operators';
-import { flatMap$, loadnoteSettings } from '../main';
-import {
-  NoteCategories,
-  NoteTypes,
-} from '../verse-notes/settings/note-gorup-settings';
+import { flatMap$ } from '../main';
+import { NoteCategories } from '../verse-notes/settings/note-gorup-settings';
 import { Note, NoteRef, VerseNote } from '../verse-notes/verse-note';
+import { NoteOverlays } from './note-types-processor';
 
 function parseVerseNoteElementID($: CheerioStatic, element: CheerioElement) {
   if (element.attribs['id'] === '') {
@@ -18,16 +16,16 @@ function parseVerseNoteElementID($: CheerioStatic, element: CheerioElement) {
 function parseNoteType(
   $: CheerioStatic,
   noteElement: CheerioElement,
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
 ) {
-  return of(noteTypes.noteTypes).pipe(
+  return of(noteTypes.noteOverlays).pipe(
     flatMap$,
     find((o) => o.className === $(noteElement).attr('class')),
     map((o) => {
       if (!o) {
         console.log($(noteElement).attr('class'));
       }
-      return o ? o.noteType : -1;
+      return o ? o.sort : -1;
     }),
   );
 }
@@ -47,7 +45,7 @@ function parseNoteCategory(
   if (nc) {
     $(noteRefLabel).remove();
     // noteRefLabel.parent.;
-    return of(nc.category);
+    return of(nc.noteCategory);
   }
 
   // console.log($(noteRefLabel));
@@ -108,7 +106,7 @@ function parseSup(noteElement: CheerioElement) {
 function parseNoteMap(
   $: CheerioStatic,
   noteElement: CheerioElement,
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
   noteCategories: NoteCategories,
 ) {
   const parseNoteRefs = () => {
@@ -155,7 +153,7 @@ function parseNoteMap(
 function parseNotes(
   $: CheerioStatic,
   verseNoteElement: CheerioElement,
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
   noteCategories: NoteCategories,
 ) {
   return of($('note', verseNoteElement).toArray()).pipe(
@@ -170,7 +168,7 @@ function parseVerseNote(
   $: CheerioStatic,
 
   verseNoteElement: CheerioElement,
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
   noteCategories: NoteCategories,
 ) {
   return forkJoin(
@@ -186,7 +184,7 @@ function parseVerseNote(
 }
 export function verseNoteProcessor(
   document: CheerioStatic,
-  noteTypes: NoteTypes,
+  noteTypes: NoteOverlays,
   noteCategories: NoteCategories,
 ) {
   document;

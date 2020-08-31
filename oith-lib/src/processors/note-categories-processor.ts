@@ -7,28 +7,21 @@ import {
 import { flatMap$ } from '../rx/flatMap$';
 
 export function getAttribute(element: Element, attr: string) {
-  return of(element.getAttribute(attr)).pipe(map(o => (o ? o : '')));
+  return of(element.getAttribute(attr)).pipe(map((o) => (o ? o : '')));
 }
 
 const parseNoteCategoryMap = map((noteCategoryElement: Element) => {
   return of(['name', 'label', 'class', 'on', 'note-category', 'off'])
     .pipe(
       flatMap$,
-      map(attr => getAttribute(noteCategoryElement, attr)),
+      map((attr) => getAttribute(noteCategoryElement, attr)),
       flatMap$,
       toArray(),
     )
     .pipe(
       map(
         ([name, label, cls, on, noteCategoryNum, off]): NoteCategory => {
-          return new NoteCategory(
-            parseFloat(noteCategoryNum),
-            cls,
-            name,
-            label,
-            on.split(','),
-            off !== '' ? off.split(',') : undefined,
-          );
+          return new NoteCategory(cls, name, label, noteCategoryNum, on, off);
         },
       ),
     );
@@ -48,7 +41,7 @@ export function noteCategoryProcessor(docuemnt: Document) {
   return forkJoin(
     parseLanguage(docuemnt),
     of(docuemnt.querySelectorAll('note-categories note-category')).pipe(
-      flatMap(o => o),
+      flatMap((o) => o),
       parseNoteCategoryMap,
       flatMap$,
       toArray(),
@@ -56,11 +49,7 @@ export function noteCategoryProcessor(docuemnt: Document) {
   ).pipe(
     map(
       ([lang, noteCategories]): NoteCategories => {
-        return new NoteCategories(
-          `${lang}-note-categories`,
-          noteCategories,
-          [],
-        );
+        return new NoteCategories(`${lang}-noteCategories`, noteCategories);
       },
     ),
   );
