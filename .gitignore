@@ -74,3 +74,5 @@ oith-lib/*-triple-index-manifest.json
 oith-lib/*-triple-manifest.json
 oith-lib/.cache2/
 scripture_files2/
+scripture_files/**/**
+*.zip

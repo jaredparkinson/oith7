@@ -19,7 +19,7 @@ export const filterUndefined$ = filter(
 export function getFileType(
   document: CheerioStatic,
 ): Observable<string | undefined> {
-  return of(document('html,book').attr('data-content-type'));
+  return of(document('html,book,testament').attr('data-content-type'));
 }
 
 export function processExistingNotes($: CheerioStatic) {
