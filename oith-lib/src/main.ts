@@ -139,15 +139,24 @@ hasArg('all', 'boolean')
               // return of(nt);
               return forkJoin(
                 writeFile$(
-                  `${flatPath}/eng-noteCategories.json`,
+                  `${flatPath}/${nc.id.replace(
+                    'note-categories',
+                    'noteCategories',
+                  )}.json`,
                   JSON.stringify(nc),
                 ),
                 writeFile$(
-                  `${flatPath}/eng-noteTypes.json`,
+                  `${flatPath}/${nc.id.replace(
+                    'note-categories',
+                    'noteTypes',
+                  )}.json`,
                   JSON.stringify(nt),
                 ),
                 writeFile$(
-                  `${flatPath}/eng-noteSettings.json`,
+                  `${flatPath}/${nc.id.replace(
+                    'note-categories',
+                    'noteSettings',
+                  )}.json`,
                   JSON.stringify(ns),
                 ),
                 process(nt, nc),

@@ -76,3 +76,4 @@ oith-lib/.cache2/
 scripture_files2/
 scripture_files/**/**
 *.zip
+*.Identifier

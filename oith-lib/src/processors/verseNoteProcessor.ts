@@ -25,7 +25,9 @@ function parseNoteType(
     find((o) => o.className === $(noteElement).attr('class')),
     map((o) => {
       if (!o) {
-        console.log($(noteElement).attr('class'));
+        console.log(
+          `Overlay ${$(noteElement).attr('class')} is missing in the files`,
+        );
       }
       return o ? o.noteType : -1;
     }),

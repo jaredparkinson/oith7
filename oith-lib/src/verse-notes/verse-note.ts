@@ -41,6 +41,7 @@ export class Note extends Doc {
   public speak?: string;
   public noteType: number;
   public sup?: string;
+  public oPhrase: string;
   // public docType: DocType = DocType.NOTE;
   public constructor(
     vid: string,
@@ -55,6 +56,7 @@ export class Note extends Doc {
     super(vid, DocType.NOTE);
     // this.id = vid;
     this.phrase = notePhrase;
+    this.oPhrase = notePhrase;
     this.ref = noteRefs;
     this.noteType = noteType;
     this.formatTag = {
