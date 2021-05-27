@@ -42,6 +42,7 @@ export class Note extends Doc {
   public noteType: number;
   public sup?: string;
   public oPhrase: string;
+  public sourceID?: string;
   // public docType: DocType = DocType.NOTE;
   public constructor(
     vid: string,
@@ -52,6 +53,7 @@ export class Note extends Doc {
     url?: string,
     speak?: string,
     sup?: string,
+    sourceID?: string,
   ) {
     super(vid, DocType.NOTE);
     // this.id = vid;
@@ -67,6 +69,7 @@ export class Note extends Doc {
     };
 
     this.sup = sup;
+    this.sourceID = sourceID;
   }
 }
 

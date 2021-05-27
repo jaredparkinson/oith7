@@ -50,7 +50,7 @@ export function process(
         switch (fileType) {
           case 'book':
           case 'manifest': {
-            // navigationProcessor($);
+            navigationProcessor($);
             break;
           }
           case 'overlay-note': {
